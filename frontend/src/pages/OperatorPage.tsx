@@ -53,6 +53,7 @@ import {
   ShoppingBag,
   MessageCircle,
   Car,
+  Lock,
 } from "lucide-react";
 
 function ProductStatusBadge({ status }: { status: ProductRequestStatus }) {
@@ -364,15 +365,28 @@ export function OperatorPage() {
     rejectTxn(id);
   }
 
-  function handleSaveStockUpdate() {
+  function handleSaveProductUpdate(e?: React.FormEvent) {
+    if (e) e.preventDefault();
     if (!editingProduct) return;
     upsertProduct({
       id: editingProduct.id,
-      name: editingProduct.name,
+      name: editNameVal || editingProduct.name,
+      category: editCategoryVal || editingProduct.category,
       availableStock: editStockVal,
       price: editPriceVal,
+      description: editDescVal,
     });
     setEditingProduct(null);
+  }
+  const handleSaveStockUpdate = handleSaveProductUpdate;
+
+  function handleDeleteProduct(id: string, name?: string) {
+    if (confirm(`Are you sure you want to delete product "${name || id}"?`)) {
+      removeProduct(id);
+      if (editingProduct?.id === id) {
+        setEditingProduct(null);
+      }
+    }
   }
 
   function handleCreateProduct(e: React.FormEvent) {
@@ -545,19 +559,19 @@ export function OperatorPage() {
                 📺 {currentOpInfo?.stbBoxName || "SCV"}
               </span>
             </div>
-            {currentOpInfo?.portalLink && (
-              <>
-                <div className="h-4 w-px bg-slate-200 hidden sm:block" />
-                <a
-                  href={currentOpInfo.portalLink.startsWith("http") ? currentOpInfo.portalLink : `https://${currentOpInfo.portalLink}`}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="flex items-center gap-1.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-3.5 py-1.5 text-xs font-extrabold text-white shadow-sm transition cursor-pointer"
-                >
-                  🔗 Open Portal Link
-                </a>
-              </>
-            )}
+            <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+            <a
+              href={
+                currentOpInfo?.portalLink
+                  ? (currentOpInfo.portalLink.startsWith("http") ? currentOpInfo.portalLink : `https://${currentOpInfo.portalLink}`)
+                  : (currentOpInfo?.stbBoxName === "TCCL" ? "https://tccl.in" : currentOpInfo?.stbBoxName === "AKSHAYA DIGINET" ? "https://akshayadiginet.in" : currentOpInfo?.stbBoxName === "TACTV" ? "https://tactv.in" : "https://scvportal.com")
+              }
+              target="_blank"
+              rel="noreferrer"
+              className="flex items-center gap-1.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-3.5 py-1.5 text-xs font-extrabold text-white shadow-sm transition cursor-pointer"
+            >
+              🔗 Open {currentOpInfo?.stbBoxName || "SCV"} Portal
+            </a>
           </div>
         </div>
 

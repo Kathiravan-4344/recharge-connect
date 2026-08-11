@@ -1,0 +1,9 @@
+{
+  "name": "stb-recharge-frontend-api",
+  "version": "1.0.0",
+  "private": true,
+  "type": "commonjs",
+  "dependencies": {
+    "mongoose": "^8.10.1"
+  }
+}

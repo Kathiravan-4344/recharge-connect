@@ -1279,16 +1279,18 @@ export async function syncOperatorsFromBackend() {
   try {
     const res = await apiGetOperators();
     if (res.success && Array.isArray(res.data?.operators)) {
-      const ops: ApprovedOperator[] = res.data.operators.map((o: any) => ({
-        id: o._id || o.id,
-        mobile: o.mobileNumber || o.mobile,
-        name: o.name || "Operator",
-        email: o.email || "",
-        stbBoxName: o.stbBoxName || "SCV",
-        portalLink: o.portalLink || "",
-        addedAt: o.createdAt || new Date().toISOString(),
-        active: o.isActive !== false,
-      }));
+      const ops: ApprovedOperator[] = res.data.operators
+        .filter((o: any) => cleanMobile(o.mobileNumber || o.mobile || "") !== "9080864542")
+        .map((o: any) => ({
+          id: o._id || o.id,
+          mobile: o.mobileNumber || o.mobile,
+          name: o.name || "Operator",
+          email: o.email || "",
+          stbBoxName: o.stbBoxName || "SCV",
+          portalLink: o.portalLink || "",
+          addedAt: o.createdAt || new Date().toISOString(),
+          active: o.isActive !== false,
+        }));
       setState({ approvedOperators: ops });
     }
   } catch (err) {

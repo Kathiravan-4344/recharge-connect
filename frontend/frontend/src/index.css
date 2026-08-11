@@ -1,0 +1,171 @@
+@import "tailwindcss" source(none);
+@source "../src";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-neon: var(--neon);
+  --color-neon-cyan: var(--neon-cyan);
+  --color-neon-purple: var(--neon-purple);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --font-display: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+:root {
+  --radius: 0.75rem;
+  /* Clean Light Grey & Blue Paytm-Style Recharge Theme */
+  --background: #F1F5F9;        /* Light Grey Page Background */
+  --foreground: #0F172A;        /* Dark Primary Text */
+  --card: #FFFFFF;              /* Pure White Card Surface */
+  --card-foreground: #0F172A;
+  --popover: #FFFFFF;
+  --popover-foreground: #0F172A;
+  --primary: #2563EB;           /* Primary Blue Accent */
+  --primary-foreground: #FFFFFF;
+  --secondary: #22C55E;         /* Success Green Accent */
+  --secondary-foreground: #FFFFFF;
+  --muted: #F8FAFC;
+  --muted-foreground: #64748B;  /* Muted Secondary Text */
+  --accent: #E2E8F0;            /* Soft Neutral Accent */
+  --accent-foreground: #0F172A;
+  --destructive: #EF4444;
+  --destructive-foreground: #FFFFFF;
+  --border: #CBD5E1;            /* Border Color */
+  --input: #F8FAFC;
+  --ring: #2563EB;
+
+  --neon: #2563EB;
+  --neon-cyan: #0284C7;
+  --neon-purple: #2563EB;
+  --success: #22C55E;
+  --warning: #F59E0B;
+
+  --gradient-primary: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+  --gradient-cyan: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+  --gradient-radial: none;
+  --shadow-glow: 0 4px 14px 0 rgba(37, 99, 235, 0.25);
+  --shadow-glow-cyan: 0 4px 14px 0 rgba(2, 132, 199, 0.25);
+  --shadow-glow-success: 0 4px 14px 0 rgba(34, 197, 94, 0.25);
+  --shadow-glow-danger: 0 4px 14px 0 rgba(239, 68, 68, 0.25);
+  --shadow-elev: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.05);
+  --glass-bg: #FFFFFF;
+  --glass-border: #CBD5E1;
+}
+
+@layer base {
+  * {
+    border-color: var(--color-border);
+  }
+  html, body {
+    background-color: #F1F5F9;
+    color: #0F172A;
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  body {
+    min-height: 100vh;
+  }
+  h1, h2, h3, h4 { font-family: var(--font-display); letter-spacing: -0.01em; }
+}
+
+@utility glass {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+@utility glass-strong {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.08), 0 4px 6px -4px rgba(0, 0, 0, 0.05);
+}
+
+@utility neon-border {
+  border: 1px solid #CBD5E1;
+}
+
+@utility gradient-primary {
+  background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%);
+}
+@utility gradient-cyan {
+  background: linear-gradient(135deg, #0284C7 0%, #0369A1 100%);
+}
+@utility text-gradient {
+  color: #2563EB;
+}
+
+@utility card-3d {
+  background: #FFFFFF;
+  border: 1px solid #CBD5E1;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+@utility no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+@utility card-3d-hover {
+  border-color: #2563EB;
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.12);
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.8; }
+}
+@keyframes pulse-glow-red {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.8; }
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-3px); }
+}
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+@keyframes ring-spin {
+  to { transform: rotate(360deg); }
+}
+@keyframes success-pop {
+  0% { transform: scale(0.98); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@utility pulse-success { animation: pulse-glow 2s infinite; }
+@utility pulse-danger  { animation: pulse-glow-red 2s infinite; }
+@utility animate-float { animation: float 5s ease-in-out infinite; }
+@utility animate-success-pop { animation: success-pop 200ms ease-out; }
