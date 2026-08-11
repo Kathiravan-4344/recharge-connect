@@ -482,6 +482,9 @@ export function OperatorPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
+                try {
+                  localStorage.removeItem("stb_recharge_local_state_v1");
+                } catch (e) {}
                 window.location.reload();
               }}
               className="flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2 text-xs font-bold text-[#64748B] transition hover:bg-slate-100 hover:text-[#0F172A] cursor-pointer"
