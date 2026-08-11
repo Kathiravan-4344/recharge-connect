@@ -1343,7 +1343,7 @@ export async function syncStbMappingsFromBackend(operatorMobile?: string) {
     if (!op) return;
     const res = await apiGetOperatorStbs(op);
     if (res.success && Array.isArray(res.data?.mappings)) {
-      const mappings: StbMapping[] = res.data.mappings.map((m: any) => ({
+      const backendMappings: StbMapping[] = res.data.mappings.map((m: any) => ({
         id: m._id || m.id,
         _id: m._id,
         stbId: m.stbId,
@@ -1357,7 +1357,13 @@ export async function syncStbMappingsFromBackend(operatorMobile?: string) {
         status: m.status || "Approved",
         createdAt: m.createdAt,
       }));
-      setState({ stbMappings: mappings });
+
+      // Combine backend mappings with VENKATESA_STB_MAPPINGS so all 360 STBs are always preserved
+      const backendStbIds = new Set(backendMappings.map((m) => m.stbId));
+      const missingVenStbs = VENKATESA_STB_MAPPINGS.filter((m) => !backendStbIds.has(m.stbId));
+      const combined = [...backendMappings, ...missingVenStbs];
+
+      setState({ stbMappings: combined });
     }
   } catch (err) {
     console.warn("Failed to sync STB mappings from backend", err);
