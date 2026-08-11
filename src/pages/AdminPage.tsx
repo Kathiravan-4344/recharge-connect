@@ -57,13 +57,56 @@ type TabType =
 
 function getOperatorForRecord(
   rec: { customerMobile?: string; stbId?: string; operatorMobile?: string },
-  operators: ApprovedOperator[]
+  operators: ApprovedOperator[],
+  stbMappings: StbMapping[] = []
 ): ApprovedOperator | null {
   if (!operators || operators.length === 0) return null;
+
+  const normMob = (m?: string) => (m || "").replace(/\D/g, "").slice(-10);
+
+  // 1. Direct match on rec.operatorMobile
   if (rec.operatorMobile) {
-    const found = operators.find((op) => op.mobile === rec.operatorMobile);
+    const targetMob = normMob(rec.operatorMobile);
+    const found = operators.find(
+      (op) => normMob(op.mobile) === targetMob || op.mobile.trim() === rec.operatorMobile?.trim()
+    );
     if (found) return found;
   }
+
+  // 2. Lookup STB ID in stbMappings
+  if (rec.stbId) {
+    const cleanStb = rec.stbId.trim().toUpperCase();
+    const mapping = stbMappings.find((m) => m.stbId && m.stbId.trim().toUpperCase() === cleanStb);
+    if (mapping && mapping.operatorMobile) {
+      const targetMob = normMob(mapping.operatorMobile);
+      const found = operators.find(
+        (op) => normMob(op.mobile) === targetMob || op.mobile.trim() === mapping.operatorMobile?.trim()
+      );
+      if (found) return found;
+    }
+  }
+
+  // 3. Lookup Customer Mobile in stbMappings
+  if (rec.customerMobile) {
+    const targetCustMob = normMob(rec.customerMobile);
+    if (targetCustMob) {
+      const mapping = stbMappings.find(
+        (m) => m.customerMobile && normMob(m.customerMobile) === targetCustMob
+      );
+      if (mapping && mapping.operatorMobile) {
+        const targetMob = normMob(mapping.operatorMobile);
+        const found = operators.find(
+          (op) => normMob(op.mobile) === targetMob || op.mobile.trim() === mapping.operatorMobile?.trim()
+        );
+        if (found) return found;
+      }
+    }
+  }
+
+  // 4. Default fallback: if operators length is 1, return operators[0]
+  if (operators.length === 1) return operators[0];
+
+  // Hash fallback
   const key = (rec.customerMobile || rec.stbId || "").trim();
   if (!key) return operators[0];
   let hash = 0;
@@ -82,6 +125,7 @@ export function AdminPage() {
   const complaints = useStore((s) => s.complaints);
   const approvedOperators = useStore((s) => s.approvedOperators);
   const blockedCustomers = useStore((s) => s.blockedCustomers);
+  const stbMappings = useStore((s) => s.stbMappings);
 
   const [tab, setTab] = useState<TabType>("dashboard");
   const [opMobile, setOpMobile] = useState("");
@@ -231,21 +275,40 @@ export function AdminPage() {
     (c) => c.status && String(c.status).toLowerCase() === "pending",
   ).length;
 
-  // Aggregate Customer list from all records
-  const customerMap = new Map<string, { mobile: string; name: string; stbId: string }>();
+  // Aggregate Customer list from all records including stbMappings
+  const customerMap = new Map<string, { mobile: string; name: string; stbId: string; operatorMobile?: string }>();
+  stbMappings.forEach((m) => {
+    if (m.stbId || m.customerMobile) {
+      const key = (m.customerMobile || m.stbId).trim();
+      if (key && !customerMap.has(key)) {
+        customerMap.set(key, {
+          mobile: m.customerMobile || "N/A",
+          name: m.customerName || "STB Subscriber",
+          stbId: m.stbId,
+          operatorMobile: m.operatorMobile,
+        });
+      }
+    }
+  });
   txns.forEach((t) => {
-    const key = t.customerMobile || t.stbId || "Unknown";
+    const key = (t.customerMobile || t.stbId || "Unknown").trim();
     if (!customerMap.has(key)) {
       customerMap.set(key, {
         mobile: t.customerMobile || "N/A",
         name: t.customerName || "Customer",
         stbId: t.stbId || "1234567890",
+        operatorMobile: (t as any).operatorMobile,
       });
+    } else {
+      const existing = customerMap.get(key)!;
+      if (!existing.operatorMobile && (t as any).operatorMobile) {
+        existing.operatorMobile = (t as any).operatorMobile;
+      }
     }
   });
   productRequests.forEach((pr) => {
-    const key = pr.customerMobile || pr.stbId;
-    if (!customerMap.has(key)) {
+    const key = (pr.customerMobile || pr.stbId).trim();
+    if (key && !customerMap.has(key)) {
       customerMap.set(key, {
         mobile: pr.customerMobile,
         name: pr.customerName,
@@ -254,8 +317,8 @@ export function AdminPage() {
     }
   });
   complaints.forEach((cmp) => {
-    const key = cmp.customerMobile || cmp.stbId;
-    if (!customerMap.has(key)) {
+    const key = (cmp.customerMobile || cmp.stbId).trim();
+    if (key && !customerMap.has(key)) {
       customerMap.set(key, {
         mobile: cmp.customerMobile,
         name: cmp.customerName,
@@ -270,7 +333,7 @@ export function AdminPage() {
       c.mobile.includes(customerSearch) ||
       c.stbId.toLowerCase().includes(customerSearch.toLowerCase()) ||
       c.name.toLowerCase().includes(customerSearch.toLowerCase());
-    const op = getOperatorForRecord(c, approvedOperators);
+    const op = getOperatorForRecord(c, approvedOperators, stbMappings);
     const matchOp =
       selectedOperatorFilter === "all" ||
       (op && (op.id === selectedOperatorFilter || op.mobile === selectedOperatorFilter));
@@ -299,7 +362,7 @@ export function AdminPage() {
     } else {
       matchStatus = normStatus === rechargeStatusFilter.toLowerCase();
     }
-    const op = getOperatorForRecord(t, approvedOperators);
+    const op = getOperatorForRecord(t, approvedOperators, stbMappings);
     const matchOp =
       selectedOperatorFilter === "all" ||
       (op && (op.id === selectedOperatorFilter || op.mobile === selectedOperatorFilter));
@@ -314,7 +377,7 @@ export function AdminPage() {
       c.category.toLowerCase().includes(complaintSearch.toLowerCase());
     const matchStatus =
       complaintStatusFilter === "all" ? true : c.status === complaintStatusFilter;
-    const op = getOperatorForRecord(c, approvedOperators);
+    const op = getOperatorForRecord(c, approvedOperators, stbMappings);
     const matchOp =
       selectedOperatorFilter === "all" ||
       (op && (op.id === selectedOperatorFilter || op.mobile === selectedOperatorFilter));
@@ -615,7 +678,7 @@ export function AdminPage() {
                 ) : (
                   approvedOperators.map((op) => {
                     const opCustomerCount = allCustomers.filter(
-                      (c) => getOperatorForRecord(c, approvedOperators)?.id === op.id
+                      (c) => getOperatorForRecord(c, approvedOperators, stbMappings)?.id === op.id
                     ).length;
 
                     return (
@@ -738,7 +801,7 @@ export function AdminPage() {
               </button>
               {approvedOperators.map((op) => {
                 const count = allCustomers.filter(
-                  (c) => getOperatorForRecord(c, approvedOperators)?.id === op.id
+                  (c) => getOperatorForRecord(c, approvedOperators, stbMappings)?.id === op.id
                 ).length;
                 return (
                   <button
@@ -785,7 +848,7 @@ export function AdminPage() {
                 {filteredCustomers.map((c, i) => {
                   const isBlocked =
                     blockedCustomers.includes(c.mobile) || blockedCustomers.includes(c.stbId);
-                  const assignedOp = getOperatorForRecord(c, approvedOperators);
+                  const assignedOp = getOperatorForRecord(c, approvedOperators, stbMappings);
 
                   return (
                     <tr key={i} className="hover:bg-slate-50 transition">
@@ -1097,16 +1160,16 @@ export function AdminPage() {
       {/* Comprehensive Selected Operator Detail Modal */}
       {selectedOperator && (() => {
         const opCustomers = allCustomers.filter(
-          (c) => getOperatorForRecord(c, approvedOperators)?.id === selectedOperator.id
+          (c) => getOperatorForRecord(c, approvedOperators, stbMappings)?.id === selectedOperator.id
         );
         const opTxns = txns.filter(
-          (t) => getOperatorForRecord(t, approvedOperators)?.id === selectedOperator.id
+          (t) => getOperatorForRecord(t, approvedOperators, stbMappings)?.id === selectedOperator.id
         );
         const opComplaints = complaints.filter(
-          (c) => getOperatorForRecord(c, approvedOperators)?.id === selectedOperator.id
+          (c) => getOperatorForRecord(c, approvedOperators, stbMappings)?.id === selectedOperator.id
         );
         const opProductReqs = productRequests.filter(
-          (p) => getOperatorForRecord(p, approvedOperators)?.id === selectedOperator.id
+          (p) => getOperatorForRecord(p, approvedOperators, stbMappings)?.id === selectedOperator.id
         );
 
         return (

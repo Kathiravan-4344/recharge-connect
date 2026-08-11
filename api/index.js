@@ -396,6 +396,9 @@ module.exports = async (req, res) => {
         const mappingByMob = await StbMapping.findOne({ customerMobile: mob });
         if (mappingByMob && mappingByMob.operatorMobile) opMob = mappingByMob.operatorMobile.trim();
       }
+      if (!opMob && (cleanStb.startsWith("8331000") || cleanStb.startsWith("STB-VP") || cleanStb.includes("VP"))) {
+        opMob = "9787312758";
+      }
       if (!opMob) {
         const firstOp = await Operator.findOne({ isActive: true });
         if (firstOp && firstOp.mobileNumber) opMob = firstOp.mobileNumber.trim();

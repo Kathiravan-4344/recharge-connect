@@ -68,6 +68,7 @@ export type ProductRequest = {
   stbId: string;
   customerName: string;
   customerMobile: string;
+  operatorMobile?: string;
   productId: string;
   productName: string;
   category: "accessory" | "service";
@@ -91,6 +92,7 @@ export type Complaint = {
   stbId: string;
   customerName: string;
   customerMobile: string;
+  operatorMobile?: string;
   category: "TV Issues" | "STB Issues" | "Cable Connection Issues" | "Recharge Issues" | string;
   issueType: string;
   description: string;
@@ -734,6 +736,22 @@ export async function fetchStb(id: string): Promise<STB | null> {
 }
 
 
+export function findOperatorMobileForStb(stbId?: string, customerMobile?: string): string | undefined {
+  if (stbId) {
+    const cleanStb = stbId.trim().toUpperCase();
+    const mapping = state.stbMappings.find((m) => m.stbId && m.stbId.trim().toUpperCase() === cleanStb);
+    if (mapping && mapping.operatorMobile) return mapping.operatorMobile;
+  }
+  if (customerMobile) {
+    const cleanCust = cleanMobile(customerMobile);
+    if (cleanCust) {
+      const mapping = state.stbMappings.find((m) => m.customerMobile && cleanMobile(m.customerMobile) === cleanCust);
+      if (mapping && mapping.operatorMobile) return mapping.operatorMobile;
+    }
+  }
+  return undefined;
+}
+
 // Transactions & Recharge Flow
 export async function startPayment(
   planId: string,
@@ -750,6 +768,7 @@ export async function startPayment(
   const targetStbId = rawStbId.trim().toUpperCase();
   const targetCustomerName = customDetails?.customerName || user?.name || "Customer";
   const targetCustomerMobile = customDetails?.customerMobile || user?.mobile || "";
+  const opMobile = findOperatorMobileForStb(targetStbId, targetCustomerMobile);
 
   const pending = { txnId: localTxnId, planName, amount, startedAt: now, stbId: targetStbId, customerMobile: targetCustomerMobile };
 
@@ -762,6 +781,7 @@ export async function startPayment(
     customerName: targetCustomerName,
     customerMobile: targetCustomerMobile,
     stbId: targetStbId,
+    operatorMobile: opMobile,
     startedAt: now,
     syncedToBackend: true, // Prevent concurrent auto-retry loop duplicate creation
   };
@@ -780,6 +800,7 @@ export async function startPayment(
       amount,
       customerName: targetCustomerName,
       customerMobile: targetCustomerMobile,
+      operatorMobile: opMobile,
       paymentStatus: "Success",
     });
 
@@ -861,12 +882,17 @@ export async function requestProduct(payload: {
   const stb = state.stb;
   const prod = state.products.find((p) => p.id === payload.productId);
 
+  const targetStbId = payload.stbId || stb?.id || u?.stbId || "1234567890";
+  const targetCustomerMobile = payload.customerMobile || u?.mobile || "";
+  const opMobile = findOperatorMobileForStb(targetStbId, targetCustomerMobile);
+
   const localId = "REQ" + Math.floor(Math.random() * 900000 + 100000);
   const req: ProductRequest = {
     id: localId,
-    stbId: payload.stbId || stb?.id || u?.stbId || "1234567890",
+    stbId: targetStbId,
     customerName: payload.customerName || u?.name || "Customer",
-    customerMobile: payload.customerMobile || u?.mobile || "",
+    customerMobile: targetCustomerMobile,
+    operatorMobile: opMobile,
     productId: payload.productId,
     productName: prod?.name || "Accessory/Service Request",
     category: prod?.category || "accessory",
@@ -921,12 +947,17 @@ export async function fileComplaint(payload: {
   const u = state.user;
   const stb = state.stb;
 
+  const targetCmpStbId = payload.stbId || stb?.id || u?.stbId || "1234567890";
+  const targetCmpCustMobile = payload.customerMobile || u?.mobile || "";
+  const cmpOpMobile = findOperatorMobileForStb(targetCmpStbId, targetCmpCustMobile);
+
   const localId = "CMP" + Math.floor(Math.random() * 900000 + 100000);
   const cmp: Complaint = {
     id: localId,
-    stbId: payload.stbId || stb?.id || u?.stbId || "1234567890",
+    stbId: targetCmpStbId,
     customerName: payload.customerName || u?.name || "Customer",
-    customerMobile: payload.customerMobile || u?.mobile || "",
+    customerMobile: targetCmpCustMobile,
+    operatorMobile: cmpOpMobile,
     category: payload.category,
     issueType: payload.issueType,
     description: payload.description,
