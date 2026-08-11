@@ -20,6 +20,7 @@ import {
   deleteStbMappingAction,
   isOperatorApproved,
   cleanContact,
+  getCalculatedExpiryDate,
   type ProductRequest,
   type Product,
   type ProductRequestStatus,
@@ -54,7 +55,39 @@ import {
   MessageCircle,
   Car,
   Lock,
+  Copy,
 } from "lucide-react";
+
+function CopyStbButton({ stbId }: { stbId: string }) {
+  const [copied, setCopied] = useState(false);
+
+  function handleCopy(e: React.MouseEvent) {
+    e.stopPropagation();
+    if (stbId && stbId !== "N/A") {
+      navigator.clipboard.writeText(stbId);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    }
+  }
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      title="Click to copy STB ID"
+      className="inline-flex items-center gap-1.5 rounded-lg bg-slate-100 hover:bg-blue-50 border border-slate-200 hover:border-blue-300 px-2.5 py-1 text-xs font-mono font-bold text-[#0F172A] transition cursor-pointer group"
+    >
+      <span>{stbId}</span>
+      {copied ? (
+        <span className="text-[10px] font-bold text-emerald-600 flex items-center gap-0.5">
+          <Check className="h-3 w-3" /> Copied!
+        </span>
+      ) : (
+        <Copy className="h-3 w-3 text-slate-400 group-hover:text-[#2563EB] shrink-0" />
+      )}
+    </button>
+  );
+}
 
 function ProductStatusBadge({ status }: { status: ProductRequestStatus }) {
   switch (status) {
@@ -823,9 +856,9 @@ export function OperatorPage() {
                 <table className="w-full text-left text-sm">
                   <thead className="border-b border-[#CBD5E1] bg-[#F8FAFC] text-xs uppercase text-[#64748B] font-bold">
                     <tr>
-                      <th className="px-6 py-4">Transaction ID</th>
-                      <th className="px-6 py-4">STB ID & Customer</th>
-                      <th className="px-6 py-4">Plan Name</th>
+                      <th className="px-6 py-4">Name</th>
+                      <th className="px-6 py-4">STB ID</th>
+                      <th className="px-6 py-4">Plan</th>
                       <th className="px-6 py-4">Amount</th>
                       <th className="px-6 py-4">Status</th>
                       <th className="px-6 py-4 text-right">Actions</th>
@@ -835,18 +868,27 @@ export function OperatorPage() {
                     {Array.isArray(filteredTxns) && filteredTxns.length > 0 ? (
                       filteredTxns.map((t, index) => (
                         <tr key={(t as any)._id || t.id || index} className="hover:bg-slate-50 transition">
-                          <td className="px-6 py-4 font-mono font-bold text-[#0F172A]">{t.id}</td>
                           <td className="px-6 py-4">
                             <div className="font-bold text-[#0F172A]">
                               {t.customerName || "Customer"}
                             </div>
-                            <div className="text-xs font-semibold text-[#64748B]">
-                              STB: <span className="font-mono text-[#0F172A]">{t.stbId}</span> · +91 {t.customerMobile}
-                            </div>
+                            {t.customerMobile && (
+                              <div className="text-xs font-semibold text-[#64748B] mt-0.5">
+                                📱 +91 {t.customerMobile}
+                              </div>
+                            )}
+                          </td>
+                          <td className="px-6 py-4">
+                            <CopyStbButton stbId={t.stbId || "N/A"} />
                           </td>
                           <td className="px-6 py-4 font-bold text-[#0F172A]">{t.planName}</td>
-                          <td className="px-6 py-4 font-mono font-extrabold text-[#2563EB]">
-                            ₹{t.amount}
+                          <td className="px-6 py-4">
+                            <div className="font-mono font-extrabold text-[#2563EB]">
+                              ₹{t.amount}
+                            </div>
+                            <div className="text-[11px] font-mono text-[#64748B] mt-0.5">
+                              TXN: {t.id}
+                            </div>
                           </td>
                           <td className="px-6 py-4">
                             {String(t.status || "").toLowerCase() === "pending" && (
@@ -976,8 +1018,8 @@ export function OperatorPage() {
                         })
                         .map((m) => (
                           <tr key={m.id || m._id} className="hover:bg-slate-50 transition">
-                            <td className="px-6 py-4 font-mono font-extrabold text-[#2563EB] text-sm">
-                              {m.stbId}
+                            <td className="px-6 py-4">
+                              <CopyStbButton stbId={m.stbId} />
                             </td>
                             <td className="px-6 py-4">
                               <div className="font-bold text-[#0F172A]">
@@ -991,9 +1033,7 @@ export function OperatorPage() {
                               {m.currentPlan || "Basic Tamil Pack Monthly Rs 220"}
                             </td>
                             <td className="px-6 py-4 text-xs font-mono font-bold text-[#64748B]">
-                              {m.expiryDate
-                                ? new Date(m.expiryDate).toLocaleDateString()
-                                : "N/A"}
+                              {getCalculatedExpiryDate(m.expiryDate)}
                             </td>
                             <td className="px-6 py-4">
                               <span className="inline-flex items-center gap-1.5 rounded-full border border-emerald-300 bg-emerald-100 px-3 py-1 text-xs font-bold text-emerald-800">

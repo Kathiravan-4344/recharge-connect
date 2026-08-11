@@ -1,7 +1,7 @@
 import { Link, useNavigate } from "@tanstack/react-router";
 import { useEffect } from "react";
 import { AppShell } from "../components/AppShell";
-import { fetchStb, useStore, PLANS, formatName, setState, getState, selectPlan } from "../services/store";
+import { fetchStb, useStore, PLANS, formatName, setState, getState, selectPlan, getCalculatedExpiryDate } from "../services/store";
 import {
   Tv,
   Zap,
@@ -77,11 +77,6 @@ export function DashboardPage() {
       {/* Welcome Banner - Soft Light Modern Gradient */}
       <section className="bg-gradient-to-r from-blue-50 via-indigo-50/70 to-slate-50 border border-blue-200/80 rounded-3xl p-6 sm:p-8 text-[#0F172A] shadow-sm relative overflow-hidden">
         <div className="relative z-10 max-w-2xl space-y-3">
-          <div className="inline-flex items-center gap-2 rounded-full bg-blue-100/80 px-3 py-1 text-xs font-bold text-[#2563EB] border border-blue-200">
-            <Sparkles className="h-3.5 w-3.5 text-[#2563EB] fill-[#2563EB]" />
-            <span>Smart Cable TV Control Center</span>
-          </div>
-
           <h1 className="font-display text-2xl sm:text-4xl font-extrabold tracking-tight text-[#0F172A]">
             Welcome back, <span className="text-[#2563EB]">{formatName(user?.name || "Customer")}</span> 👋
           </h1>
@@ -134,15 +129,7 @@ export function DashboardPage() {
           <Meta label="Current Subscription Plan" value={stb?.currentPlan || "Basic Tamil Pack Monthly Rs 220"} />
           <Meta
             label="Plan Expiry Date"
-            value={
-              stb?.expiry
-                ? new Date(stb.expiry).toLocaleDateString("en-IN", {
-                    day: "numeric",
-                    month: "short",
-                    year: "numeric",
-                  })
-                : "Active"
-            }
+            value={getCalculatedExpiryDate(stb?.expiry)}
           />
           <Meta label="Account Status" value={stb?.active ? "Active Box" : "Expired / Disconnected"} accent={stb?.active ? "ok" : "warn"} />
           <Meta label="Assigned Cable Operator" value={`${opName} (${formattedOpNumber})`} />

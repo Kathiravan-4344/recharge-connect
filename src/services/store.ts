@@ -1,6 +1,6 @@
 // In-memory data store for STB RECHARGE (Pure Frontend - Supabase removed).
 import { useSyncExternalStore } from "react";
-import { cleanMobile, cleanContact, mobileToEmail } from "../utils/utils";
+import { cleanMobile, cleanContact, mobileToEmail, getCalculatedExpiryDate } from "../utils/utils";
 import {
   apiAddOperator,
   apiToggleOperator,
@@ -30,7 +30,7 @@ import {
 } from "./api";
 import { VENKATESA_OPERATOR, VENKATESA_STB_MAPPINGS } from "./venkatesaStbs";
 
-export { cleanMobile, cleanContact, mobileToEmail } from "../utils/utils";
+export { cleanMobile, cleanContact, mobileToEmail, getCalculatedExpiryDate } from "../utils/utils";
 
 export type Plan = {
   id: string;
