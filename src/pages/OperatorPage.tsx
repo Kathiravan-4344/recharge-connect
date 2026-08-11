@@ -227,34 +227,44 @@ export function OperatorPage() {
     console.log("Statuses:", txns.map((t) => t.status));
   }, [txns]);
 
+  const cleanMob = cleanContact(user?.mobile || "");
+  const isApprovedOp =
+    user?.role === "admin" ||
+    (cleanMob &&
+      approvedOperators.some(
+        (o) => o.active !== false && cleanContact(o.mobile) === cleanMob,
+      ));
+
   useEffect(() => {
     if (!user) {
       navigate({ to: "/login" });
       return;
     }
-    const isOp = isOperatorApproved(user.mobile);
-    if (user.role !== "operator" && user.role !== "admin" && !isOp) {
-      // If customer role and not approved operator, send to login
+    if (!isApprovedOp && user.role !== "admin") {
       navigate({ to: "/login" });
     }
-  }, [user, navigate]);
+  }, [user, isApprovedOp, navigate]);
 
-  if (!user) {
+  if (!user || (!isApprovedOp && user.role !== "admin")) {
     return (
       <div className="min-h-screen bg-[#F1F5F9] flex items-center justify-center p-4">
-        <div className="bg-white rounded-2xl border border-[#CBD5E1] p-8 max-w-md w-full text-center shadow-lg">
-          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-blue-50 text-[#2563EB] mx-auto font-bold mb-4">
-            <Shield className="h-6 w-6" />
+        <div className="bg-white rounded-2xl border border-[#CBD5E1] p-8 max-w-md w-full text-center shadow-lg space-y-4">
+          <div className="grid h-12 w-12 place-items-center rounded-2xl bg-red-50 text-red-600 mx-auto font-bold">
+            <Lock className="h-6 w-6" />
           </div>
-          <h2 className="text-xl font-extrabold text-[#0F172A]">Operator Login Required</h2>
-          <p className="text-xs text-[#64748B] mt-2 leading-relaxed">
-            Please log in with your registered Operator Mobile Number to access the Control Center.
+          <h2 className="text-xl font-extrabold text-[#0F172A]">Operator Access Denied</h2>
+          <p className="text-xs text-[#64748B] leading-relaxed">
+            Mobile number <strong>+91 {user?.mobile}</strong> is not registered as an active operator in the Admin Whitelist database.
+            Please contact Super Admin (Kathiravan V) to register your operator account.
           </p>
           <button
-            onClick={() => navigate({ to: "/login" })}
-            className="mt-6 w-full rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] py-3 text-sm font-bold text-white shadow-md transition"
+            onClick={() => {
+              logout();
+              navigate({ to: "/login" });
+            }}
+            className="w-full rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] py-3 text-xs font-bold text-white shadow-md transition cursor-pointer"
           >
-            Go to Operator Login
+            Back to Operator Login
           </button>
         </div>
       </div>
@@ -550,48 +560,45 @@ export function OperatorPage() {
           </div>
         </div>
 
-        {/* DEDICATED BIG STB ID MAPPING CARD - DIRECTLY BELOW WELCOME PERUMAL */}
-        <div className="mb-8 rounded-2xl border-2 border-blue-500/30 bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 p-6 text-white shadow-xl">
-          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
-            <div className="flex items-start gap-4">
-              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-inner">
-                <Tv className="h-7 w-7 text-white" />
+        {/* COMPACT ELEGANT STB ID MAPPING CARD */}
+        <div className="mb-6 rounded-xl border border-blue-500/30 bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 p-4 text-white shadow-md">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <div className="flex items-center gap-3">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-inner">
+                <Tv className="h-5 w-5 text-white" />
               </div>
               <div>
-                <div className="flex items-center gap-2.5 flex-wrap">
-                  <span className="rounded-md bg-white/20 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-blue-100 backdrop-blur-sm">
+                <div className="flex items-center gap-2 flex-wrap">
+                  <h2 className="font-display text-base font-bold text-white tracking-tight">
                     STB ID Mapping Portal
-                  </span>
-                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/20 border border-emerald-400/40 px-3 py-0.5 text-xs font-bold text-emerald-200">
-                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
-                    {stbMappings.length} STB IDs Mapped
+                  </h2>
+                  <span className="inline-flex items-center gap-1 rounded-full bg-emerald-400/20 border border-emerald-400/40 px-2.5 py-0.5 text-[10px] font-bold text-emerald-200">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    {stbMappings.length} Mapped
                   </span>
                 </div>
-                <h2 className="mt-1 font-display text-2xl font-black text-white tracking-tight">
-                  STB ID Mapping & Management
-                </h2>
-                <p className="mt-1 text-xs sm:text-sm text-blue-100/90 font-medium max-w-2xl leading-relaxed">
-                  Map customer STB IDs to your operator account. Only mapped and approved STB IDs can be recharged by your customers.
+                <p className="text-[11px] text-blue-100/90 font-medium">
+                  Map customer STB IDs to authorize recharges for your operator account.
                 </p>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+            <div className="flex items-center gap-2 shrink-0 flex-wrap sm:flex-nowrap">
               <button
                 onClick={() => setShowAddStbModal(true)}
-                className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-blue-700 hover:bg-blue-50 shadow-lg hover:shadow-xl transition transform active:scale-95 cursor-pointer"
+                className="flex items-center justify-center gap-1.5 rounded-lg bg-white px-3.5 py-2 text-xs font-extrabold text-blue-700 hover:bg-blue-50 shadow transition transform active:scale-95 cursor-pointer"
               >
-                <Plus className="h-5 w-5 text-blue-600" /> Map / Add New STB ID
+                <Plus className="h-4 w-4 text-blue-600" /> Map New STB ID
               </button>
               <button
                 onClick={() => setActiveMenu("stb_mapping")}
-                className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition border cursor-pointer ${
+                className={`flex items-center justify-center gap-1.5 rounded-lg px-3 py-2 text-xs font-bold transition border cursor-pointer ${
                   activeMenu === "stb_mapping"
                     ? "bg-white/30 border-white text-white shadow-inner"
                     : "bg-white/10 border-white/20 text-white hover:bg-white/20"
                 }`}
               >
-                <Tv className="h-4 w-4" /> Open STB List ({stbMappings.length})
+                <Tv className="h-3.5 w-3.5" /> STB List ({stbMappings.length})
               </button>
             </div>
           </div>
