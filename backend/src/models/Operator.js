@@ -13,6 +13,16 @@ const operatorSchema = new mongoose.Schema(
       default: "Operator",
       trim: true,
     },
+    stbBoxName: {
+      type: String,
+      default: "SCV",
+      trim: true,
+    },
+    portalLink: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     isActive: {
       type: Boolean,
       default: true,

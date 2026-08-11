@@ -133,10 +133,10 @@ export async function apiGetUserProfile(mobileNumber: string) {
 
 
 // Admin API Calls
-export async function apiAddOperator(mobileNumber: string, name: string) {
+export async function apiAddOperator(mobileNumber: string, name: string, stbBoxName?: string, portalLink?: string) {
   return apiRequest("/admin/operator/add", {
     method: "POST",
-    body: JSON.stringify({ mobileNumber, name }),
+    body: JSON.stringify({ mobileNumber, name, stbBoxName, portalLink }),
   });
 }
 

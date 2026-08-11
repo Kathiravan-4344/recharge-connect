@@ -8,7 +8,7 @@ const Complaint = require("../models/Complaint");
 // @route POST /api/admin/operator/add
 const addOperator = async (req, res) => {
   try {
-    const { mobileNumber, name } = req.body;
+    const { mobileNumber, name, stbBoxName, portalLink } = req.body;
     if (!mobileNumber) {
       return res.status(400).json({ message: "Operator mobile number is required" });
     }
@@ -19,11 +19,15 @@ const addOperator = async (req, res) => {
     if (operator) {
       operator.isActive = true;
       if (name) operator.name = name;
+      if (stbBoxName) operator.stbBoxName = stbBoxName;
+      if (portalLink !== undefined) operator.portalLink = portalLink;
       await operator.save();
     } else {
       operator = await Operator.create({
         mobileNumber: cleanMobile,
         name: name || "Operator",
+        stbBoxName: stbBoxName || "SCV",
+        portalLink: portalLink || "",
         isActive: true,
       });
     }

@@ -131,6 +131,20 @@ const operatorSchema = new mongoose.Schema(
   { timestamps: true }
 );
 
+const productCatalogSchema = new mongoose.Schema(
+  {
+    id: { type: String, required: true, unique: true },
+    name: { type: String, required: true },
+    category: { type: String, default: "accessory" },
+    price: { type: Number, default: 0 },
+    availableStock: { type: Number, default: 0 },
+    soldQuantity: { type: Number, default: 0 },
+    description: { type: String, default: "" },
+    iconName: { type: String, default: "Box" },
+  },
+  { timestamps: true }
+);
+
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 const StbMapping = mongoose.models.StbMapping || mongoose.model("StbMapping", stbMappingSchema);
 const RechargeRequest = mongoose.models.RechargeRequest || mongoose.model("RechargeRequest", rechargeSchema);
@@ -138,6 +152,7 @@ const Recharge = mongoose.models.Recharge || mongoose.model("Recharge", recharge
 const Complaint = mongoose.models.Complaint || mongoose.model("Complaint", complaintSchema);
 const ProductRequest = mongoose.models.ProductRequest || mongoose.model("ProductRequest", productRequestSchema);
 const Operator = mongoose.models.Operator || mongoose.model("Operator", operatorSchema);
+const ProductCatalog = mongoose.models.ProductCatalog || mongoose.model("ProductCatalog", productCatalogSchema);
 
 module.exports = async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
@@ -161,13 +176,106 @@ module.exports = async (req, res) => {
       } catch (e) {}
     }
 
+    // Auth: Send OTP
+    if (req.method === "POST" && routeString.includes("auth/send-otp")) {
+      const { mobileNumber } = body;
+      return res.status(200).json({ success: true, message: "OTP sent successfully", otp: "1234" });
+    }
+
+    // Auth: Verify OTP
+    if (req.method === "POST" && routeString.includes("auth/verify-otp")) {
+      const { mobileNumber, otp, name, stbId } = body;
+      const cleanMob = String(mobileNumber || "").trim();
+      const cleanDigits = cleanMob.replace(/\D/g, "").slice(-10);
+
+      let user = await User.findOne({
+        $or: [{ mobileNumber: cleanMob }, { mobileNumber: cleanDigits }]
+      });
+
+      if (!user) {
+        let role = "customer";
+        if (cleanDigits === "9080864542") role = "admin";
+        else {
+          const opExists = await Operator.findOne({
+            $or: [{ mobileNumber: cleanMob }, { mobileNumber: cleanDigits }],
+            isActive: true,
+          });
+          if (opExists || cleanDigits === "9787312758") role = "operator";
+        }
+
+        user = await User.create({
+          mobileNumber: cleanMob,
+          name: name || (role === "admin" ? "Kathiravan V" : role === "operator" ? "Operator" : "Customer"),
+          stbId: stbId || `STB-${cleanDigits.slice(-6)}`,
+          role,
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        token: `jwt-${user._id}-${Date.now()}`,
+        user,
+      });
+    }
+
+    // Operator: Login
+    if (req.method === "POST" && routeString.includes("operator/login")) {
+      const { mobileNumber } = body;
+      if (!mobileNumber) {
+        return res.status(400).json({ success: false, message: "Operator mobile number is required" });
+      }
+      const cleanMob = String(mobileNumber).trim();
+      const cleanDigits = cleanMob.replace(/\D/g, "").slice(-10);
+
+      let op = await Operator.findOne({
+        $or: [{ mobileNumber: cleanMob }, { mobileNumber: cleanDigits }],
+        isActive: true,
+      });
+
+      if (!op && (cleanDigits === "9080864542" || cleanDigits === "9787312758")) {
+        op = {
+          _id: `op-${cleanDigits}`,
+          mobileNumber: cleanMob,
+          name: cleanDigits === "9080864542" ? "Admin" : "PERUMAL",
+          isActive: true,
+        };
+      }
+
+      if (!op) {
+        return res.status(403).json({
+          success: false,
+          message: "Not Authorized: Operator mobile number not registered or inactive",
+        });
+      }
+
+      return res.status(200).json({
+        success: true,
+        message: "Operator authentication successful",
+        token: `op-jwt-${cleanDigits}-${Date.now()}`,
+        operator: op,
+      });
+    }
+
     // Auth: Profile
     if (req.method === "GET" && routeString.includes("auth/profile")) {
       const mob = String(reqUrl.split("/").pop()).trim();
-      const user = await User.findOne({ mobileNumber: mob });
-      const recharges = await RechargeRequest.find({ customerMobile: mob }).sort({ createdAt: -1 });
-      const productRequests = await ProductRequest.find({ customerMobile: mob }).sort({ createdAt: -1 });
-      const complaints = await Complaint.find({ customerMobile: mob }).sort({ createdAt: -1 });
+      const cleanDigits = mob.replace(/\D/g, "").slice(-10);
+
+      const user = await User.findOne({
+        $or: [{ mobileNumber: mob }, { mobileNumber: cleanDigits }]
+      });
+
+      const recharges = await RechargeRequest.find({
+        $or: [{ customerMobile: mob }, { customerMobile: cleanDigits }]
+      }).sort({ createdAt: -1 });
+
+      const productRequests = await ProductRequest.find({
+        $or: [{ customerMobile: mob }, { customerMobile: cleanDigits }]
+      }).sort({ createdAt: -1 });
+
+      const complaints = await Complaint.find({
+        $or: [{ customerMobile: mob }, { customerMobile: cleanDigits }]
+      }).sort({ createdAt: -1 });
 
       return res.status(200).json({
         success: true,
@@ -323,6 +431,34 @@ module.exports = async (req, res) => {
       return res.status(201).json({ success: true, rechargeRequest: request });
     }
 
+    // GET /api/recharge/status/:id
+    if (req.method === "GET" && routeString.includes("recharge/status")) {
+      const statusId = reqUrl.split("/").pop();
+      let reqDoc = null;
+      if (statusId && statusId.match(/^[0-9a-fA-F]{24}$/)) {
+        reqDoc = (await RechargeRequest.findById(statusId)) || (await Recharge.findById(statusId));
+      }
+      if (!reqDoc && statusId) {
+        const cleanId = String(statusId).trim().toUpperCase();
+        reqDoc =
+          (await RechargeRequest.findOne({ $or: [{ stbId: cleanId }, { customerMobile: statusId }] }).sort({ createdAt: -1 })) ||
+          (await Recharge.findOne({ $or: [{ stbId: cleanId }, { customerMobile: statusId }] }).sort({ createdAt: -1 }));
+      }
+      if (reqDoc) {
+        return res.status(200).json({
+          success: true,
+          id: reqDoc._id,
+          stbId: reqDoc.stbId,
+          amount: reqDoc.amount,
+          status: reqDoc.status || "Pending",
+          approvedTime: reqDoc.approvedTime,
+          requestTime: reqDoc.requestTime || reqDoc.createdAt,
+          request: reqDoc,
+        });
+      }
+      return res.status(404).json({ success: false, message: "Recharge request not found" });
+    }
+
     // GET /api/recharge/pending or /api/operator/requests
     if (req.method === "GET" && (routeString.includes("recharge/pending") || routeString.includes("operator/requests") || routeString.includes("recharge"))) {
       const searchParams = req.query || {};
@@ -330,13 +466,17 @@ module.exports = async (req, res) => {
 
       let filter = {};
       if (opMobile && opMobile !== "9080864542") {
-        const mappedStbs = await StbMapping.find({ operatorMobile: opMobile }).distinct("stbId");
+        const cleanDigits = opMobile.replace(/\D/g, "").slice(-10);
+        const mappedStbs = await StbMapping.find({
+          $or: [{ operatorMobile: opMobile }, { operatorMobile: cleanDigits }]
+        }).distinct("stbId");
         const cleanStbs = mappedStbs.filter(Boolean).map((s) => String(s).trim());
         const stbConditions = cleanStbs.length > 0 ? [{ stbId: { $in: cleanStbs } }] : [];
 
         filter = {
           $or: [
             { operatorMobile: opMobile },
+            { customerMobile: { $regex: cleanDigits, $options: "i" } },
             ...stbConditions,
             { operatorMobile: "" },
             { operatorMobile: null },
@@ -421,6 +561,23 @@ module.exports = async (req, res) => {
                 expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
               }
             );
+          }
+
+          if (item.userId || item.customerMobile || item.stbId) {
+            const userQuery = [];
+            if (item.userId && String(item.userId).match(/^[0-9a-fA-F]{24}$/)) userQuery.push({ _id: item.userId });
+            if (item.customerMobile) userQuery.push({ mobileNumber: item.customerMobile });
+            if (item.stbId) userQuery.push({ stbId: { $regex: new RegExp("^" + item.stbId + "$", "i") } });
+            if (userQuery.length > 0) {
+              await User.findOneAndUpdate(
+                { $or: userQuery },
+                {
+                  currentPlan: item.planName || "Basic Tamil Pack Monthly Rs 220",
+                  expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                  status: "Active",
+                }
+              );
+            }
           }
         }
       }
@@ -537,11 +694,24 @@ module.exports = async (req, res) => {
 
     // Admin: Add Operator
     if (req.method === "POST" && routeString.includes("admin/operator/add")) {
-      const { mobileNumber, name } = body;
-      const op = await Operator.create({
-        mobileNumber: String(mobileNumber).trim(),
-        name: name ? String(name).trim() : "Operator",
-      });
+      const { mobileNumber, name, stbBoxName, portalLink } = body;
+      const cleanMob = String(mobileNumber).trim();
+      let op = await Operator.findOne({ mobileNumber: cleanMob });
+      if (op) {
+        op.isActive = true;
+        if (name) op.name = String(name).trim();
+        if (stbBoxName) op.stbBoxName = String(stbBoxName).trim();
+        if (portalLink !== undefined) op.portalLink = String(portalLink).trim();
+        await op.save();
+      } else {
+        op = await Operator.create({
+          mobileNumber: cleanMob,
+          name: name ? String(name).trim() : "Operator",
+          stbBoxName: stbBoxName ? String(stbBoxName).trim() : "SCV",
+          portalLink: portalLink ? String(portalLink).trim() : "",
+          isActive: true,
+        });
+      }
       return res.status(201).json({ success: true, operator: op });
     }
 
@@ -554,6 +724,74 @@ module.exports = async (req, res) => {
         await op.save();
       }
       return res.status(200).json({ success: true, operator: op });
+    }
+
+    // Admin: Delete Operator
+    if (req.method === "DELETE" && routeString.includes("admin/operator")) {
+      const opId = reqUrl.split("/").pop();
+      if (opId && opId !== "operator") {
+        await Operator.findOneAndDelete({
+          $or: [{ _id: opId }, { mobileNumber: opId }, { mobileNumber: opId.replace(/\D/g, "").slice(-10) }]
+        }).catch(() => {});
+      }
+      return res.status(200).json({ success: true, message: "Operator deleted" });
+    }
+
+    // Products: Get List
+    if (req.method === "GET" && routeString.includes("products") && !routeString.includes("product-request")) {
+      let products = await ProductCatalog.find().sort({ createdAt: 1 });
+      if (products.length === 0) {
+        const seedItems = [
+          { id: "prod-1", name: "HD Set Top Box Remote", category: "accessory", price: 250, availableStock: 45, soldQuantity: 120, description: "Universal STB Remote compatible with all HD models", iconName: "Tv" },
+          { id: "prod-2", name: "4K Ultra HD HDMI Cable 1.5m", category: "accessory", price: 150, availableStock: 60, soldQuantity: 85, description: "High speed 4K Gold Plated Shielded HDMI Cable", iconName: "Zap" },
+          { id: "prod-3", name: "Dish Antenna LNB Receiver", category: "accessory", price: 350, availableStock: 30, soldQuantity: 42, description: "Universal Ku-Band Single LNB for High Signal Reception", iconName: "Radio" },
+          { id: "prod-4", name: "Coaxial Cable 15m with F-Connectors", category: "accessory", price: 200, availableStock: 50, soldQuantity: 65, description: "Heavy Duty Shielded RG6 Coaxial Cable with brass connectors", iconName: "Cable" },
+          { id: "prod-5", name: "12V 2A STB Power Adapter", category: "accessory", price: 220, availableStock: 40, soldQuantity: 90, description: "Surge Protected Power Supply Adapter for HD STB", iconName: "Plug" },
+          { id: "prod-6", name: "STB Wall Mounting Bracket Stand", category: "accessory", price: 180, availableStock: 35, soldQuantity: 55, description: "Heavy Duty Metal Wall Mount Stand with cable slots", iconName: "Box" },
+          { id: "prod-7", name: "AV 3-RCA Audio Video Cable", category: "accessory", price: 120, availableStock: 45, soldQuantity: 38, description: "Premium RCA Cable for Standard Definition STB connection", iconName: "Sliders" },
+          { id: "prod-8", name: "Universal Learning Smart Remote", category: "accessory", price: 390, availableStock: 25, soldQuantity: 74, description: "Dual TV + STB Smart Remote with button learning mode", iconName: "Tv" },
+          { id: "prod-9", name: "Dish Antenna Signal Alignment Service", category: "service", price: 299, availableStock: 100, soldQuantity: 110, description: "Technician Home Visit for Dish Alignment & Cable Signal Tuning", iconName: "Wrench" },
+          { id: "prod-10", name: "4K Smart Hybrid STB Hardware Upgrade", category: "service", price: 999, availableStock: 15, soldQuantity: 28, description: "Upgrade old STB to 4K Smart Android Hybrid Box with OTT Apps", iconName: "Sparkles" }
+        ];
+        try {
+          await ProductCatalog.insertMany(seedItems);
+          products = await ProductCatalog.find().sort({ createdAt: 1 });
+        } catch (seedErr) {
+          console.warn("[Product Seed Error]", seedErr.message);
+        }
+      }
+      return res.status(200).json({ success: true, count: products.length, products });
+    }
+
+    // Products: Upsert (Save/Update in MongoDB)
+    if (req.method === "POST" && routeString.includes("products/upsert")) {
+      const prod = body;
+      if (!prod || !prod.id) {
+        return res.status(400).json({ success: false, message: "Product ID and details required" });
+      }
+      const updatedProd = await ProductCatalog.findOneAndUpdate(
+        { id: prod.id },
+        {
+          name: prod.name,
+          category: prod.category || "accessory",
+          price: Number(prod.price) || 0,
+          availableStock: Number(prod.availableStock) || 0,
+          soldQuantity: Number(prod.soldQuantity) || 0,
+          description: prod.description || "",
+          iconName: prod.iconName || "Box",
+        },
+        { upsert: true, new: true }
+      );
+      return res.status(200).json({ success: true, product: updatedProd });
+    }
+
+    // Products: Delete from MongoDB
+    if ((req.method === "POST" || req.method === "DELETE") && routeString.includes("products/delete")) {
+      const prodId = body.id || reqUrl.split("/").pop();
+      if (prodId) {
+        await ProductCatalog.deleteOne({ id: prodId });
+      }
+      return res.status(200).json({ success: true, message: "Product deleted from MongoDB" });
     }
 
     // Default Fallback

@@ -8,6 +8,7 @@ import {
   formatName,
   updateProductStatus,
   upsertProduct,
+  removeProduct,
   updateComplaintStatus,
   setState,
   syncPendingRechargesFromBackend,
@@ -45,6 +46,7 @@ import {
   Phone,
   Plus,
   Edit3,
+  Trash2,
   Check,
   X,
   ShoppingBag,
@@ -133,7 +135,14 @@ export function OperatorPage() {
   const productRequests = useStore((s) => s.productRequests);
   const complaints = useStore((s) => s.complaints);
   const stbMappings = useStore((s) => s.stbMappings);
+  const approvedOperators = useStore((s) => s.approvedOperators);
   const navigate = useNavigate();
+
+  const currentOpInfo = approvedOperators.find(
+    (op) =>
+      op.mobile === user?.mobile ||
+      (op.name && user?.name && op.name.toLowerCase().trim() === user.name.toLowerCase().trim())
+  );
 
   // Navigation Menu Tabs: "txns" | "stb_mapping" | "product_requests" | "stock" | "complaints"
   const [activeMenu, setActiveMenu] = useState<
@@ -173,10 +182,13 @@ export function OperatorPage() {
   const [cmpTechPhone, setCmpTechPhone] = useState(user?.mobile || "");
   const [cmpExpectedArrival, setCmpExpectedArrival] = useState("In 20 Minutes");
 
-  // Edit Stock State
+  // Edit Product State
   const [editingProduct, setEditingProduct] = useState<Product | null>(null);
+  const [editNameVal, setEditNameVal] = useState<string>("");
+  const [editCategoryVal, setEditCategoryVal] = useState<"accessory" | "service">("accessory");
   const [editStockVal, setEditStockVal] = useState<number>(0);
   const [editPriceVal, setEditPriceVal] = useState<number>(0);
+  const [editDescVal, setEditDescVal] = useState<string>("");
 
   // Add Product Modal State
   const [showAddProduct, setShowAddProduct] = useState(false);
@@ -446,10 +458,15 @@ export function OperatorPage() {
                 <span>
                   Logged in:{" "}
                   <strong className="font-bold text-[#0F172A]">
-                    {formatName(user.name || "Operator Admin")}
+                    {formatName(currentOpInfo?.name || user.name || "Operator Admin")}
                   </strong>{" "}
-                  ({user.operatorNumber || "OP-ADMIN"} · +91 {user.mobile})
+                  (+91 {user.mobile})
                 </span>
+                {currentOpInfo?.stbBoxName && (
+                  <span className="rounded-md border border-blue-300 bg-blue-100 px-2 py-0.5 text-[10px] uppercase font-black text-[#2563EB]">
+                    📺 {currentOpInfo.stbBoxName}
+                  </span>
+                )}
                 <span>•</span>
                 <span className="flex items-center gap-1 text-[#22C55E] font-bold">
                   <span className="relative flex h-2 w-2">
@@ -465,13 +482,9 @@ export function OperatorPage() {
           <div className="flex items-center gap-3">
             <button
               onClick={() => {
-                syncPendingRechargesFromBackend();
-                syncProductRequestsFromBackend();
-                syncComplaintsFromBackend();
-                syncOperatorsFromBackend();
-                setNow(Date.now());
+                window.location.reload();
               }}
-              className="hidden sm:flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2 text-xs font-bold text-[#64748B] transition hover:bg-slate-100 hover:text-[#0F172A]"
+              className="flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-2 text-xs font-bold text-[#64748B] transition hover:bg-slate-100 hover:text-[#0F172A] cursor-pointer"
             >
               <RefreshCw className="h-3.5 w-3.5" /> Sync Now
             </button>
@@ -491,22 +504,99 @@ export function OperatorPage() {
 
       {/* Main Container */}
       <main className="mx-auto max-w-7xl px-4 py-8 sm:px-6">
-        {/* Top Header & Global Toggle Tabs */}
-        <div className="mb-6 flex flex-col justify-between gap-6 md:flex-row md:items-center">
+        {/* Top Header Section */}
+        <div className="mb-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
           <div>
             <p className="text-xs uppercase tracking-wider text-[#2563EB] font-bold">
               Operator Dashboard
             </p>
             <h1 className="mt-1 font-display text-2xl sm:text-3xl font-extrabold text-[#0F172A]">
-              Welcome, {formatName(user.name || "Operator")} 👋
+              Welcome, {formatName(currentOpInfo?.name || user.name || "Operator")} 👋
             </h1>
             <p className="mt-1 text-xs sm:text-sm font-medium text-[#64748B]">
               Manage customer recharges, product requests, inventory stock & support complaints.
             </p>
           </div>
 
-          {/* GLOBAL TAB FIX (Inactive #E2E8F0 / Active #2563EB) */}
-          <div className="flex items-center gap-1.5 rounded-xl border border-[#CBD5E1] bg-[#F1F5F9] p-1.5 overflow-x-auto no-scrollbar max-w-full">
+          {/* Operator Details & Portal Link Card */}
+          <div className="flex flex-wrap items-center gap-3 bg-white rounded-2xl border border-[#CBD5E1] p-3.5 shadow-sm">
+            <div className="flex items-center gap-2 text-xs font-bold text-[#0F172A]">
+              <Shield className="h-4 w-4 text-[#2563EB]" />
+              <span>Mobile: <strong className="font-mono">{user.mobile}</strong></span>
+            </div>
+            <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+            <div className="flex items-center gap-2 text-xs font-bold">
+              <span className="text-[#64748B]">STB Provider:</span>
+              <span className="rounded-lg bg-blue-100 border border-blue-200 px-2.5 py-1 text-xs font-black text-[#2563EB]">
+                📺 {currentOpInfo?.stbBoxName || "SCV"}
+              </span>
+            </div>
+            {currentOpInfo?.portalLink && (
+              <>
+                <div className="h-4 w-px bg-slate-200 hidden sm:block" />
+                <a
+                  href={currentOpInfo.portalLink.startsWith("http") ? currentOpInfo.portalLink : `https://${currentOpInfo.portalLink}`}
+                  target="_blank"
+                  rel="noreferrer"
+                  className="flex items-center gap-1.5 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-3.5 py-1.5 text-xs font-extrabold text-white shadow-sm transition cursor-pointer"
+                >
+                  🔗 Open Portal Link
+                </a>
+              </>
+            )}
+          </div>
+        </div>
+
+        {/* DEDICATED BIG STB ID MAPPING CARD - DIRECTLY BELOW WELCOME PERUMAL */}
+        <div className="mb-8 rounded-2xl border-2 border-blue-500/30 bg-gradient-to-r from-blue-700 via-indigo-700 to-blue-800 p-6 text-white shadow-xl">
+          <div className="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex items-start gap-4">
+              <div className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-white backdrop-blur-md border border-white/20 shadow-inner">
+                <Tv className="h-7 w-7 text-white" />
+              </div>
+              <div>
+                <div className="flex items-center gap-2.5 flex-wrap">
+                  <span className="rounded-md bg-white/20 px-2.5 py-0.5 text-[11px] font-black uppercase tracking-wider text-blue-100 backdrop-blur-sm">
+                    STB ID Mapping Portal
+                  </span>
+                  <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-400/20 border border-emerald-400/40 px-3 py-0.5 text-xs font-bold text-emerald-200">
+                    <span className="h-2 w-2 rounded-full bg-emerald-400 animate-pulse" />
+                    {stbMappings.length} STB IDs Mapped
+                  </span>
+                </div>
+                <h2 className="mt-1 font-display text-2xl font-black text-white tracking-tight">
+                  STB ID Mapping & Management
+                </h2>
+                <p className="mt-1 text-xs sm:text-sm text-blue-100/90 font-medium max-w-2xl leading-relaxed">
+                  Map customer STB IDs to your operator account. Only mapped and approved STB IDs can be recharged by your customers.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 shrink-0 flex-wrap sm:flex-nowrap">
+              <button
+                onClick={() => setShowAddStbModal(true)}
+                className="flex items-center justify-center gap-2 rounded-xl bg-white px-5 py-3 text-sm font-extrabold text-blue-700 hover:bg-blue-50 shadow-lg hover:shadow-xl transition transform active:scale-95 cursor-pointer"
+              >
+                <Plus className="h-5 w-5 text-blue-600" /> Map / Add New STB ID
+              </button>
+              <button
+                onClick={() => setActiveMenu("stb_mapping")}
+                className={`flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition border cursor-pointer ${
+                  activeMenu === "stb_mapping"
+                    ? "bg-white/30 border-white text-white shadow-inner"
+                    : "bg-white/10 border-white/20 text-white hover:bg-white/20"
+                }`}
+              >
+                <Tv className="h-4 w-4" /> Open STB List ({stbMappings.length})
+              </button>
+            </div>
+          </div>
+        </div>
+
+        {/* Global Navigation Tabs Bar */}
+        <div className="mb-6 flex items-center justify-between gap-4">
+          <div className="flex items-center gap-2 rounded-xl border border-[#CBD5E1] bg-[#F1F5F9] p-1.5 overflow-x-auto no-scrollbar max-w-full">
             <button
               onClick={() => setActiveMenu("txns")}
               className={`flex shrink-0 items-center gap-2 rounded-lg px-4 py-2.5 text-xs sm:text-sm font-bold transition-all duration-200 ease-in-out whitespace-nowrap ${
@@ -1106,71 +1196,101 @@ export function OperatorPage() {
                       <td className="px-6 py-4 text-right">Actions</td>
                     </tr>
 
-                    {products.map((p) => {
-                      const isLowStock = p.category === "accessory" && p.availableStock <= 5;
-                      return (
-                        <tr key={p.id} className="hover:bg-slate-50 transition">
-                          <td className="px-6 py-4 font-bold text-[#0F172A] flex items-center gap-2">
-                            {p.category === "service" ? (
-                              <Wrench className="h-4 w-4 text-[#2563EB]" />
-                            ) : (
-                              <Package className="h-4 w-4 text-[#2563EB]" />
-                            )}
-                            <div>
-                              <div>{p.name}</div>
-                              <span className="text-[11px] text-[#64748B] font-normal">
-                                {p.description}
-                              </span>
-                            </div>
-                          </td>
-                          <td className="px-6 py-4 text-xs">
-                            <span
-                              className={`capitalize rounded-full px-2.5 py-0.5 font-bold ${
-                                p.category === "service"
-                                  ? "bg-purple-100 text-purple-800 border border-purple-200"
-                                  : "bg-blue-100 text-blue-800 border border-blue-200"
-                              }`}
-                            >
-                              {p.category}
-                            </span>
-                          </td>
-                          <td className="px-6 py-4 font-mono font-bold text-[#0F172A]">₹{p.price}</td>
-                          <td className="px-6 py-4 font-mono font-bold text-[#22C55E]">
-                            {p.availableStock}
-                          </td>
-                          <td className="px-6 py-4 font-mono text-[#64748B]">{p.soldQuantity}</td>
-                          <td className="px-6 py-4">
-                            {p.category === "accessory" ? (
-                              isLowStock ? (
-                                <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
-                                  ⚠️ Low Stock ({p.availableStock} left)
-                                </span>
+                    {products.length === 0 ? (
+                      <tr>
+                        <td colSpan={7} className="px-6 py-12 text-center text-[#64748B] font-medium">
+                          <Package className="mx-auto h-12 w-12 text-[#94A3B8] mb-3" />
+                          <p className="text-base font-bold text-[#0F172A]">No products or services added yet</p>
+                          <p className="text-xs text-[#64748B] mt-1 max-w-sm mx-auto">
+                            Add your first accessory product or installation service to display it in your store catalog.
+                          </p>
+                          <button
+                            onClick={() => setShowAddProduct(true)}
+                            className="mt-4 inline-flex items-center gap-2 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-md transition cursor-pointer"
+                          >
+                            <Plus className="h-4 w-4" /> Add New Product / Service
+                          </button>
+                        </td>
+                      </tr>
+                    ) : (
+                      products.map((p) => {
+                        const isLowStock = p.category === "accessory" && p.availableStock <= 5;
+                        return (
+                          <tr key={p.id} className="hover:bg-slate-50 transition">
+                            <td className="px-6 py-4 font-bold text-[#0F172A] flex items-center gap-2">
+                              {p.category === "service" ? (
+                                <Wrench className="h-4 w-4 text-[#2563EB]" />
                               ) : (
-                                <span className="font-mono text-[#22C55E] font-bold">
-                                  {p.availableStock} units
+                                <Package className="h-4 w-4 text-[#2563EB]" />
+                              )}
+                              <div>
+                                <div>{p.name}</div>
+                                <span className="text-[11px] text-[#64748B] font-normal">
+                                  {p.description}
                                 </span>
-                              )
-                            ) : (
-                              <span className="text-xs text-[#2563EB] font-bold">
-                                Service Available
+                              </div>
+                            </td>
+                            <td className="px-6 py-4 text-xs">
+                              <span
+                                className={`capitalize rounded-full px-2.5 py-0.5 font-bold ${
+                                  p.category === "service"
+                                    ? "bg-purple-100 text-purple-800 border border-purple-200"
+                                    : "bg-blue-100 text-blue-800 border border-blue-200"
+                                }`}
+                              >
+                                {p.category}
                               </span>
-                            )}
-                          </td>
-                          <td className="px-6 py-4 text-right">
-                            <button
-                              onClick={() => {
-                                setEditingProduct(p);
-                                setEditStockVal(p.availableStock);
-                                setEditPriceVal(p.price);
-                              }}
-                              className="inline-flex items-center gap-1 rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100"
-                            >
-                              <Edit3 className="h-3.5 w-3.5 text-[#2563EB]" /> Edit Price / Stock
-                            </button>
-                          </td>
-                        </tr>
-                      );
-                    })}
+                            </td>
+                            <td className="px-6 py-4 font-mono font-bold text-[#0F172A]">₹{p.price}</td>
+                            <td className="px-6 py-4 font-mono font-bold text-[#22C55E]">
+                              {p.availableStock}
+                            </td>
+                            <td className="px-6 py-4 font-mono text-[#64748B]">{p.soldQuantity}</td>
+                            <td className="px-6 py-4">
+                              {p.category === "accessory" ? (
+                                isLowStock ? (
+                                  <span className="inline-flex items-center gap-1 rounded-full border border-amber-300 bg-amber-100 px-3 py-1 text-xs font-bold text-amber-800">
+                                    ⚠️ Low Stock ({p.availableStock} left)
+                                  </span>
+                                ) : (
+                                  <span className="font-mono text-[#22C55E] font-bold">
+                                    {p.availableStock} units
+                                  </span>
+                                )
+                              ) : (
+                                <span className="text-xs text-[#2563EB] font-bold">
+                                  Service Available
+                                </span>
+                              )}
+                            </td>
+                            <td className="px-6 py-4 text-right">
+                              <div className="flex items-center justify-end gap-2">
+                                <button
+                                  onClick={() => {
+                                    setEditingProduct(p);
+                                    setEditNameVal(p.name);
+                                    setEditCategoryVal(p.category);
+                                    setEditStockVal(p.availableStock);
+                                    setEditPriceVal(p.price);
+                                    setEditDescVal(p.description || "");
+                                  }}
+                                  className="inline-flex items-center gap-1 rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
+                                >
+                                  <Edit3 className="h-3.5 w-3.5 text-[#2563EB]" /> Edit
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteProduct(p.id, p.name)}
+                                  className="inline-flex items-center gap-1 rounded-xl border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer"
+                                  title="Delete Product"
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })
+                    )}
                   </tbody>
                 </table>
               </div>
@@ -1498,13 +1618,13 @@ export function OperatorPage() {
         </div>
       )}
 
-      {/* Modal: Edit Stock */}
+      {/* Modal: Edit Product */}
       {editingProduct && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
           <div className="w-full max-w-md rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-xl space-y-4">
             <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
               <h3 className="text-lg font-bold text-[#0F172A] flex items-center gap-2">
-                <Edit3 className="h-5 w-5 text-[#2563EB]" /> Update Stock & Price
+                <Edit3 className="h-5 w-5 text-[#2563EB]" /> Edit Product / Service Details
               </h3>
               <button
                 onClick={() => setEditingProduct(null)}
@@ -1514,60 +1634,92 @@ export function OperatorPage() {
               </button>
             </div>
 
-            <div className="space-y-4 text-xs">
+            <form onSubmit={handleSaveProductUpdate} className="space-y-3.5 text-xs">
               <div>
                 <label className="block font-bold text-[#64748B] mb-1">Product Name</label>
                 <input
                   type="text"
-                  readOnly
-                  value={editingProduct.name}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm font-bold text-[#0F172A] outline-none cursor-not-allowed"
+                  required
+                  value={editNameVal}
+                  onChange={(e) => setEditNameVal(e.target.value)}
+                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm font-bold text-[#0F172A] outline-none focus:border-[#2563EB]"
                 />
               </div>
 
               <div>
-                <label className="block font-bold text-[#64748B] mb-1">Update Price (₹)</label>
-                <input
-                  type="number"
-                  required
-                  min={0}
-                  value={editPriceVal}
-                  onChange={(e) => setEditPriceVal(Number(e.target.value))}
+                <label className="block font-bold text-[#64748B] mb-1">Category</label>
+                <select
+                  value={editCategoryVal}
+                  onChange={(e) => setEditCategoryVal(e.target.value as "accessory" | "service")}
                   className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
-                />
+                >
+                  <option value="accessory">📦 Accessory</option>
+                  <option value="service">🔧 Installation Service</option>
+                </select>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="block font-bold text-[#64748B] mb-1">Price (₹)</label>
+                  <input
+                    type="number"
+                    required
+                    min={0}
+                    value={editPriceVal}
+                    onChange={(e) => setEditPriceVal(Number(e.target.value))}
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold text-[#64748B] mb-1">Available Stock</label>
+                  <input
+                    type="number"
+                    required
+                    min={0}
+                    value={editStockVal}
+                    onChange={(e) => setEditStockVal(Number(e.target.value))}
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
               </div>
 
               <div>
-                <label className="block font-bold text-[#64748B] mb-1">
-                  Available Stock Quantity
-                </label>
-                <input
-                  type="number"
-                  required
-                  min={0}
-                  value={editStockVal}
-                  onChange={(e) => setEditStockVal(Number(e.target.value))}
+                <label className="block font-bold text-[#64748B] mb-1">Description</label>
+                <textarea
+                  rows={2}
+                  value={editDescVal}
+                  onChange={(e) => setEditDescVal(e.target.value)}
                   className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
                 />
               </div>
 
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex items-center justify-between">
                 <button
                   type="button"
-                  onClick={() => setEditingProduct(null)}
-                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2 text-xs font-bold text-[#0F172A]"
+                  onClick={() => handleDeleteProduct(editingProduct.id, editingProduct.name)}
+                  className="flex items-center gap-1.5 rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer"
                 >
-                  Cancel
+                  <Trash2 className="h-4 w-4" /> Delete Item
                 </button>
-                <button
-                  type="button"
-                  onClick={handleSaveStockUpdate}
-                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2 text-xs font-bold text-white shadow-sm"
-                >
-                  Save Stock Updates
-                </button>
+
+                <div className="flex gap-2">
+                  <button
+                    type="button"
+                    onClick={() => setEditingProduct(null)}
+                    className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2 text-xs font-bold text-[#0F172A]"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer"
+                  >
+                    Save Changes
+                  </button>
+                </div>
               </div>
-            </div>
+            </form>
           </div>
         </div>
       )}

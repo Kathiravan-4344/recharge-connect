@@ -24,6 +24,9 @@ import {
   apiMapStb,
   apiGetOperatorStbs,
   apiDeleteStbMapping,
+  apiGetProducts,
+  apiUpsertProduct,
+  apiDeleteProduct,
 } from "./api";
 
 
@@ -123,12 +126,15 @@ export type STB = {
   currentPlan: string;
   expiry: string;
   active: boolean;
+  operatorMobile?: string;
 };
 
 export type ApprovedOperator = {
   id: string;
   mobile: string;
   name: string;
+  stbBoxName?: "SCV" | "TCCL" | "AKSHAYA DIGINET" | "TACTV" | string;
+  portalLink?: string;
   addedAt: string;
   active: boolean;
 };
@@ -139,6 +145,8 @@ export type User = {
   name?: string;
   email?: string;
   operatorNumber?: string;
+  operatorMobile?: string;
+  operatorName?: string;
   stbId?: string;
   role: "operator" | "customer" | "admin";
 };
@@ -251,108 +259,7 @@ export const PLANS: Plan[] = [
   },
 ];
 
-export const INITIAL_SEED_PRODUCTS: Product[] = [
-  {
-    id: "prod-1",
-    name: "HD Set Top Box Remote",
-    category: "accessory",
-    price: 250,
-    availableStock: 45,
-    soldQuantity: 120,
-    description: "Universal STB Remote compatible with all HD models",
-    iconName: "Tv",
-  },
-  {
-    id: "prod-2",
-    name: "4K Ultra HD HDMI Cable 1.5m",
-    category: "accessory",
-    price: 150,
-    availableStock: 60,
-    soldQuantity: 85,
-    description: "High speed 4K Gold Plated Shielded HDMI Cable",
-    iconName: "Zap",
-  },
-  {
-    id: "prod-3",
-    name: "Dish Antenna LNB Receiver",
-    category: "accessory",
-    price: 350,
-    availableStock: 30,
-    soldQuantity: 42,
-    description: "Universal Ku-Band Single LNB for High Signal Reception",
-    iconName: "Radio",
-  },
-  {
-    id: "prod-4",
-    name: "Coaxial Cable 15m with F-Connectors",
-    category: "accessory",
-    price: 200,
-    availableStock: 50,
-    soldQuantity: 65,
-    description: "Heavy Duty Shielded RG6 Coaxial Cable with brass connectors",
-    iconName: "Cable",
-  },
-  {
-    id: "prod-5",
-    name: "12V 2A STB Power Adapter",
-    category: "accessory",
-    price: 220,
-    availableStock: 40,
-    soldQuantity: 90,
-    description: "Surge Protected Power Supply Adapter for HD STB",
-    iconName: "Plug",
-  },
-  {
-    id: "prod-6",
-    name: "STB Wall Mounting Bracket Stand",
-    category: "accessory",
-    price: 180,
-    availableStock: 35,
-    soldQuantity: 55,
-    description: "Heavy Duty Metal Wall Mount Stand with cable slots",
-    iconName: "Box",
-  },
-  {
-    id: "prod-7",
-    name: "AV 3-RCA Audio Video Cable",
-    category: "accessory",
-    price: 120,
-    availableStock: 45,
-    soldQuantity: 38,
-    description: "Premium RCA Cable for Standard Definition STB connection",
-    iconName: "Sliders",
-  },
-  {
-    id: "prod-8",
-    name: "Universal Learning Smart Remote",
-    category: "accessory",
-    price: 390,
-    availableStock: 25,
-    soldQuantity: 74,
-    description: "Dual TV + STB Smart Remote with button learning mode",
-    iconName: "Tv",
-  },
-  {
-    id: "prod-9",
-    name: "Dish Antenna Signal Alignment Service",
-    category: "service",
-    price: 299,
-    availableStock: 100,
-    soldQuantity: 110,
-    description: "Technician Home Visit for Dish Alignment & Cable Signal Tuning",
-    iconName: "Wrench",
-  },
-  {
-    id: "prod-10",
-    name: "4K Smart Hybrid STB Hardware Upgrade",
-    category: "service",
-    price: 999,
-    availableStock: 15,
-    soldQuantity: 28,
-    description: "Upgrade old STB to 4K Smart Android Hybrid Box with OTT Apps",
-    iconName: "Sparkles",
-  },
-];
+export const INITIAL_SEED_PRODUCTS: Product[] = [];
 
 export const INITIAL_SEED_PRODUCT_REQUESTS: ProductRequest[] = [];
 export const INITIAL_SEED_COMPLAINTS: Complaint[] = [];
@@ -401,7 +308,13 @@ function loadSavedState(): State {
       const cleanOps = ((parsed.approvedOperators || INITIAL_APPROVED_OPERATORS) as ApprovedOperator[]).filter(
         (op) => op && op.mobile !== "9080864542"
       );
-      return { ...defaultState, ...parsed, approvedOperators: cleanOps, ready: true };
+      // Remove any old seed products prod-1 through prod-10
+      const cleanProds = Array.isArray(parsed.products)
+        ? (parsed.products as Product[]).filter(
+            (p) => p && !["prod-1", "prod-2", "prod-3", "prod-4", "prod-5", "prod-6", "prod-7", "prod-8", "prod-9", "prod-10"].includes(p.id)
+          )
+        : [];
+      return { ...defaultState, ...parsed, approvedOperators: cleanOps, products: cleanProds, ready: true };
     }
   } catch (e) {
     console.error("Failed to load local state", e);
@@ -637,6 +550,7 @@ export async function initStore() {
   }
 
   syncOperatorsFromBackend();
+  syncProductsFromBackend();
   syncPendingRechargesFromBackend();
   syncProductRequestsFromBackend();
   syncComplaintsFromBackend();
@@ -646,6 +560,8 @@ export async function initStore() {
       if (state.user?.mobile) {
         syncAccountFromBackend(state.user.mobile);
       }
+      syncOperatorsFromBackend();
+      syncProductsFromBackend();
       syncPendingRechargesFromBackend();
       syncProductRequestsFromBackend();
       syncComplaintsFromBackend();
@@ -1064,7 +980,13 @@ export function applyCoupon(code: string): { success: boolean; discount: number;
 }
 
 // Admin Operations
-export async function upsertOperator(mobile: string, name: string, active = true): Promise<{ success: boolean; message?: string }> {
+export async function upsertOperator(
+  mobile: string,
+  name: string,
+  stbBoxName?: string,
+  portalLink?: string,
+  active = true
+): Promise<{ success: boolean; message?: string }> {
   const cleaned = cleanContact(mobile);
   if (!cleaned) {
     return { success: false, message: "Invalid mobile number or email address" };
@@ -1073,18 +995,35 @@ export async function upsertOperator(mobile: string, name: string, active = true
   let updatedOps: ApprovedOperator[];
   if (exists) {
     updatedOps = state.approvedOperators.map((o) =>
-      cleanContact(o.mobile) === cleaned ? { ...o, mobile: cleaned, name, active } : o,
+      cleanContact(o.mobile) === cleaned
+        ? {
+            ...o,
+            mobile: cleaned,
+            name,
+            stbBoxName: stbBoxName || o.stbBoxName || "SCV",
+            portalLink: portalLink !== undefined ? portalLink : o.portalLink,
+            active,
+          }
+        : o,
     );
   } else {
     updatedOps = [
       ...state.approvedOperators,
-      { id: "op-" + Date.now(), mobile: cleaned, name, addedAt: new Date().toISOString(), active },
+      {
+        id: "op-" + Date.now(),
+        mobile: cleaned,
+        name,
+        stbBoxName: stbBoxName || "SCV",
+        portalLink: portalLink || "",
+        addedAt: new Date().toISOString(),
+        active,
+      },
     ];
   }
   setState({ approvedOperators: updatedOps });
 
   try {
-    const res = await apiAddOperator(cleaned, name);
+    const res = await apiAddOperator(cleaned, name, stbBoxName, portalLink);
     if (!res.success) {
       console.warn("Backend add operator warning:", res.error);
       return { success: false, message: res.error || "Failed to save operator to server database" };
@@ -1138,10 +1077,12 @@ export async function unblockCustomer(identifier: string) {
 export async function upsertProduct(prod: Partial<Product> & { id: string; name: string }) {
   const exists = state.products.find((p) => p.id === prod.id);
   let updated: Product[];
+  let targetP: Product;
   if (exists) {
-    updated = state.products.map((p) => (p.id === prod.id ? { ...p, ...prod } : p));
+    targetP = { ...exists, ...prod };
+    updated = state.products.map((p) => (p.id === prod.id ? targetP : p));
   } else {
-    const newP: Product = {
+    targetP = {
       id: prod.id,
       name: prod.name,
       category: prod.category || "accessory",
@@ -1151,13 +1092,15 @@ export async function upsertProduct(prod: Partial<Product> & { id: string; name:
       description: prod.description,
       iconName: prod.iconName,
     };
-    updated = [...state.products, newP];
+    updated = [...state.products, targetP];
   }
   setState({ products: updated });
+  await apiUpsertProduct(targetP);
 }
 
 export async function removeProduct(id: string) {
   setState({ products: state.products.filter((p) => p.id !== id) });
+  await apiDeleteProduct(id);
 }
 
 export async function resetAllData() {
@@ -1208,7 +1151,7 @@ export async function syncPendingRechargesFromBackend(operatorMobile?: string) {
         const matchingTxn = backendTxns.find((t) => {
           if (t.id === pTxnId) return true;
           const tStb = (t.stbId || "").trim().toUpperCase();
-          if (pStb && tStb === pStb && t.status !== "pending") return true;
+          if (pStbId && tStb === pStbId && t.status !== "pending") return true;
           const tMobile = cleanMobile(t.customerMobile || "");
           if (pMobile && tMobile && pMobile === tMobile && t.status !== "pending") return true;
           return false;
@@ -1333,6 +1276,8 @@ export async function syncOperatorsFromBackend() {
         id: o._id || o.id,
         mobile: o.mobileNumber || o.mobile,
         name: o.name || "Operator",
+        stbBoxName: o.stbBoxName || "SCV",
+        portalLink: o.portalLink || "",
         addedAt: o.createdAt || new Date().toISOString(),
         active: o.isActive !== false,
       }));
@@ -1340,6 +1285,27 @@ export async function syncOperatorsFromBackend() {
     }
   } catch (err) {
     console.warn("Failed to sync operators from backend", err);
+  }
+}
+
+export async function syncProductsFromBackend() {
+  try {
+    const res = await apiGetProducts();
+    if (res.success && Array.isArray(res.data?.products)) {
+      const prods: Product[] = res.data.products.map((p: any) => ({
+        id: p._id || p.id,
+        name: p.name,
+        category: p.category || "accessory",
+        price: p.price || 0,
+        availableStock: p.availableStock || 0,
+        soldQuantity: p.soldQuantity || 0,
+        description: p.description || "",
+        iconName: p.iconName || "Box",
+      }));
+      setState({ products: prods });
+    }
+  } catch (err) {
+    console.warn("Failed to sync products from backend", err);
   }
 }
 

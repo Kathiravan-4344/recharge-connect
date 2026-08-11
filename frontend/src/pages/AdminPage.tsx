@@ -53,7 +53,7 @@ type TabType =
   | "customers"
   | "recharges"
   | "complaints"
-  | "products";
+  | "product_requests";
 
 function getOperatorForRecord(
   rec: { customerMobile?: string; stbId?: string; operatorMobile?: string },
@@ -86,6 +86,8 @@ export function AdminPage() {
   const [tab, setTab] = useState<TabType>("dashboard");
   const [opMobile, setOpMobile] = useState("");
   const [opName, setOpName] = useState("");
+  const [opStbBox, setOpStbBox] = useState<"SCV" | "TCCL" | "AKSHAYA DIGINET" | "TACTV">("SCV");
+  const [opPortalLink, setOpPortalLink] = useState("");
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null);
 
   // Search states per tab
@@ -100,15 +102,6 @@ export function AdminPage() {
   const [selectedOperator, setSelectedOperator] = useState<ApprovedOperator | null>(null);
   const [selectedOperatorFilter, setSelectedOperatorFilter] = useState<string>("all");
   const [opModalTab, setOpModalTab] = useState<"customers" | "recharges" | "complaints" | "products">("customers");
-
-  // Product Add/Edit Modal state
-  const [showAddProduct, setShowAddProduct] = useState(false);
-  const [editingProduct, setEditingProduct] = useState<Product | null>(null);
-  const [newProdName, setNewProdName] = useState("");
-  const [newProdCategory, setNewProdCategory] = useState<"accessory" | "service">("accessory");
-  const [newProdPrice, setNewProdPrice] = useState("");
-  const [newProdStock, setNewProdStock] = useState("");
-  const [newProdDesc, setNewProdDesc] = useState("");
 
   const navigate = useNavigate();
 
@@ -128,34 +121,16 @@ export function AdminPage() {
     e.preventDefault();
     setMsg(null);
     if (!opMobile.trim() || !opName.trim()) return;
-    const res = await upsertOperator(opMobile, opName);
+    const res = await upsertOperator(opMobile.trim(), opName.trim(), opStbBox, opPortalLink.trim());
     if (res.success) {
-      setMsg({ text: `Operator ${opName} added and saved to database successfully!` });
+      setMsg({ text: `Operator ${opName} (${opStbBox}) added successfully!` });
     } else {
       setMsg({ text: res.message || `Failed to save operator to database.`, error: true });
     }
     setOpMobile("");
     setOpName("");
-  }
-
-  function handleSaveProduct(e: React.FormEvent) {
-    e.preventDefault();
-    if (!newProdName.trim() || !newProdPrice) return;
-    upsertProduct({
-      id: editingProduct ? editingProduct.id : "prod-" + Date.now(),
-      name: newProdName.trim(),
-      category: newProdCategory,
-      price: Number(newProdPrice),
-      availableStock: Number(newProdStock) || 10,
-      description: newProdDesc.trim(),
-    });
-    setShowAddProduct(false);
-    setEditingProduct(null);
-    setNewProdName("");
-    setNewProdPrice("");
-    setNewProdStock("");
-    setNewProdDesc("");
-    setMsg({ text: editingProduct ? "Product updated." : "New item added to catalog." });
+    setOpPortalLink("");
+    setOpStbBox("SCV");
   }
 
   // Derived Metrics
@@ -260,12 +235,6 @@ export function AdminPage() {
     return matchSearch && matchStatus && matchOp;
   });
 
-  const filteredProducts = products.filter(
-    (p) =>
-      p.name.toLowerCase().includes(productSearch.toLowerCase()) ||
-      p.category.toLowerCase().includes(productSearch.toLowerCase()),
-  );
-
   return (
     <AppShell>
       {/* Top Banner */}
@@ -309,9 +278,9 @@ export function AdminPage() {
           { id: "dashboard", label: "📊 Overview", icon: Zap },
           { id: "operators", label: "🛡️ Operators", icon: Shield },
           { id: "customers", label: "👥 Customers", icon: Users },
-          { id: "recharges", label: "💳 Recharges", icon: CreditCard },
+          { id: "recharges", label: "💳 Recharges & Payments", icon: CreditCard },
+          { id: "product_requests", label: "📦 Product Requests", icon: Package },
           { id: "complaints", label: "🔧 Complaints", icon: Wrench },
-          { id: "products", label: "📦 Products", icon: Package },
         ].map((t) => (
           <button
             key={t.id}
@@ -417,15 +386,15 @@ export function AdminPage() {
             </div>
 
             <div
-              onClick={() => setTab("products")}
+              onClick={() => setTab("product_requests")}
               className="cursor-pointer rounded-2xl border border-[#CBD5E1] bg-white p-5 hover:border-[#2563EB] shadow-sm transition space-y-1.5"
             >
               <div className="flex items-center gap-3">
                 <Package className="h-6 w-6 text-[#2563EB]" />
-                <h3 className="font-bold text-[#0F172A] text-base">Product Inventory</h3>
+                <h3 className="font-bold text-[#0F172A] text-base">Product Requests</h3>
               </div>
               <p className="text-xs text-[#64748B]">
-                Manage accessories, services, price & available stock.
+                View customer product & service order requests, payments & fulfillment status.
               </p>
             </div>
           </div>
@@ -445,44 +414,82 @@ export function AdminPage() {
               </span>
             </div>
 
-            <form
-              onSubmit={handleAddOperator}
-              className="grid grid-cols-1 sm:grid-cols-3 gap-3 items-end"
-            >
-              <div>
-                <label className="block text-xs font-bold text-[#64748B] mb-1.5">
-                  Operator Full Name
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={opName}
-                  onChange={(e) => setOpName(e.target.value)}
-                  placeholder="e.g. Ramesh Kumar"
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
-                />
+            <form onSubmit={handleAddOperator} className="space-y-4">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    OPERATOR FULL NAME <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={opName}
+                    onChange={(e) => setOpName(e.target.value)}
+                    placeholder="e.g. Ramesh Kumar"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    MOBILE NUMBER <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    required
+                    value={opMobile}
+                    onChange={(e) => setOpMobile(e.target.value)}
+                    placeholder="e.g. 9840192837"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
               </div>
 
-              <div>
-                <label className="block text-xs font-bold text-[#64748B] mb-1.5">
-                  Mobile Number / Email
-                </label>
-                <input
-                  type="text"
-                  required
-                  value={opMobile}
-                  onChange={(e) => setOpMobile(e.target.value)}
-                  placeholder="e.g. 9840192837 or op@stb.com"
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
-                />
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-end">
+                <div className="lg:col-span-7">
+                  <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    SELECT STB BOX NAME <span className="text-red-500">*</span>
+                  </label>
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                    {(["SCV", "TCCL", "AKSHAYA DIGINET", "TACTV"] as const).map((provider) => (
+                      <button
+                        key={provider}
+                        type="button"
+                        onClick={() => setOpStbBox(provider)}
+                        className={`rounded-xl px-3 py-2.5 text-xs font-black transition border cursor-pointer text-center ${
+                          opStbBox === provider
+                            ? "bg-[#2563EB] text-white border-[#2563EB] shadow-md shadow-blue-500/20"
+                            : "bg-[#F8FAFC] text-[#334155] border-[#CBD5E1] hover:bg-slate-100"
+                        }`}
+                      >
+                        📺 {provider}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className="lg:col-span-5">
+                  <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    PLACE YOUR PORTAL LINK
+                  </label>
+                  <input
+                    type="url"
+                    value={opPortalLink}
+                    onChange={(e) => setOpPortalLink(e.target.value)}
+                    placeholder="e.g. https://scvportal.com or tccl.in"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
               </div>
 
-              <button
-                type="submit"
-                className="h-10 rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-6 py-2.5 text-xs font-bold text-white shadow-sm"
-              >
-                + ADD OPERATOR
-              </button>
+              <div className="pt-2 flex justify-end">
+                <button
+                  type="submit"
+                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-6 py-2.5 text-xs font-extrabold text-white shadow-md transition cursor-pointer flex items-center gap-1.5"
+                >
+                  <Plus className="h-4 w-4" /> + ADD OPERATOR
+                </button>
+              </div>
             </form>
           </div>
 
@@ -491,76 +498,99 @@ export function AdminPage() {
               <thead className="border-b border-[#CBD5E1] bg-[#F8FAFC] text-xs uppercase text-[#64748B] font-bold">
                 <tr>
                   <th className="px-6 py-4">Operator Name</th>
-                  <th className="px-6 py-4">Contact (Mobile/Email)</th>
+                  <th className="px-6 py-4">Mobile</th>
+                  <th className="px-6 py-4">STB Box Name</th>
+                  <th className="px-6 py-4">Portal Link</th>
                   <th className="px-6 py-4">Status</th>
                   <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#CBD5E1]">
-                {approvedOperators.map((op) => {
-                  const opCustomerCount = allCustomers.filter(
-                    (c) => getOperatorForRecord(c, approvedOperators)?.id === op.id
-                  ).length;
-                  const opRechargeCount = txns.filter(
-                    (t) => getOperatorForRecord(t, approvedOperators)?.id === op.id
-                  ).length;
-                  const opComplaintCount = complaints.filter(
-                    (c) => getOperatorForRecord(c, approvedOperators)?.id === op.id
-                  ).length;
+                {approvedOperators.length === 0 ? (
+                  <tr>
+                    <td colSpan={6} className="px-6 py-12 text-center text-[#64748B] font-medium">
+                      No operators registered. Use the form above to add an operator.
+                    </td>
+                  </tr>
+                ) : (
+                  approvedOperators.map((op) => {
+                    const opCustomerCount = allCustomers.filter(
+                      (c) => getOperatorForRecord(c, approvedOperators)?.id === op.id
+                    ).length;
 
-                  return (
-                    <tr key={op.id} className="hover:bg-slate-50 transition">
-                      <td className="px-6 py-4 font-bold text-[#0F172A]">
-                        <button
-                          onClick={() => {
-                            setSelectedOperator(op);
-                            setOpModalTab("customers");
-                          }}
-                          className="flex items-center gap-2 hover:text-[#2563EB] hover:underline cursor-pointer font-bold text-left"
-                        >
-                          <Shield className="h-4 w-4 text-[#2563EB] shrink-0" />
-                          {op.name}
-                        </button>
-                      </td>
-                      <td className="px-6 py-4 font-mono">{op.mobile}</td>
-                      <td className="px-6 py-4">
-                        {op.active ? (
-                          <span className="text-[#22C55E] font-bold text-xs">🟢 Active</span>
-                        ) : (
-                          <span className="text-red-600 font-bold text-xs">🔴 Inactive</span>
-                        )}
-                      </td>
-                      <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
-                        <button
-                          onClick={() => {
-                            setSelectedOperator(op);
-                            setOpModalTab("customers");
-                          }}
-                          className="rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-[#2563EB] hover:bg-blue-100 transition flex items-center gap-1"
-                        >
-                          <Eye className="h-3.5 w-3.5" /> View ({opCustomerCount} Customers)
-                        </button>
-                        <button
-                          onClick={() => setOperatorActive(op.id, !op.active)}
-                          className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100"
-                        >
-                          Toggle
-                        </button>
-                        <button
-                          onClick={() => {
-                            if (window.confirm(`Are you sure you want to remove operator "${op.name}"?`)) {
-                              removeApprovedOperator(op.id);
-                              setMsg({ text: `Operator ${op.name} removed successfully.` });
-                            }
-                          }}
-                          className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition"
-                        >
-                          <Trash2 className="h-3.5 w-3.5" />
-                        </button>
-                      </td>
-                    </tr>
-                  );
-                })}
+                    return (
+                      <tr key={op.id} className="hover:bg-slate-50 transition">
+                        <td className="px-6 py-4 font-bold text-[#0F172A]">
+                          <button
+                            onClick={() => {
+                              setSelectedOperator(op);
+                              setOpModalTab("customers");
+                            }}
+                            className="flex items-center gap-2 hover:text-[#2563EB] hover:underline cursor-pointer font-bold text-left"
+                          >
+                            <Shield className="h-4 w-4 text-[#2563EB] shrink-0" />
+                            {op.name}
+                          </button>
+                        </td>
+                        <td className="px-6 py-4 font-mono">{op.mobile}</td>
+                        <td className="px-6 py-4">
+                          <span className="inline-flex items-center gap-1 rounded-full bg-blue-50 border border-blue-200 px-3 py-1 text-xs font-black text-[#2563EB]">
+                            📺 {op.stbBoxName || "SCV"}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4">
+                          {op.portalLink ? (
+                            <a
+                              href={op.portalLink.startsWith("http") ? op.portalLink : `https://${op.portalLink}`}
+                              target="_blank"
+                              rel="noreferrer"
+                              className="inline-flex items-center gap-1 text-xs font-bold text-[#2563EB] hover:underline"
+                            >
+                              🔗 Open Portal
+                            </a>
+                          ) : (
+                            <span className="text-xs text-slate-400 font-medium">No Link Provided</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4">
+                          {op.active ? (
+                            <span className="text-[#22C55E] font-bold text-xs">🟢 Active</span>
+                          ) : (
+                            <span className="text-red-600 font-bold text-xs">🔴 Inactive</span>
+                          )}
+                        </td>
+                        <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
+                          <button
+                            onClick={() => {
+                              setSelectedOperator(op);
+                              setOpModalTab("customers");
+                            }}
+                            className="rounded-xl border border-blue-200 bg-blue-50 px-3 py-1.5 text-xs font-bold text-[#2563EB] hover:bg-blue-100 transition flex items-center gap-1 cursor-pointer"
+                          >
+                            <Eye className="h-3.5 w-3.5" /> View ({opCustomerCount} Customers)
+                          </button>
+                          <button
+                            onClick={() => setOperatorActive(op.id, !op.active)}
+                            className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
+                          >
+                            Toggle
+                          </button>
+                          <button
+                            onClick={() => {
+                              if (window.confirm(`Are you sure you want to remove operator "${op.name}"?`)) {
+                                removeApprovedOperator(op.id);
+                                setMsg({ text: `Operator ${op.name} removed successfully.` });
+                              }
+                            }}
+                            className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer"
+                          >
+                            <Trash2 className="h-3.5 w-3.5" />
+                          </button>
+                        </td>
+                      </tr>
+                    );
+                  })
+                )}
               </tbody>
             </table>
           </div>
@@ -839,77 +869,115 @@ export function AdminPage() {
         </div>
       )}
 
-      {/* TAB 6: Products */}
-      {tab === "products" && (
+      {/* TAB 6: Product Requests View */}
+      {tab === "product_requests" && (
         <div className="space-y-6">
-          <div className="flex flex-col sm:flex-row justify-between items-center gap-4">
-            <div className="relative flex-1 w-full">
+          <div className="bg-white rounded-2xl border border-[#CBD5E1] p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 shadow-sm">
+            <div className="relative flex-1">
               <Search className="absolute left-3.5 top-3.5 h-4 w-4 text-[#64748B]" />
               <input
                 type="text"
                 value={productSearch}
                 onChange={(e) => setProductSearch(e.target.value)}
-                placeholder="Search products..."
-                className="w-full bg-white border border-[#CBD5E1] rounded-2xl py-2.5 pl-10 pr-4 text-xs text-[#0F172A] outline-none"
+                placeholder="Search request ID, customer, STB, or product name..."
+                className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl py-2.5 pl-10 pr-4 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
               />
             </div>
-            <button
-              onClick={() => {
-                setEditingProduct(null);
-                setNewProdName("");
-                setNewProdPrice("");
-                setNewProdStock("");
-                setNewProdDesc("");
-                setShowAddProduct(true);
-              }}
-              className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shrink-0 shadow-sm"
-            >
-              + Add Product
-            </button>
+            <div className="flex items-center gap-2 text-xs">
+              <Filter className="h-4 w-4 text-[#64748B]" />
+              {["all", "Pending", "Processing", "Out for Delivery", "Installation Scheduled", "Completed", "Not Available"].map((st) => (
+                <button
+                  key={st}
+                  onClick={() => setRechargeStatusFilter(st)}
+                  className={`rounded-lg px-3 py-1.5 font-bold transition ${
+                    rechargeStatusFilter === st
+                      ? "bg-[#2563EB] text-white"
+                      : "bg-[#E2E8F0] text-[#334155] hover:bg-slate-300"
+                  }`}
+                >
+                  {st}
+                </button>
+              ))}
+            </div>
           </div>
 
           <div className="bg-white rounded-2xl border border-[#CBD5E1] shadow-sm overflow-hidden">
             <table className="w-full text-left text-sm text-[#0F172A]">
               <thead className="border-b border-[#CBD5E1] bg-[#F8FAFC] text-xs uppercase text-[#64748B] font-bold">
                 <tr>
-                  <th className="px-6 py-4">Item Name</th>
-                  <th className="px-6 py-4">Category</th>
-                  <th className="px-6 py-4">Price</th>
-                  <th className="px-6 py-4">Stock</th>
-                  <th className="px-6 py-4 text-right">Action</th>
+                  <th className="px-6 py-4">Request ID</th>
+                  <th className="px-6 py-4">Customer Details</th>
+                  <th className="px-6 py-4">Product / Service</th>
+                  <th className="px-6 py-4">Qty & Price</th>
+                  <th className="px-6 py-4">Total Amount</th>
+                  <th className="px-6 py-4">Status</th>
+                  <th className="px-6 py-4 text-right">Actions</th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-[#CBD5E1]">
-                {filteredProducts.map((p) => (
-                  <tr key={p.id} className="hover:bg-slate-50 transition">
-                    <td className="px-6 py-4 font-bold text-[#0F172A]">{p.name}</td>
-                    <td className="px-6 py-4 capitalize">{p.category}</td>
-                    <td className="px-6 py-4 font-mono font-bold text-[#22C55E]">₹{p.price}</td>
-                    <td className="px-6 py-4 font-mono">{p.availableStock}</td>
-                    <td className="px-6 py-4 text-right flex items-center justify-end gap-2">
-                      <button
-                        onClick={() => {
-                          setEditingProduct(p);
-                          setNewProdName(p.name);
-                          setNewProdCategory(p.category);
-                          setNewProdPrice(String(p.price));
-                          setNewProdStock(String(p.availableStock));
-                          setNewProdDesc(p.description || "");
-                          setShowAddProduct(true);
-                        }}
-                        className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1 text-xs font-bold text-[#0F172A] hover:bg-slate-100"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => removeProduct(p.id)}
-                        className="rounded-xl border border-red-200 bg-red-50 text-red-600 px-3 py-1 text-xs font-bold hover:bg-red-100"
-                      >
-                        Remove
-                      </button>
+                {productRequests.filter((pr) => {
+                  const q = productSearch.trim().toLowerCase();
+                  const matchesSearch =
+                    !q ||
+                    pr.id.toLowerCase().includes(q) ||
+                    pr.customerName.toLowerCase().includes(q) ||
+                    pr.stbId.toLowerCase().includes(q) ||
+                    pr.productName.toLowerCase().includes(q) ||
+                    pr.customerMobile.includes(q);
+                  const matchesStatus =
+                    rechargeStatusFilter === "all" ? true : pr.status === rechargeStatusFilter;
+                  return matchesSearch && matchesStatus;
+                }).length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="px-6 py-12 text-center text-[#64748B] font-medium">
+                      No product requests found.
                     </td>
                   </tr>
-                ))}
+                ) : (
+                  productRequests
+                    .filter((pr) => {
+                      const q = productSearch.trim().toLowerCase();
+                      const matchesSearch =
+                        !q ||
+                        pr.id.toLowerCase().includes(q) ||
+                        pr.customerName.toLowerCase().includes(q) ||
+                        pr.stbId.toLowerCase().includes(q) ||
+                        pr.productName.toLowerCase().includes(q) ||
+                        pr.customerMobile.includes(q);
+                      const matchesStatus =
+                        rechargeStatusFilter === "all" ? true : pr.status === rechargeStatusFilter;
+                      return matchesSearch && matchesStatus;
+                    })
+                    .map((pr) => (
+                      <tr key={pr.id} className="hover:bg-slate-50 transition">
+                        <td className="px-6 py-4 font-mono font-bold text-[#2563EB]">{pr.id}</td>
+                        <td className="px-6 py-4">
+                          <div className="font-bold text-[#0F172A]">{pr.customerName}</div>
+                          <div className="text-xs text-[#64748B]">
+                            STB: <strong className="font-mono text-[#0F172A]">{pr.stbId}</strong> • {pr.customerMobile}
+                          </div>
+                        </td>
+                        <td className="px-6 py-4 font-semibold text-[#0F172A]">{pr.productName}</td>
+                        <td className="px-6 py-4 font-mono">
+                          {pr.quantity} x ₹{pr.unitPrice}
+                        </td>
+                        <td className="px-6 py-4 font-mono font-bold text-[#22C55E]">
+                          ₹{pr.totalAmount}
+                        </td>
+                        <td className="px-6 py-4 font-bold">{pr.status}</td>
+                        <td className="px-6 py-4 text-right">
+                          {pr.status !== "Completed" && (
+                            <button
+                              onClick={() => updateProductStatus(pr.id, { status: "Completed" })}
+                              className="rounded-xl bg-[#22C55E] hover:bg-[#16A34A] px-3 py-1 text-xs font-bold text-white shadow-sm cursor-pointer"
+                            >
+                              Mark Completed
+                            </button>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                )}
               </tbody>
             </table>
           </div>
@@ -1169,71 +1237,6 @@ export function AdminPage() {
           </div>
         );
       })()}
-
-      {/* Add / Edit Product Modal */}
-      {showAddProduct && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-xl space-y-4">
-            <h3 className="font-display text-lg font-bold text-[#0F172A]">
-              {editingProduct ? "Edit Product" : "Add New Item"}
-            </h3>
-            <form onSubmit={handleSaveProduct} className="space-y-3 text-xs">
-              <input
-                type="text"
-                required
-                placeholder="Product Name"
-                value={newProdName}
-                onChange={(e) => setNewProdName(e.target.value)}
-                className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none"
-              />
-              <select
-                value={newProdCategory}
-                onChange={(e) => setNewProdCategory(e.target.value as "accessory" | "service")}
-                className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none"
-              >
-                <option value="accessory">📦 Accessory</option>
-                <option value="service">🔧 Service</option>
-              </select>
-              <input
-                type="number"
-                required
-                placeholder="Price (₹)"
-                value={newProdPrice}
-                onChange={(e) => setNewProdPrice(e.target.value)}
-                className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none"
-              />
-              <input
-                type="number"
-                placeholder="Available Stock"
-                value={newProdStock}
-                onChange={(e) => setNewProdStock(e.target.value)}
-                className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none"
-              />
-              <textarea
-                placeholder="Description"
-                value={newProdDesc}
-                onChange={(e) => setNewProdDesc(e.target.value)}
-                className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none"
-              />
-              <div className="flex justify-end gap-2 pt-2">
-                <button
-                  type="button"
-                  onClick={() => setShowAddProduct(false)}
-                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2 text-xs font-bold text-[#0F172A]"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  className="rounded-xl bg-[#2563EB] px-5 py-2 text-xs font-bold text-white"
-                >
-                  Save
-                </button>
-              </div>
-            </form>
-          </div>
-        </div>
-      )}
     </AppShell>
   );
 }

@@ -275,7 +275,16 @@ export function ProductsPage() {
 
             {/* Product Cards */}
             <div className="grid gap-3.5 sm:grid-cols-2">
-              {filteredProducts.map((p) => {
+              {filteredProducts.length === 0 ? (
+                <div className="sm:col-span-2 rounded-2xl border border-dashed border-[#CBD5E1] bg-white p-8 text-center">
+                  <Package className="mx-auto h-10 w-10 text-slate-300 mb-2" />
+                  <p className="font-bold text-[#0F172A] text-sm">No items available currently</p>
+                  <p className="text-xs text-[#64748B] mt-1">
+                    Your local cable operator has not published any stock items yet.
+                  </p>
+                </div>
+              ) : (
+                filteredProducts.map((p) => {
                 const isSelected = p.id === selectedProductId;
 
                 return (
@@ -309,10 +318,10 @@ export function ProductsPage() {
                       {p.name}
                     </div>
 
-                    <p className="mt-1 text-xs text-[#64748B] line-clamp-2">{p.description}</p>
                   </button>
                 );
-              })}
+              })
+              )}
             </div>
           </div>
 

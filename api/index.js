@@ -694,11 +694,24 @@ module.exports = async (req, res) => {
 
     // Admin: Add Operator
     if (req.method === "POST" && routeString.includes("admin/operator/add")) {
-      const { mobileNumber, name } = body;
-      const op = await Operator.create({
-        mobileNumber: String(mobileNumber).trim(),
-        name: name ? String(name).trim() : "Operator",
-      });
+      const { mobileNumber, name, stbBoxName, portalLink } = body;
+      const cleanMob = String(mobileNumber).trim();
+      let op = await Operator.findOne({ mobileNumber: cleanMob });
+      if (op) {
+        op.isActive = true;
+        if (name) op.name = String(name).trim();
+        if (stbBoxName) op.stbBoxName = String(stbBoxName).trim();
+        if (portalLink !== undefined) op.portalLink = String(portalLink).trim();
+        await op.save();
+      } else {
+        op = await Operator.create({
+          mobileNumber: cleanMob,
+          name: name ? String(name).trim() : "Operator",
+          stbBoxName: stbBoxName ? String(stbBoxName).trim() : "SCV",
+          portalLink: portalLink ? String(portalLink).trim() : "",
+          isActive: true,
+        });
+      }
       return res.status(201).json({ success: true, operator: op });
     }
 

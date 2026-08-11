@@ -24,7 +24,7 @@ const nav = [
   { to: "/history", label: "History", icon: Receipt },
 ];
 
-export function AppShell({ children }: { children: ReactNode }) {
+export function AppShell({ children, title }: { children: ReactNode; title?: string }) {
   const pathname = useRouterState({ select: (s) => s.location.pathname });
   const user = useStore((s) => s.user);
   const navigate = useNavigate();

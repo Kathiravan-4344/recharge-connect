@@ -23,6 +23,7 @@ import {
   apiValidateStb,
   apiMapStb,
   apiGetOperatorStbs,
+  apiDeleteStbMapping,
   apiGetProducts,
   apiUpsertProduct,
   apiDeleteProduct,
@@ -125,12 +126,15 @@ export type STB = {
   currentPlan: string;
   expiry: string;
   active: boolean;
+  operatorMobile?: string;
 };
 
 export type ApprovedOperator = {
   id: string;
   mobile: string;
   name: string;
+  stbBoxName?: "SCV" | "TCCL" | "AKSHAYA DIGINET" | "TACTV" | string;
+  portalLink?: string;
   addedAt: string;
   active: boolean;
 };
@@ -141,6 +145,8 @@ export type User = {
   name?: string;
   email?: string;
   operatorNumber?: string;
+  operatorMobile?: string;
+  operatorName?: string;
   stbId?: string;
   role: "operator" | "customer" | "admin";
 };
@@ -1069,7 +1075,13 @@ export function applyCoupon(code: string): { success: boolean; discount: number;
 }
 
 // Admin Operations
-export async function upsertOperator(mobile: string, name: string, active = true): Promise<{ success: boolean; message?: string }> {
+export async function upsertOperator(
+  mobile: string,
+  name: string,
+  stbBoxName?: string,
+  portalLink?: string,
+  active = true
+): Promise<{ success: boolean; message?: string }> {
   const cleaned = cleanContact(mobile);
   if (!cleaned) {
     return { success: false, message: "Invalid mobile number or email address" };
@@ -1078,18 +1090,35 @@ export async function upsertOperator(mobile: string, name: string, active = true
   let updatedOps: ApprovedOperator[];
   if (exists) {
     updatedOps = state.approvedOperators.map((o) =>
-      cleanContact(o.mobile) === cleaned ? { ...o, mobile: cleaned, name, active } : o,
+      cleanContact(o.mobile) === cleaned
+        ? {
+            ...o,
+            mobile: cleaned,
+            name,
+            stbBoxName: stbBoxName || o.stbBoxName || "SCV",
+            portalLink: portalLink !== undefined ? portalLink : o.portalLink,
+            active,
+          }
+        : o,
     );
   } else {
     updatedOps = [
       ...state.approvedOperators,
-      { id: "op-" + Date.now(), mobile: cleaned, name, addedAt: new Date().toISOString(), active },
+      {
+        id: "op-" + Date.now(),
+        mobile: cleaned,
+        name,
+        stbBoxName: stbBoxName || "SCV",
+        portalLink: portalLink || "",
+        addedAt: new Date().toISOString(),
+        active,
+      },
     ];
   }
   setState({ approvedOperators: updatedOps });
 
   try {
-    const res = await apiAddOperator(cleaned, name);
+    const res = await apiAddOperator(cleaned, name, stbBoxName, portalLink);
     if (!res.success) {
       console.warn("Backend add operator warning:", res.error);
       return { success: false, message: res.error || "Failed to save operator to server database" };
@@ -1217,7 +1246,7 @@ export async function syncPendingRechargesFromBackend(operatorMobile?: string) {
         const matchingTxn = backendTxns.find((t) => {
           if (t.id === pTxnId) return true;
           const tStb = (t.stbId || "").trim().toUpperCase();
-          if (pStb && tStb === pStb && t.status !== "pending") return true;
+          if (pStbId && tStb === pStbId && t.status !== "pending") return true;
           const tMobile = cleanMobile(t.customerMobile || "");
           if (pMobile && tMobile && pMobile === tMobile && t.status !== "pending") return true;
           return false;
@@ -1342,6 +1371,8 @@ export async function syncOperatorsFromBackend() {
         id: o._id || o.id,
         mobile: o.mobileNumber || o.mobile,
         name: o.name || "Operator",
+        stbBoxName: o.stbBoxName || "SCV",
+        portalLink: o.portalLink || "",
         addedAt: o.createdAt || new Date().toISOString(),
         active: o.isActive !== false,
       }));

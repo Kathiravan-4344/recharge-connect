@@ -133,10 +133,10 @@ export async function apiGetUserProfile(mobileNumber: string) {
 
 
 // Admin API Calls
-export async function apiAddOperator(mobileNumber: string, name: string) {
+export async function apiAddOperator(mobileNumber: string, name: string, stbBoxName?: string, portalLink?: string) {
   return apiRequest("/admin/operator/add", {
     method: "POST",
-    body: JSON.stringify({ mobileNumber, name }),
+    body: JSON.stringify({ mobileNumber, name, stbBoxName, portalLink }),
   });
 }
 
@@ -263,6 +263,20 @@ export async function apiUpdateComplaintStatus(id: string, patch: any) {
 // Products API Calls
 export async function apiGetProducts() {
   return apiRequest<{ products: any[] }>("/products");
+}
+
+export async function apiUpsertProduct(prod: any) {
+  return apiRequest<{ product: any }>("/products/upsert", {
+    method: "POST",
+    body: JSON.stringify(prod),
+  });
+}
+
+export async function apiDeleteProduct(id: string) {
+  return apiRequest("/products/delete", {
+    method: "POST",
+    body: JSON.stringify({ id }),
+  });
 }
 
 // Product Requests API Calls
