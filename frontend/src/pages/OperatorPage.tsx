@@ -408,13 +408,13 @@ export function OperatorPage() {
   async function handleAddStbSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStbErr(null);
-    const cleanStb = newStbId.replace(/\D/g, "").slice(0, 12);
+    const cleanStb = newStbId.trim().toUpperCase().slice(0, 12);
     if (!cleanStb) {
-      setStbErr("Please enter a valid STB ID (numbers only)");
+      setStbErr("Please enter a valid STB ID");
       return;
     }
-    if (cleanStb.length !== 12) {
-      setStbErr(`STB ID must be exactly 12 numeric digits (current: ${cleanStb.length} digits)`);
+    if (cleanStb.length > 12) {
+      setStbErr("STB ID cannot exceed 12 characters!");
       return;
     }
     setStbSubmitting(true);
@@ -1877,28 +1877,26 @@ export function OperatorPage() {
             <form onSubmit={handleAddStbSubmit} className="space-y-4 text-xs">
               <div>
                 <label className="block font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
-                  STB ID (12 Numeric Digits) <span className="text-red-500">*</span>
+                  STB ID / Box ID <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
-                  inputMode="numeric"
-                  pattern="[0-9]*"
                   maxLength={12}
                   required
                   autoFocus
-                  placeholder="e.g. 123456789012"
+                  placeholder="e.g. STB123456789"
                   value={newStbId}
-                  onChange={(e) => setNewStbId(e.target.value.replace(/\D/g, "").slice(0, 12))}
+                  onChange={(e) => setNewStbId(e.target.value.toUpperCase().slice(0, 12))}
                   className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-base font-mono font-extrabold text-[#0F172A] tracking-wider outline-none focus:border-[#2563EB]"
                 />
                 <div className="mt-1.5 flex items-center justify-between text-[11px]">
-                  <span className="text-[#64748B] font-medium">🔢 Numbers only (Max 12 digits)</span>
+                  <span className="text-[#64748B] font-medium">🔤 Letters & Numbers allowed (Max 12 chars)</span>
                   <span
                     className={`font-mono font-bold ${
-                      newStbId.length === 12 ? "text-[#22C55E]" : "text-[#2563EB]"
+                      newStbId.length > 0 ? "text-[#22C55E]" : "text-[#2563EB]"
                     }`}
                   >
-                    {newStbId.length} / 12 digits
+                    {newStbId.length} / 12 chars
                   </span>
                 </div>
               </div>
@@ -1916,7 +1914,7 @@ export function OperatorPage() {
                 </button>
                 <button
                   type="submit"
-                  disabled={stbSubmitting || newStbId.length !== 12}
+                  disabled={stbSubmitting || !newStbId.trim()}
                   className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   {stbSubmitting ? "Mapping..." : "Map STB ID"}

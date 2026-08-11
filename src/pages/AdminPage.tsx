@@ -511,7 +511,7 @@ export function AdminPage() {
                     required
                     value={opName}
                     onChange={(e) => setOpName(e.target.value)}
-                    placeholder="e.g. Ramesh Kumar"
+                    placeholder="e.g. Kathiravan V"
                     className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
                   />
                 </div>
@@ -525,7 +525,7 @@ export function AdminPage() {
                     required
                     value={opMobile}
                     onChange={(e) => setOpMobile(e.target.value)}
-                    placeholder="e.g. 9840192837"
+                    placeholder="e.g. 9080864542"
                     className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
                   />
                 </div>
@@ -539,7 +539,7 @@ export function AdminPage() {
                     required
                     value={opEmail}
                     onChange={(e) => setOpEmail(e.target.value)}
-                    placeholder="e.g. ramesh@stb.com"
+                    placeholder="e.g. kathiravan.v.1010@gmail.com"
                     className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
                   />
                 </div>
