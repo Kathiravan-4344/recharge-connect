@@ -694,12 +694,13 @@ module.exports = async (req, res) => {
 
     // Admin: Add Operator
     if (req.method === "POST" && routeString.includes("admin/operator/add")) {
-      const { mobileNumber, name, stbBoxName, portalLink } = body;
+      const { mobileNumber, name, stbBoxName, portalLink, email } = body;
       const cleanMob = String(mobileNumber).trim();
       let op = await Operator.findOne({ mobileNumber: cleanMob });
       if (op) {
         op.isActive = true;
         if (name) op.name = String(name).trim();
+        if (email) op.email = String(email).trim();
         if (stbBoxName) op.stbBoxName = String(stbBoxName).trim();
         if (portalLink !== undefined) op.portalLink = String(portalLink).trim();
         await op.save();
@@ -707,6 +708,7 @@ module.exports = async (req, res) => {
         op = await Operator.create({
           mobileNumber: cleanMob,
           name: name ? String(name).trim() : "Operator",
+          email: email ? String(email).trim() : "",
           stbBoxName: stbBoxName ? String(stbBoxName).trim() : "SCV",
           portalLink: portalLink ? String(portalLink).trim() : "",
           isActive: true,
@@ -728,13 +730,19 @@ module.exports = async (req, res) => {
 
     // Admin: Delete Operator
     if (req.method === "DELETE" && routeString.includes("admin/operator")) {
-      const opId = reqUrl.split("/").pop();
-      if (opId && opId !== "operator") {
-        await Operator.findOneAndDelete({
-          $or: [{ _id: opId }, { mobileNumber: opId }, { mobileNumber: opId.replace(/\D/g, "").slice(-10) }]
-        }).catch(() => {});
+      const rawId = decodeURIComponent(reqUrl.split("?")[0].split("/").pop() || "");
+      if (rawId && rawId !== "operator") {
+        const cleanDigits = rawId.replace(/\D/g, "").slice(-10);
+        await Operator.deleteMany({
+          $or: [
+            { _id: rawId.match(/^[0-9a-fA-F]{24}$/) ? rawId : null },
+            { mobileNumber: rawId },
+            { mobileNumber: cleanDigits },
+            { mobileNumber: { $regex: cleanDigits, $options: "i" } },
+          ],
+        }).catch((err) => console.warn("Operator delete error", err));
       }
-      return res.status(200).json({ success: true, message: "Operator deleted" });
+      return res.status(200).json({ success: true, message: "Operator deleted successfully" });
     }
 
     // Products: Get List

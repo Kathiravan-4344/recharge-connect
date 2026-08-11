@@ -86,9 +86,16 @@ export function AdminPage() {
   const [tab, setTab] = useState<TabType>("dashboard");
   const [opMobile, setOpMobile] = useState("");
   const [opName, setOpName] = useState("");
+  const [opEmail, setOpEmail] = useState("");
   const [opStbBox, setOpStbBox] = useState<"SCV" | "TCCL" | "AKSHAYA DIGINET" | "TACTV">("SCV");
   const [opPortalLink, setOpPortalLink] = useState("");
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null);
+
+  // OTP Verification Modal for Adding Operator
+  const [showAddOpOtpModal, setShowAddOpOtpModal] = useState(false);
+  const [addOpOtpSentCode, setAddOpOtpSentCode] = useState("");
+  const [enteredAddOpOtp, setEnteredAddOpOtp] = useState("");
+  const [addOpOtpErr, setAddOpOtpErr] = useState<string | null>(null);
 
   // OTP Verification Modal for Removing Operator
   const [deletingOperator, setDeletingOperator] = useState<ApprovedOperator | null>(null);
@@ -123,20 +130,41 @@ export function AdminPage() {
   if (!user || user.role !== "admin") return null;
 
   // Handlers
-  async function handleAddOperator(e: React.FormEvent) {
+  function handleAddOperator(e: React.FormEvent) {
     e.preventDefault();
     setMsg(null);
-    if (!opMobile.trim() || !opName.trim()) return;
-    const res = await upsertOperator(opMobile.trim(), opName.trim(), opStbBox, opPortalLink.trim());
-    if (res.success) {
-      setMsg({ text: `Operator ${opName} (${opStbBox}) added successfully!` });
-    } else {
-      setMsg({ text: res.message || `Failed to save operator to database.`, error: true });
+    if (!opMobile.trim() || !opName.trim() || !opEmail.trim()) {
+      setMsg({ text: "Please provide Operator Name, Mobile Number, and Email Address.", error: true });
+      return;
     }
-    setOpMobile("");
-    setOpName("");
-    setOpPortalLink("");
-    setOpStbBox("SCV");
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    setAddOpOtpSentCode(generatedOtp);
+    setEnteredAddOpOtp("");
+    setAddOpOtpErr(null);
+    setShowAddOpOtpModal(true);
+  }
+
+  async function handleConfirmAddOperatorWithOtp(e: React.FormEvent) {
+    e.preventDefault();
+    if (enteredAddOpOtp.trim() !== addOpOtpSentCode) {
+      setAddOpOtpErr(`Invalid OTP code! Please enter the 6-digit code sent to ${opEmail.trim()}.`);
+      return;
+    }
+    const res = await upsertOperator(opMobile.trim(), opName.trim(), opStbBox, opPortalLink.trim(), opEmail.trim());
+    if (res.success) {
+      setMsg({ text: `Operator ${opName} (${opStbBox}) verified via email (${opEmail}) and registered successfully!` });
+      setOpMobile("");
+      setOpName("");
+      setOpEmail("");
+      setOpPortalLink("");
+      setOpStbBox("SCV");
+      setShowAddOpOtpModal(false);
+      setAddOpOtpSentCode("");
+      setEnteredAddOpOtp("");
+      setAddOpOtpErr(null);
+    } else {
+      setAddOpOtpErr(res.message || `Failed to save operator to database.`);
+    }
   }
 
   function handleInitiateRemoveOperator(op: ApprovedOperator) {
@@ -444,7 +472,7 @@ export function AdminPage() {
             </div>
 
             <form onSubmit={handleAddOperator} className="space-y-4">
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
                     OPERATOR FULL NAME <span className="text-red-500">*</span>
@@ -469,6 +497,20 @@ export function AdminPage() {
                     value={opMobile}
                     onChange={(e) => setOpMobile(e.target.value)}
                     placeholder="e.g. 9840192837"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    OPERATOR EMAIL <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={opEmail}
+                    onChange={(e) => setOpEmail(e.target.value)}
+                    placeholder="e.g. ramesh@stb.com"
                     className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-xl px-4 py-2.5 text-xs text-[#0F172A] outline-none focus:border-[#2563EB]"
                   />
                 </div>
@@ -1295,7 +1337,7 @@ export function AdminPage() {
               <div className="text-xs font-bold text-[#64748B]">
                 OTP Verification Code sent to:
               </div>
-              <div className="text-sm font-extrabold text-[#2563EB] font-mono">
+              <div className="text-sm font-extrabold text-[#0F172A] font-mono">
                 ✉️ kathiravan.v.1010@gmail.com
               </div>
               <div className="mt-2 inline-flex items-center gap-2 rounded-lg bg-blue-600 text-white px-3 py-1 text-xs font-black tracking-widest font-mono shadow-sm">
@@ -1340,6 +1382,81 @@ export function AdminPage() {
                   className="rounded-xl bg-red-600 hover:bg-red-700 px-5 py-2.5 text-xs font-bold text-white shadow-md transition flex items-center gap-1.5 cursor-pointer"
                 >
                   <Trash2 className="h-4 w-4" /> Verify OTP & Remove Operator
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Operator Email OTP Verification Modal for Add Operator */}
+      {showAddOpOtpModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
+              <div className="flex items-center gap-2 text-[#2563EB]">
+                <Shield className="h-5 w-5" />
+                <h3 className="font-display text-base font-bold text-[#0F172A]">
+                  Operator Email Verification
+                </h3>
+              </div>
+              <button
+                onClick={() => setShowAddOpOtpModal(false)}
+                className="text-[#64748B] hover:text-[#0F172A] p-1 cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-4 space-y-2 text-center">
+              <div className="text-xs font-bold text-[#64748B]">
+                OTP Verification Code sent to Operator Email:
+              </div>
+              <div className="text-sm font-extrabold text-[#0F172A] font-mono">
+                ✉️ {opEmail}
+              </div>
+              <div className="mt-2 inline-flex items-center gap-2 rounded-lg bg-blue-600 text-white px-3 py-1 text-xs font-black tracking-widest font-mono shadow-sm">
+                <span>OPERATOR EMAIL CODE:</span>
+                <span className="text-amber-300 text-sm">{addOpOtpSentCode}</span>
+              </div>
+            </div>
+
+            {addOpOtpErr && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">
+                {addOpOtpErr}
+              </div>
+            )}
+
+            <form onSubmit={handleConfirmAddOperatorWithOtp} className="space-y-4">
+              <div>
+                <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                  ENTER 6-DIGIT EMAIL OTP <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  required
+                  autoFocus
+                  value={enteredAddOpOtp}
+                  onChange={(e) => setEnteredAddOpOtp(e.target.value)}
+                  placeholder="Enter 6-digit OTP..."
+                  className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] focus:border-[#2563EB] rounded-xl py-3 px-4 text-center font-mono text-lg font-bold text-[#0F172A] tracking-widest outline-none shadow-inner"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setShowAddOpOtpModal(false)}
+                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-md transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Check className="h-4 w-4" /> Verify OTP & Register Operator
                 </button>
               </div>
             </form>

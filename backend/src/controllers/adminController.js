@@ -8,7 +8,7 @@ const Complaint = require("../models/Complaint");
 // @route POST /api/admin/operator/add
 const addOperator = async (req, res) => {
   try {
-    const { mobileNumber, name, stbBoxName, portalLink } = req.body;
+    const { mobileNumber, name, stbBoxName, portalLink, email } = req.body;
     if (!mobileNumber) {
       return res.status(400).json({ message: "Operator mobile number is required" });
     }
@@ -19,6 +19,7 @@ const addOperator = async (req, res) => {
     if (operator) {
       operator.isActive = true;
       if (name) operator.name = name;
+      if (email) operator.email = email;
       if (stbBoxName) operator.stbBoxName = stbBoxName;
       if (portalLink !== undefined) operator.portalLink = portalLink;
       await operator.save();
@@ -26,6 +27,7 @@ const addOperator = async (req, res) => {
       operator = await Operator.create({
         mobileNumber: cleanMobile,
         name: name || "Operator",
+        email: email || "",
         stbBoxName: stbBoxName || "SCV",
         portalLink: portalLink || "",
         isActive: true,
@@ -38,11 +40,13 @@ const addOperator = async (req, res) => {
       if (userDoc) {
         userDoc.role = "operator";
         if (name) userDoc.name = name;
+        if (email) userDoc.email = email;
         await userDoc.save();
       } else {
         await User.create({
           mobileNumber: cleanMobile,
           name: name || "Operator",
+          email: email || "",
           role: "operator",
           stbId: `OP-${cleanMobile.slice(-6)}`,
         });
@@ -105,11 +109,15 @@ const toggleOperator = async (req, res) => {
 const removeOperator = async (req, res) => {
   try {
     const { id } = req.params;
-    if (id.startsWith("op-")) {
-      await Operator.deleteMany({ id });
-    } else {
-      await Operator.findByIdAndDelete(id);
-    }
+    const cleanDigits = id.replace(/\D/g, "").slice(-10);
+    await Operator.deleteMany({
+      $or: [
+        { _id: id.match(/^[0-9a-fA-F]{24}$/) ? id : null },
+        { mobileNumber: id },
+        { mobileNumber: cleanDigits },
+        { mobileNumber: { $regex: cleanDigits, $options: "i" } },
+      ],
+    });
     return res.status(200).json({ success: true, message: "Operator removed successfully" });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

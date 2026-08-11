@@ -13,6 +13,11 @@ const operatorSchema = new mongoose.Schema(
       default: "Operator",
       trim: true,
     },
+    email: {
+      type: String,
+      default: "",
+      trim: true,
+    },
     stbBoxName: {
       type: String,
       default: "SCV",

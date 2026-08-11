@@ -133,6 +133,7 @@ export type ApprovedOperator = {
   id: string;
   mobile: string;
   name: string;
+  email?: string;
   stbBoxName?: "SCV" | "TCCL" | "AKSHAYA DIGINET" | "TACTV" | string;
   portalLink?: string;
   addedAt: string;
@@ -985,6 +986,7 @@ export async function upsertOperator(
   name: string,
   stbBoxName?: string,
   portalLink?: string,
+  email?: string,
   active = true
 ): Promise<{ success: boolean; message?: string }> {
   const cleaned = cleanContact(mobile);
@@ -1000,6 +1002,7 @@ export async function upsertOperator(
             ...o,
             mobile: cleaned,
             name,
+            email: email || o.email || "",
             stbBoxName: stbBoxName || o.stbBoxName || "SCV",
             portalLink: portalLink !== undefined ? portalLink : o.portalLink,
             active,
@@ -1013,6 +1016,7 @@ export async function upsertOperator(
         id: "op-" + Date.now(),
         mobile: cleaned,
         name,
+        email: email || "",
         stbBoxName: stbBoxName || "SCV",
         portalLink: portalLink || "",
         addedAt: new Date().toISOString(),
@@ -1023,7 +1027,7 @@ export async function upsertOperator(
   setState({ approvedOperators: updatedOps });
 
   try {
-    const res = await apiAddOperator(cleaned, name, stbBoxName, portalLink);
+    const res = await apiAddOperator(cleaned, name, stbBoxName, portalLink, email);
     if (!res.success) {
       console.warn("Backend add operator warning:", res.error);
       return { success: false, message: res.error || "Failed to save operator to server database" };
@@ -1054,6 +1058,9 @@ export async function removeApprovedOperator(id: string) {
   try {
     if (targetMobile) {
       await apiDeleteOperator(targetMobile);
+    }
+    if (target?.id && target.id !== targetMobile) {
+      await apiDeleteOperator(target.id);
     }
   } catch (e) {
     console.warn("Failed to delete operator on backend", e);
@@ -1276,6 +1283,7 @@ export async function syncOperatorsFromBackend() {
         id: o._id || o.id,
         mobile: o.mobileNumber || o.mobile,
         name: o.name || "Operator",
+        email: o.email || "",
         stbBoxName: o.stbBoxName || "SCV",
         portalLink: o.portalLink || "",
         addedAt: o.createdAt || new Date().toISOString(),
