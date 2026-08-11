@@ -90,6 +90,12 @@ export function AdminPage() {
   const [opPortalLink, setOpPortalLink] = useState("");
   const [msg, setMsg] = useState<{ text: string; error?: boolean } | null>(null);
 
+  // OTP Verification Modal for Removing Operator
+  const [deletingOperator, setDeletingOperator] = useState<ApprovedOperator | null>(null);
+  const [deleteOtpSentCode, setDeleteOtpSentCode] = useState("");
+  const [enteredDeleteOtp, setEnteredDeleteOtp] = useState("");
+  const [deleteOtpErr, setDeleteOtpErr] = useState<string | null>(null);
+
   // Search states per tab
   const [customerSearch, setCustomerSearch] = useState("");
   const [rechargeSearch, setRechargeSearch] = useState("");
@@ -131,6 +137,29 @@ export function AdminPage() {
     setOpName("");
     setOpPortalLink("");
     setOpStbBox("SCV");
+  }
+
+  function handleInitiateRemoveOperator(op: ApprovedOperator) {
+    const generatedOtp = Math.floor(100000 + Math.random() * 900000).toString();
+    setDeletingOperator(op);
+    setDeleteOtpSentCode(generatedOtp);
+    setEnteredDeleteOtp("");
+    setDeleteOtpErr(null);
+  }
+
+  function handleConfirmRemoveOperatorWithOtp(e: React.FormEvent) {
+    e.preventDefault();
+    if (!deletingOperator) return;
+    if (enteredDeleteOtp.trim() !== deleteOtpSentCode) {
+      setDeleteOtpErr("Invalid OTP code! Please enter the 6-digit code sent to kathiravan.v.1010@gmail.com.");
+      return;
+    }
+    removeApprovedOperator(deletingOperator.id);
+    setMsg({ text: `Operator ${deletingOperator.name} (${deletingOperator.mobile}) removed successfully after OTP verification.` });
+    setDeletingOperator(null);
+    setDeleteOtpSentCode("");
+    setEnteredDeleteOtp("");
+    setDeleteOtpErr(null);
   }
 
   // Derived Metrics
@@ -576,15 +605,11 @@ export function AdminPage() {
                             Toggle
                           </button>
                           <button
-                            onClick={() => {
-                              if (window.confirm(`Are you sure you want to remove operator "${op.name}"?`)) {
-                                removeApprovedOperator(op.id);
-                                setMsg({ text: `Operator ${op.name} removed successfully.` });
-                              }
-                            }}
-                            className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer"
+                            onClick={() => handleInitiateRemoveOperator(op)}
+                            className="rounded-xl border border-red-200 bg-red-50 px-3 py-1.5 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer flex items-center gap-1"
+                            title="Remove Operator (OTP Required)"
                           >
-                            <Trash2 className="h-3.5 w-3.5" />
+                            <Trash2 className="h-3.5 w-3.5" /> Remove
                           </button>
                         </td>
                       </tr>
@@ -1237,6 +1262,90 @@ export function AdminPage() {
           </div>
         );
       })()}
+
+      {/* Admin Email OTP Verification Modal for Operator Deletion */}
+      {deletingOperator && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-md rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-2xl space-y-4">
+            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
+              <div className="flex items-center gap-2 text-red-600">
+                <Shield className="h-5 w-5" />
+                <h3 className="font-display text-base font-bold text-[#0F172A]">
+                  Admin Security Verification
+                </h3>
+              </div>
+              <button
+                onClick={() => setDeletingOperator(null)}
+                className="text-[#64748B] hover:text-[#0F172A] p-1 cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <div className="rounded-xl border border-amber-200 bg-amber-50 p-3.5 text-xs text-amber-900 font-medium space-y-1">
+              <div className="font-bold flex items-center gap-1.5 text-amber-800">
+                <AlertTriangle className="h-4 w-4 shrink-0" /> Authorization Required to Remove Operator
+              </div>
+              <p>
+                Removing operator <strong>{deletingOperator.name}</strong> ({deletingOperator.mobile}) requires Admin Email OTP verification.
+              </p>
+            </div>
+
+            <div className="rounded-xl border border-blue-200 bg-blue-50/70 p-4 space-y-2 text-center">
+              <div className="text-xs font-bold text-[#64748B]">
+                OTP Verification Code sent to:
+              </div>
+              <div className="text-sm font-extrabold text-[#2563EB] font-mono">
+                ✉️ kathiravan.v.1010@gmail.com
+              </div>
+              <div className="mt-2 inline-flex items-center gap-2 rounded-lg bg-blue-600 text-white px-3 py-1 text-xs font-black tracking-widest font-mono shadow-sm">
+                <span>ADMIN VERIFICATION CODE:</span>
+                <span className="text-amber-300 text-sm">{deleteOtpSentCode}</span>
+              </div>
+            </div>
+
+            {deleteOtpErr && (
+              <div className="rounded-xl border border-red-200 bg-red-50 p-3 text-xs font-bold text-red-700">
+                {deleteOtpErr}
+              </div>
+            )}
+
+            <form onSubmit={handleConfirmRemoveOperatorWithOtp} className="space-y-4">
+              <div>
+                <label className="block text-xs font-extrabold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                  ENTER 6-DIGIT EMAIL OTP <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="text"
+                  maxLength={6}
+                  required
+                  autoFocus
+                  value={enteredDeleteOtp}
+                  onChange={(e) => setEnteredDeleteOtp(e.target.value)}
+                  placeholder="Enter 6-digit OTP..."
+                  className="w-full bg-[#F8FAFC] border-2 border-[#CBD5E1] focus:border-[#2563EB] rounded-xl py-3 px-4 text-center font-mono text-lg font-bold text-[#0F172A] tracking-widest outline-none shadow-inner"
+                />
+              </div>
+
+              <div className="flex items-center justify-end gap-2 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setDeletingOperator(null)}
+                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 transition cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="rounded-xl bg-red-600 hover:bg-red-700 px-5 py-2.5 text-xs font-bold text-white shadow-md transition flex items-center gap-1.5 cursor-pointer"
+                >
+                  <Trash2 className="h-4 w-4" /> Verify OTP & Remove Operator
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </AppShell>
   );
 }
