@@ -28,6 +28,7 @@ import {
   apiUpsertProduct,
   apiDeleteProduct,
 } from "./api";
+import { VENKATESA_OPERATOR, VENKATESA_STB_MAPPINGS } from "./venkatesaStbs";
 
 export { cleanMobile, cleanContact, mobileToEmail } from "../utils/utils";
 
@@ -260,139 +261,11 @@ export const PLANS: Plan[] = [
   },
 ];
 
-export const VENKATESA_PERUMAL_STBS = [
-  "8331000FEDA9",
-  "8331000DE77D",
-  "8331000F53AB",
-  "8331000F69BF",
-  "8331000DFCE3",
-  "8331000EC1BC",
-  "8331000FEF15",
-  "8331000ED57D",
-  "8331000EB422",
-  "8331000EC1D7",
-  "8331000EAFB7",
-  "8331000EEC00",
-  "8331000EB371",
-  "8331000F0FA7",
-  "8331000EEABA",
-  "8331000EEA91",
-  "8331000E0281",
-  "8331000F01FD",
-  "8331000DE885",
-  "8331000F2EBA",
-  "8331000DDFFE",
-  "8331000F02B1",
-  "8331000DFCBB",
-  "8331000EF76F",
-  "8331000F0FE2",
-  "8331000DE84F",
-  "8331000DF7B5",
-  "8331000EAF21",
-  "8331000F8B17",
-  "8331000EB017",
-  "8331000EC8AA",
-  "8331000EF4A4",
-  "8331000ECC2E",
-  "8331000F01A6",
-  "83310001012B1",
-  "8331000DF7EA",
-  "8331000F53AA",
-  "8331000F6C58",
-  "8331000DE77C",
-  "8331000DE95A",
-  "8331000F53DF",
-  "8331000E5D53",
-  "8331000EFDA5",
-  "8331000EEDF1",
-  "8331000EB00D",
-  "8331000EEB59",
-  "8331000EEA95",
-  "8331000EB585",
-  "8331000DF811",
-  "8331000F8CB7",
-  "8331000F8B62",
-  "8331000F5B60",
-  "8331000F5B73",
-  "8331000DF805",
-  "8331000F5B8F",
-  "8331000F9D4C",
-  "8331000F2E4E",
-  "8331000EEDE9",
-  "8331000DE951",
-  "8331000E03D2",
-  "8331000EB587",
-  "8331000E5B80",
-  "8331000E0406",
-  "8331000EB8AA",
-  "8331000EB5C5",
-  "8331000F0418",
-  "8331000F8B4F",
-  "8331000F022D",
-  "8331000EB6CD",
-  "8331000E5D45",
-  "8331000F6477",
-  "8331000E5D10",
-  "8331000FA019",
-  "8331000EAD40",
-  "8331000EC664",
-  "8331000E5D9A",
-  "8331000F2F60",
-  "8331000EDBC7",
-  "8331000ED36F",
-  "8331000ECAA7",
-  "8331000F11F3",
-  "8331000F8C4F",
-  "8331000EDE26",
-  "8331000EAEDD",
-  "8331000F2EFB",
-  "8331000EB746",
-  "8331000F6C73",
-  "8331000DF81D",
-  "8331000F0FE8",
-  "8331000EF45A",
-  "8331000F0512",
-  "8331000EF6B1",
-  "8331000EEC84",
-  "8331000EF78A",
-  "8331000EF75B",
-  "8331000E5D8A",
-  "8331000F5E6D",
-  "8331000F4F18",
-  "8331000F6C55",
-  "8331000EE4ED",
-];
-
-export const INITIAL_APPROVED_OPERATORS: ApprovedOperator[] = [
-  {
-    id: "op-venkatesa",
-    name: "VENKATESA PERUMAL",
-    mobile: "9787312758",
-    email: "venkatesaperumal@stb.com",
-    stbBoxName: "SCV",
-    portalLink: "https://scvportal.com",
-    active: true,
-    addedAt: new Date().toISOString(),
-  },
-];
-
-export const INITIAL_SEED_STB_MAPPINGS: StbMapping[] = VENKATESA_PERUMAL_STBS.map((stbId, idx) => ({
-  id: `stb-venk-${idx + 1}`,
-  stbId,
-  operatorMobile: "9787312758",
-  operatorName: "VENKATESA PERUMAL",
-  customerName: "Customer",
-  customerMobile: "",
-  currentPlan: "Basic Tamil Pack Monthly Rs 220",
-  expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
-  isApproved: true,
-  status: "Approved",
-}));
-
 export const INITIAL_SEED_PRODUCTS: Product[] = [];
 
 export const INITIAL_SEED_PRODUCT_REQUESTS: ProductRequest[] = [];
 export const INITIAL_SEED_COMPLAINTS: Complaint[] = [];
+export const INITIAL_APPROVED_OPERATORS: ApprovedOperator[] = [VENKATESA_OPERATOR];
 
 const defaultState: State = {
   user: null,
@@ -404,7 +277,7 @@ const defaultState: State = {
   products: INITIAL_SEED_PRODUCTS,
   productRequests: INITIAL_SEED_PRODUCT_REQUESTS,
   complaints: INITIAL_SEED_COMPLAINTS,
-  stbMappings: INITIAL_SEED_STB_MAPPINGS,
+  stbMappings: VENKATESA_STB_MAPPINGS,
   appliedCoupon: null,
   selectedPlanId: null,
   selectedPlanObject: null,
@@ -434,18 +307,11 @@ function loadSavedState(): State {
     const saved = localStorage.getItem(STORAGE_KEY);
     if (saved) {
       const parsed = JSON.parse(saved);
-      const cleanOps = ((parsed.approvedOperators || INITIAL_APPROVED_OPERATORS) as ApprovedOperator[]).filter(
+      let cleanOps = ((parsed.approvedOperators || INITIAL_APPROVED_OPERATORS) as ApprovedOperator[]).filter(
         (op) => op && op.mobile !== "9080864542"
       );
       if (!cleanOps.some((op) => op.mobile === "9787312758")) {
-        cleanOps.push(INITIAL_APPROVED_OPERATORS[0]);
-      }
-      const existingStbs = parsed.stbMappings || [];
-      const mergedStbs = [...existingStbs];
-      for (const seedStb of INITIAL_SEED_STB_MAPPINGS) {
-        if (!mergedStbs.some((s) => s.stbId === seedStb.stbId)) {
-          mergedStbs.push(seedStb);
-        }
+        cleanOps.push(VENKATESA_OPERATOR);
       }
       // Remove any old seed products prod-1 through prod-10
       const cleanProds = Array.isArray(parsed.products)
@@ -453,7 +319,21 @@ function loadSavedState(): State {
             (p) => p && !["prod-1", "prod-2", "prod-3", "prod-4", "prod-5", "prod-6", "prod-7", "prod-8", "prod-9", "prod-10"].includes(p.id)
           )
         : [];
-      return { ...defaultState, ...parsed, approvedOperators: cleanOps, stbMappings: mergedStbs, products: cleanProds, ready: true };
+
+      // Ensure all 360 STB mappings for 9787312758 exist in stbMappings
+      let currentStbs: StbMapping[] = Array.isArray(parsed.stbMappings) ? parsed.stbMappings : [];
+      const existingStbIds = new Set(currentStbs.map((m) => m.stbId));
+      const missingVenStbs = VENKATESA_STB_MAPPINGS.filter((m) => !existingStbIds.has(m.stbId));
+      const mergedStbs = [...currentStbs, ...missingVenStbs];
+
+      return {
+        ...defaultState,
+        ...parsed,
+        approvedOperators: cleanOps,
+        products: cleanProds,
+        stbMappings: mergedStbs,
+        ready: true,
+      };
     }
   } catch (e) {
     console.error("Failed to load local state", e);

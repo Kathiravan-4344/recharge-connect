@@ -70,17 +70,6 @@ const addOperator = async (req, res) => {
 // @route GET /api/admin/operators
 const getOperators = async (req, res) => {
   try {
-    const venk = await Operator.findOne({ mobileNumber: "9787312758" });
-    if (!venk) {
-      await Operator.create({
-        mobileNumber: "9787312758",
-        name: "VENKATESA PERUMAL",
-        email: "venkatesaperumal@stb.com",
-        stbBoxName: "SCV",
-        portalLink: "https://scvportal.com",
-        isActive: true,
-      });
-    }
     const operators = await Operator.find().sort({ createdAt: -1 });
     return res.status(200).json({ success: true, count: operators.length, operators });
   } catch (error) {
