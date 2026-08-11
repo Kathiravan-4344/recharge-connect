@@ -154,6 +154,8 @@ export function OperatorPage() {
   // STB ID Mapping State
   const [stbSearchTerm, setStbSearchTerm] = useState("");
   const [showAddStbModal, setShowAddStbModal] = useState(false);
+  const [stbAddMode, setStbAddMode] = useState<"single" | "bulk">("single");
+  const [bulkStbText, setBulkStbText] = useState("");
   const [newStbId, setNewStbId] = useState("");
   const [newCustName, setNewCustName] = useState("");
   const [newCustMobile, setNewCustMobile] = useState("");
@@ -433,6 +435,42 @@ export function OperatorPage() {
     } else {
       setStbErr(res.message || "Failed to map STB ID");
     }
+  }
+
+  const parsedBulkStbIds = Array.from(
+    new Set(
+      bulkStbText
+        .split(/[\n,;\s]+/)
+        .map((s) => s.trim().toUpperCase().replace(/[^A-Z0-9]/g, "").slice(0, 12))
+        .filter((s) => s.length > 0)
+    )
+  );
+
+  async function handleBulkStbSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (parsedBulkStbIds.length === 0) {
+      setStbErr("Please paste at least one valid STB ID!");
+      return;
+    }
+    setStbSubmitting(true);
+    let mapped = 0;
+    for (const stbId of parsedBulkStbIds) {
+      try {
+        const res = await addStbMapping({
+          stbId,
+          operatorMobile: user?.mobile || "",
+          operatorName: user?.name || "Operator",
+          customerName: "Customer",
+          customerMobile: "",
+        });
+        if (res.success) mapped++;
+      } catch (err) {}
+    }
+    setStbSubmitting(false);
+    setShowAddStbModal(false);
+    setBulkStbText("");
+    setNewStbId("");
+    alert(`Successfully mapped ${mapped} STB IDs to your operator account!`);
   }
 
   function handleDeleteStbMapping(id: string) {
@@ -1849,13 +1887,13 @@ export function OperatorPage() {
         </div>
       )}
 
-      {/* Modal: Map / Add New STB ID */}
+      {/* Modal: Map / Add STB IDs */}
       {showAddStbModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 backdrop-blur-sm">
-          <div className="w-full max-w-md rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-xl space-y-4">
+          <div className="w-full max-w-lg rounded-2xl border border-[#CBD5E1] bg-white p-6 shadow-2xl space-y-4">
             <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
               <h3 className="text-lg font-bold text-[#0F172A] flex items-center gap-2">
-                <Tv className="h-5 w-5 text-[#2563EB]" /> Map / Add New STB ID
+                <Tv className="h-5 w-5 text-[#2563EB]" /> Map / Add STB IDs
               </h3>
               <button
                 onClick={() => {
@@ -1868,59 +1906,161 @@ export function OperatorPage() {
               </button>
             </div>
 
+            {/* Mode Switcher Tabs */}
+            <div className="grid grid-cols-2 gap-2 rounded-xl bg-[#F1F5F9] p-1 text-xs font-bold">
+              <button
+                type="button"
+                onClick={() => setStbAddMode("single")}
+                className={`rounded-lg py-2 transition text-center cursor-pointer ${
+                  stbAddMode === "single"
+                    ? "bg-[#2563EB] text-white shadow-sm"
+                    : "text-[#64748B] hover:text-[#0F172A]"
+                }`}
+              >
+                Single STB ID
+              </button>
+              <button
+                type="button"
+                onClick={() => setStbAddMode("bulk")}
+                className={`rounded-lg py-2 transition text-center cursor-pointer ${
+                  stbAddMode === "bulk"
+                    ? "bg-[#2563EB] text-white shadow-sm"
+                    : "text-[#64748B] hover:text-[#0F172A]"
+                }`}
+              >
+                📋 Bulk Paste STB IDs ({parsedBulkStbIds.length})
+              </button>
+            </div>
+
             {stbErr && (
               <div className="rounded-xl bg-red-50 border border-red-200 p-3 text-xs font-bold text-red-700">
                 ⚠️ {stbErr}
               </div>
             )}
 
-            <form onSubmit={handleAddStbSubmit} className="space-y-4 text-xs">
-              <div>
-                <label className="block font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
-                  STB ID / Box ID <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="text"
-                  maxLength={12}
-                  required
-                  autoFocus
-                  placeholder="e.g. STB123456789"
-                  value={newStbId}
-                  onChange={(e) => setNewStbId(e.target.value.toUpperCase().slice(0, 12))}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-base font-mono font-extrabold text-[#0F172A] tracking-wider outline-none focus:border-[#2563EB]"
-                />
-                <div className="mt-1.5 flex items-center justify-between text-[11px]">
-                  <span className="text-[#64748B] font-medium">🔤 Letters & Numbers allowed (Max 12 chars)</span>
-                  <span
-                    className={`font-mono font-bold ${
-                      newStbId.length > 0 ? "text-[#22C55E]" : "text-[#2563EB]"
-                    }`}
-                  >
-                    {newStbId.length} / 12 chars
-                  </span>
+            {stbAddMode === "single" ? (
+              <form onSubmit={handleAddStbSubmit} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    STB ID / Box ID <span className="text-red-500">*</span>
+                  </label>
+                  <input
+                    type="text"
+                    maxLength={12}
+                    required
+                    autoFocus
+                    placeholder="e.g. STB123456789"
+                    value={newStbId}
+                    onChange={(e) => setNewStbId(e.target.value.toUpperCase().slice(0, 12))}
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-base font-mono font-extrabold text-[#0F172A] tracking-wider outline-none focus:border-[#2563EB]"
+                  />
+                  <div className="mt-1.5 flex items-center justify-between text-[11px]">
+                    <span className="text-[#64748B] font-medium">🔤 Letters & Numbers allowed (Max 12 chars)</span>
+                    <span
+                      className={`font-mono font-bold ${
+                        newStbId.length > 0 ? "text-[#22C55E]" : "text-[#2563EB]"
+                      }`}
+                    >
+                      {newStbId.length} / 12 chars
+                    </span>
+                  </div>
                 </div>
-              </div>
 
-              <div className="pt-2 flex justify-end gap-2 border-t border-[#CBD5E1]">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setShowAddStbModal(false);
-                    setStbErr(null);
-                  }}
-                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
-                >
-                  Cancel
-                </button>
-                <button
-                  type="submit"
-                  disabled={stbSubmitting || !newStbId.trim()}
-                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer"
-                >
-                  {stbSubmitting ? "Mapping..." : "Map STB ID"}
-                </button>
-              </div>
-            </form>
+                <div className="pt-2 flex justify-end gap-2 border-t border-[#CBD5E1]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddStbModal(false);
+                      setStbErr(null);
+                    }}
+                    className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={stbSubmitting || !newStbId.trim()}
+                    className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer"
+                  >
+                    {stbSubmitting ? "Mapping..." : "Map STB ID"}
+                  </button>
+                </div>
+              </form>
+            ) : (
+              <form onSubmit={handleBulkStbSubmit} className="space-y-4 text-xs">
+                <div>
+                  <label className="block font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                    PASTE MULTIPLE STB IDs <span className="text-red-500">*</span>
+                  </label>
+                  <textarea
+                    rows={5}
+                    required
+                    placeholder={`Paste STB IDs here (separated by line break, space, or comma)...
+
+e.g.:
+123456789012
+987654321098
+STB999888777`}
+                    value={bulkStbText}
+                    onChange={(e) => setBulkStbText(e.target.value)}
+                    className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-xs font-mono font-bold text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  />
+                  <div className="mt-1.5 flex items-center justify-between text-[11px]">
+                    <span className="text-[#64748B] font-medium">
+                      📋 Paste any number of STB IDs at once
+                    </span>
+                    <span className="font-mono font-bold text-[#2563EB]">
+                      {parsedBulkStbIds.length} Valid STB ID(s) Extracted
+                    </span>
+                  </div>
+                </div>
+
+                {parsedBulkStbIds.length > 0 && (
+                  <div className="rounded-xl bg-[#F8FAFC] border border-[#CBD5E1] p-3 space-y-1.5 max-h-32 overflow-y-auto">
+                    <div className="text-[10px] font-bold text-[#64748B] uppercase tracking-wider">
+                      Extracted Preview:
+                    </div>
+                    <div className="flex flex-wrap gap-1.5">
+                      {parsedBulkStbIds.slice(0, 20).map((stb) => (
+                        <span
+                          key={stb}
+                          className="rounded-md bg-blue-100 border border-blue-200 px-2 py-0.5 text-[11px] font-mono font-extrabold text-[#2563EB]"
+                        >
+                          {stb}
+                        </span>
+                      ))}
+                      {parsedBulkStbIds.length > 20 && (
+                        <span className="text-[11px] font-bold text-[#64748B] self-center">
+                          +{parsedBulkStbIds.length - 20} more...
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                <div className="pt-2 flex justify-end gap-2 border-t border-[#CBD5E1]">
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setShowAddStbModal(false);
+                      setStbErr(null);
+                    }}
+                    className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="submit"
+                    disabled={stbSubmitting || parsedBulkStbIds.length === 0}
+                    className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                  >
+                    {stbSubmitting
+                      ? "Mapping Bulk STB IDs..."
+                      : `Map All ${parsedBulkStbIds.length} STB IDs`}
+                  </button>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
