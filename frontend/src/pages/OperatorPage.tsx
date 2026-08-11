@@ -408,25 +408,28 @@ export function OperatorPage() {
   async function handleAddStbSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStbErr(null);
-    if (!newStbId.trim()) {
-      setStbErr("Please enter STB ID");
+    const cleanStb = newStbId.replace(/\D/g, "").slice(0, 12);
+    if (!cleanStb) {
+      setStbErr("Please enter a valid STB ID (numbers only)");
+      return;
+    }
+    if (cleanStb.length !== 12) {
+      setStbErr(`STB ID must be exactly 12 numeric digits (current: ${cleanStb.length} digits)`);
       return;
     }
     setStbSubmitting(true);
     const res = await addStbMapping({
-      stbId: newStbId.trim(),
+      stbId: cleanStb,
       operatorMobile: user?.mobile || "",
       operatorName: user?.name || "Operator",
-      customerName: newCustName.trim() || "Customer",
-      customerMobile: newCustMobile.trim(),
+      customerName: "Customer",
+      customerMobile: "",
     });
     setStbSubmitting(false);
 
     if (res.success) {
       setShowAddStbModal(false);
       setNewStbId("");
-      setNewCustName("");
-      setNewCustMobile("");
     } else {
       setStbErr(res.message || "Failed to map STB ID");
     }
@@ -1871,58 +1874,50 @@ export function OperatorPage() {
               </div>
             )}
 
-            <form onSubmit={handleAddStbSubmit} className="space-y-3 text-xs">
+            <form onSubmit={handleAddStbSubmit} className="space-y-4 text-xs">
               <div>
-                <label className="block font-bold text-[#64748B] mb-1">
-                  STB ID / Customer Box ID <span className="text-red-500">*</span>
+                <label className="block font-bold text-[#64748B] mb-1.5 uppercase tracking-wider">
+                  STB ID (12 Numeric Digits) <span className="text-red-500">*</span>
                 </label>
                 <input
                   type="text"
+                  inputMode="numeric"
+                  pattern="[0-9]*"
+                  maxLength={12}
                   required
-                  placeholder="e.g. STB100200"
+                  autoFocus
+                  placeholder="e.g. 123456789012"
                   value={newStbId}
-                  onChange={(e) => setNewStbId(e.target.value.toUpperCase())}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm font-mono font-bold text-[#0F172A] outline-none focus:border-[#2563EB]"
+                  onChange={(e) => setNewStbId(e.target.value.replace(/\D/g, "").slice(0, 12))}
+                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-3 text-base font-mono font-extrabold text-[#0F172A] tracking-wider outline-none focus:border-[#2563EB]"
                 />
+                <div className="mt-1.5 flex items-center justify-between text-[11px]">
+                  <span className="text-[#64748B] font-medium">🔢 Numbers only (Max 12 digits)</span>
+                  <span
+                    className={`font-mono font-bold ${
+                      newStbId.length === 12 ? "text-[#22C55E]" : "text-[#2563EB]"
+                    }`}
+                  >
+                    {newStbId.length} / 12 digits
+                  </span>
+                </div>
               </div>
 
-              <div>
-                <label className="block font-bold text-[#64748B] mb-1">Customer Name</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Karthik R"
-                  value={newCustName}
-                  onChange={(e) => setNewCustName(e.target.value)}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
-                />
-              </div>
-
-              <div>
-                <label className="block font-bold text-[#64748B] mb-1">Customer Mobile Number</label>
-                <input
-                  type="text"
-                  placeholder="e.g. 9876543210"
-                  value={newCustMobile}
-                  onChange={(e) => setNewCustMobile(e.target.value)}
-                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] p-2.5 text-sm text-[#0F172A] outline-none focus:border-[#2563EB]"
-                />
-              </div>
-
-              <div className="pt-2 flex justify-end gap-2">
+              <div className="pt-2 flex justify-end gap-2 border-t border-[#CBD5E1]">
                 <button
                   type="button"
                   onClick={() => {
                     setShowAddStbModal(false);
                     setStbErr(null);
                   }}
-                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2 text-xs font-bold text-[#0F172A]"
+                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2.5 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
                 >
                   Cancel
                 </button>
                 <button
                   type="submit"
-                  disabled={stbSubmitting}
-                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2 text-xs font-bold text-white shadow-sm disabled:opacity-50"
+                  disabled={stbSubmitting || newStbId.length !== 12}
+                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2.5 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer"
                 >
                   {stbSubmitting ? "Mapping..." : "Map STB ID"}
                 </button>
