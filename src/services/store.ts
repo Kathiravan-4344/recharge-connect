@@ -29,7 +29,7 @@ import {
   apiDeleteProduct,
 } from "./api";
 
-
+export { cleanMobile, cleanContact, mobileToEmail } from "../utils/utils";
 
 export type Plan = {
   id: string;

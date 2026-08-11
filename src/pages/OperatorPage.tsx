@@ -19,6 +19,7 @@ import {
   addStbMapping,
   deleteStbMappingAction,
   isOperatorApproved,
+  cleanContact,
   type ProductRequest,
   type Product,
   type ProductRequestStatus,

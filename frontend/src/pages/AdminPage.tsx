@@ -150,7 +150,19 @@ export function AdminPage() {
       setAddOpOtpErr(`Invalid OTP code! Please enter the 6-digit code sent to ${opEmail.trim()}.`);
       return;
     }
-    const res = await upsertOperator(opMobile.trim(), opName.trim(), opStbBox, opPortalLink.trim(), opEmail.trim());
+    const defaultPortalLinks: Record<string, string> = {
+      SCV: "https://scvportal.com",
+      TCCL: "https://tccl.in",
+      "AKSHAYA DIGINET": "https://akshayadiginet.in",
+      TACTV: "https://tactv.in",
+    };
+    let finalPortalLink = opPortalLink.trim();
+    if (!finalPortalLink) {
+      finalPortalLink = defaultPortalLinks[opStbBox] || "https://scvportal.com";
+    } else if (!finalPortalLink.startsWith("http://") && !finalPortalLink.startsWith("https://")) {
+      finalPortalLink = "https://" + finalPortalLink;
+    }
+    const res = await upsertOperator(opMobile.trim(), opName.trim(), opStbBox, finalPortalLink, opEmail.trim());
     if (res.success) {
       setMsg({ text: `Operator ${opName} (${opStbBox}) verified via email (${opEmail}) and registered successfully!` });
       setOpMobile("");
@@ -544,7 +556,7 @@ export function AdminPage() {
                     PLACE YOUR PORTAL LINK
                   </label>
                   <input
-                    type="url"
+                    type="text"
                     value={opPortalLink}
                     onChange={(e) => setOpPortalLink(e.target.value)}
                     placeholder="e.g. https://scvportal.com or tccl.in"
