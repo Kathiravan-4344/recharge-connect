@@ -5,7 +5,7 @@ import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from "fi
 import { auth } from "../config/firebase";
 import { sendOtp, verifyOtp, useStore, isOperatorApproved, getState, syncOperatorsFromBackend } from "../services/store";
 import { apiValidateStb } from "../services/api";
-import { cleanMobile } from "../utils/utils";
+import { cleanMobile, normalizeIndianPhoneNumber } from "../utils/utils";
 
 function getRoleFromUrl(): "customer" | "operator" {
   if (typeof window === "undefined") return "customer";
@@ -144,22 +144,22 @@ export function LoginPage() {
       return;
     }
 
-    const cleanedMobile = mobile.trim().replace(/\D/g, "");
+    const phoneResult = normalizeIndianPhoneNumber(mobile);
+    if (!phoneResult.valid) {
+      setErr(`❌ ${phoneResult.error || "Please enter a valid 10-digit mobile number."}`);
+      return;
+    }
+
+    const cleanedMobile = cleanMobile(mobile);
 
     if (cleanedMobile === "9080864542") {
       setErr("❌ Admin Portal can ONLY be accessed via Operator Login tab.");
       return;
     }
 
-    if (!/^\d{10}$/.test(cleanedMobile)) {
-      setErr("Enter a valid 10-digit mobile number");
-      return;
-    }
-
     setLoading(true);
 
     try {
-      const formattedPhone = `+91${cleanedMobile}`;
       const verifier = setupRecaptcha();
       if (!verifier) {
         setErr("Failed to initialize reCAPTCHA. Please refresh the page.");
@@ -167,7 +167,7 @@ export function LoginPage() {
         return;
       }
 
-      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, verifier);
+      const confirmation = await signInWithPhoneNumber(auth, phoneResult.formatted, verifier);
       setConfirmationResult(confirmation);
       setResendCooldown(30);
       setStep("otp");
