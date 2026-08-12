@@ -169,6 +169,7 @@ export async function apiCreateRecharge(payload: {
   amount: number;
   customerName?: string;
   customerMobile?: string;
+  operatorMobile?: string;
   paymentStatus?: string;
   userId?: string;
 }) {

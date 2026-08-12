@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useSearch } from "@tanstack/react-router";
-import { Tv, Shield, Zap, ArrowRight, Lock } from "lucide-react";
+import { Tv, Shield, Zap, ArrowRight, Lock, RefreshCw, CheckCircle2 } from "lucide-react";
+import { RecaptchaVerifier, signInWithPhoneNumber, ConfirmationResult } from "firebase/auth";
+import { auth } from "../config/firebase";
 import { sendOtp, verifyOtp, useStore, isOperatorApproved, getState, syncOperatorsFromBackend } from "../services/store";
 import { apiValidateStb } from "../services/api";
 import { cleanMobile } from "../utils/utils";
@@ -18,19 +20,29 @@ function getRoleFromUrl(): "customer" | "operator" {
 export function LoginPage() {
   const search = useSearch({ strict: false }) as { role?: string };
   const [role, setRole] = useState<"customer" | "operator">(getRoleFromUrl);
-  const [step, setStep] = useState<"details" | "otp">("details");
+  
+  // Step state:
+  // For Customer: "details" (Mobile+Name) -> "otp" (Firebase 6-digit SMS) -> "stb" (STB Validation)
+  // For Operator: "details" -> "otp"
+  const [step, setStep] = useState<"details" | "otp" | "stb">("details");
 
   // Common & Customer state
   const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [stbId, setStbId] = useState("");
 
-  // Operator state: Contact can be Mobile Number OR Gmail
+  // Operator state
   const [operatorContact, setOperatorContact] = useState("");
 
+  // OTP state
   const [otp, setOtp] = useState("");
   const [loading, setLoading] = useState(false);
   const [err, setErr] = useState<string | null>(null);
+
+  // Firebase Auth State
+  const [confirmationResult, setConfirmationResult] = useState<ConfirmationResult | null>(null);
+  const [firebaseUid, setFirebaseUid] = useState<string>("");
+  const [resendCooldown, setResendCooldown] = useState<number>(0);
 
   const navigate = useNavigate();
   const user = useStore((s) => s.user);
@@ -54,13 +66,27 @@ export function LoginPage() {
     }
   }, [user, navigate]);
 
+  // Resend Timer Effect
+  useEffect(() => {
+    let timer: any = null;
+    if (resendCooldown > 0) {
+      timer = setInterval(() => {
+        setResendCooldown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, [resendCooldown]);
+
   function handleSwitchRole(newRole: "customer" | "operator") {
     setRole(newRole);
     setStep("details");
     setErr(null);
+    setOtp("");
+    setConfirmationResult(null);
   }
 
-  // Formatting Operator Contact: Auto-lowercase for email/text, clean digits for mobile
   function handleOperatorContactChange(raw: string) {
     setErr(null);
     if (raw.includes("@")) {
@@ -84,176 +110,279 @@ export function LoginPage() {
 
   const isCustomerValid =
     name.trim().length > 0 &&
-    /^\d{10}$/.test(cleanMobile(mobile)) &&
-    /^[A-Za-z0-9\-\_]{4,12}$/.test(stbId.trim());
+    /^\d{10}$/.test(cleanMobile(mobile));
 
-  const isFormValid = role === "operator" ? isOperatorValid : isCustomerValid;
+  // Initialize invisible Firebase reCAPTCHA
+  function setupRecaptcha() {
+    if (typeof window === "undefined") return null;
+    try {
+      if ((window as any).recaptchaVerifier) {
+        try {
+          (window as any).recaptchaVerifier.clear();
+        } catch (e) {}
+      }
+      const verifier = new RecaptchaVerifier(auth, "recaptcha-container", {
+        size: "invisible",
+        callback: () => {},
+        "expired-callback": () => {
+          setErr("reCAPTCHA expired. Please try requesting OTP again.");
+        },
+      });
+      (window as any).recaptchaVerifier = verifier;
+      return verifier;
+    } catch (err: any) {
+      console.error("Recaptcha Setup Error:", err);
+      return null;
+    }
+  }
 
-  async function handleSend() {
+  // Customer Step 1: Send Firebase SMS OTP
+  async function handleSendCustomerOtp() {
     setErr(null);
     if (!name.trim()) {
       setErr("ENTER YOUR NAME");
       return;
     }
 
-    if (role === "operator") {
-      const contact = operatorContact.trim();
-      const cleanedContact = cleanMobile(contact);
+    const cleanedMobile = mobile.trim().replace(/\D/g, "");
 
-      if (!contact) {
-        setErr("ENTER YOUR MOBILE NUMBER OR GMAIL");
-        return;
-      }
+    if (cleanedMobile === "9080864542") {
+      setErr("❌ Admin Portal can ONLY be accessed via Operator Login tab.");
+      return;
+    }
 
-      // Check if Admin login number 9080864542
-      if (cleanedContact === "9080864542") {
-        setLoading(true);
-        await sendOtp("9080864542");
+    if (!/^\d{10}$/.test(cleanedMobile)) {
+      setErr("Enter a valid 10-digit mobile number");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const formattedPhone = `+91${cleanedMobile}`;
+      const verifier = setupRecaptcha();
+      if (!verifier) {
+        setErr("Failed to initialize reCAPTCHA. Please refresh the page.");
         setLoading(false);
-        setStep("otp");
         return;
       }
 
-      // STRICT OPERATOR WHITELIST CHECK FOR OTHERS
-      setLoading(true);
-      await syncOperatorsFromBackend();
+      const confirmation = await signInWithPhoneNumber(auth, formattedPhone, verifier);
+      setConfirmationResult(confirmation);
+      setResendCooldown(30);
+      setStep("otp");
+    } catch (error: any) {
+      console.error("Firebase Phone Auth Error:", error);
+      let msg = "Failed to send SMS OTP. Please check mobile number and try again.";
+      if (error.code === "auth/invalid-phone-number") {
+        msg = "Invalid mobile number format.";
+      } else if (error.code === "auth/too-many-requests") {
+        msg = "Too many OTP requests. Please wait a few minutes before trying again.";
+      } else if (error.code === "auth/captcha-check-failed") {
+        msg = "reCAPTCHA verification failed. Please try again.";
+      } else if (error.message) {
+        msg = error.message;
+      }
+      setErr(`❌ ${msg}`);
+    } finally {
       setLoading(false);
+    }
+  }
 
-      if (!isOperatorApproved(contact) && !isOperatorApproved(cleanedContact)) {
-        setErr(
-          "❌ You are not authorized. Contact Admin (KATHIRAVAN V) to add your operator number.",
-        );
-        return;
-      }
+  // Operator Step 1: Send OTP
+  async function handleSendOperatorOtp() {
+    setErr(null);
+    if (!name.trim()) {
+      setErr("ENTER YOUR NAME");
+      return;
+    }
 
-      if (!isOperatorValidEmail && !isOperatorValidMobile) {
-        if (isOperatorEmail) {
-          setErr("Please enter a valid Gmail / Email address");
-        } else {
-          setErr("Please enter a valid 10-digit Mobile Number");
-        }
-        return;
-      }
+    const contact = operatorContact.trim();
+    const cleanedContact = cleanMobile(contact);
 
+    if (!contact) {
+      setErr("ENTER YOUR MOBILE NUMBER OR GMAIL");
+      return;
+    }
+
+    if (cleanedContact === "9080864542") {
       setLoading(true);
-      await sendOtp(cleanedContact || contact);
+      await sendOtp("9080864542");
       setLoading(false);
       setStep("otp");
-    } else {
-      const cleanedMobile = mobile.trim().replace(/\D/g, "");
+      return;
+    }
 
-      if (cleanedMobile === "9080864542") {
-        setErr("❌ Admin Portal can ONLY be accessed via Operator Login tab.");
-        return;
+    setLoading(true);
+    await syncOperatorsFromBackend();
+    setLoading(false);
+
+    if (!isOperatorApproved(contact) && !isOperatorApproved(cleanedContact)) {
+      setErr(
+        "❌ You are not authorized. Contact Admin (KATHIRAVAN V) to add your operator number."
+      );
+      return;
+    }
+
+    if (!isOperatorValidEmail && !isOperatorValidMobile) {
+      if (isOperatorEmail) {
+        setErr("Please enter a valid Gmail / Email address");
+      } else {
+        setErr("Please enter a valid 10-digit Mobile Number");
       }
+      return;
+    }
 
-      if (!/^\d{10}$/.test(mobile)) {
-        setErr("Enter a valid 10-digit mobile number");
-        return;
+    setLoading(true);
+    await sendOtp(cleanedContact || contact);
+    setLoading(false);
+    setStep("otp");
+  }
+
+  // Customer Step 2: Verify Firebase SMS OTP
+  async function handleVerifyCustomerOtp() {
+    setErr(null);
+    const cleanOtp = otp.trim();
+    if (cleanOtp.length < 6) {
+      setErr("Enter the 6-digit SMS OTP code");
+      return;
+    }
+
+    if (!confirmationResult) {
+      setErr("OTP session expired. Please request a new OTP.");
+      return;
+    }
+
+    setLoading(true);
+
+    try {
+      const userCredential = await confirmationResult.confirm(cleanOtp);
+      const uid = userCredential.user.uid;
+      setFirebaseUid(uid);
+
+      // REQUIREMENT 3: DO NOT open Customer Home directly. Advance to STB ID entry step!
+      setStep("stb");
+      setOtp("");
+    } catch (error: any) {
+      console.error("Firebase OTP Verification Error:", error);
+      let msg = "Incorrect OTP code.";
+      if (error.code === "auth/invalid-verification-code") {
+        msg = "Incorrect SMS OTP code. Please check and re-enter.";
+      } else if (error.code === "auth/code-expired") {
+        msg = "OTP has expired. Please click Resend OTP.";
+      } else if (error.message) {
+        msg = error.message;
       }
+      setErr(`❌ ${msg}`);
+    } finally {
+      setLoading(false);
+    }
+  }
 
-      if (!/^[A-Za-z0-9\-\_]{4,12}$/.test(stbId.trim())) {
-        setErr("Enter a valid STB ID / Customer ID (4 to 12 characters)");
-        return;
-      }
+  // Customer Step 3: Validate STB ID against backend database
+  async function handleValidateStbAndLogin() {
+    setErr(null);
+    const cleanStb = stbId.trim().toUpperCase();
 
-      setLoading(true);
+    if (!/^[A-Za-z0-9\-\_]{4,12}$/.test(cleanStb)) {
+      setErr("Enter a valid STB ID / Customer ID (4 to 12 characters)");
+      return;
+    }
 
-      // Validate STB ID against Operator mapped STB IDs
-      const valRes = await apiValidateStb(stbId.trim());
+    setLoading(true);
+
+    try {
+      // Validate STB ID against Operator Mapped STBs
+      const valRes = await apiValidateStb(cleanStb);
       if (!valRes.success || !valRes.data?.valid) {
         setLoading(false);
         setErr(
           valRes.data?.message ||
             "❌ STB ID is not registered with any operator. Please contact your local operator to map your STB ID."
         );
+        // REMAIN on STB step as required!
         return;
       }
 
-      await sendOtp(mobile);
-      setLoading(false);
-      setStep("otp");
-    }
-  }
-
-  async function handleVerify() {
-    setErr(null);
-    if (otp.length !== 4) {
-      setErr("Enter the 4-digit OTP");
-      return;
-    }
-    setLoading(true);
-
-    if (role === "operator") {
-      const contact = operatorContact.trim();
-      const cleanedContact = contact.replace(/\D/g, "");
-
-      // ADMIN PORTAL LOGIN (ONLY VIA OPERATOR LOGIN TAB)
-      if (cleanedContact === "9080864542") {
-        const ok = await verifyOtp("9080864542", otp, name || "KATHIRAVAN V", "admin");
-        setLoading(false);
-        if (ok) {
-          navigate({ to: "/admin" });
-        } else {
-          setErr("Incorrect OTP code. Enter 4-digit OTP.");
-        }
-        return;
-      }
-
-      // OPERATOR LOGIN
-      if (!isOperatorApproved(contact)) {
-        setLoading(false);
-        setErr("❌ You are not authorized. Contact Admin (KATHIRAVAN V) to add your operator number.");
-        return;
-      }
-      const isGmail = contact.includes("@");
-      const mobileNum = isGmail ? "9787312758" : contact;
-      const emailAddr = isGmail ? contact : undefined;
-      const operatorNum = isGmail
-        ? "OP-" + contact.split("@")[0].toUpperCase()
-        : "OP-" + contact.slice(-5);
-
-      const ok = await verifyOtp(mobileNum, otp, name, "operator", {
-        email: emailAddr,
-        operatorNumber: operatorNum,
+      // Valid STB ID! Store session and navigate to Customer Home!
+      const ok = await verifyOtp(mobile, "000000", name, "customer", {
+        stbId: cleanStb,
+        firebaseUid,
       });
-      setLoading(false);
 
-      if (ok) {
-        const currentUser = getState().user;
-        if (currentUser?.role === "admin") {
-          navigate({ to: "/admin" });
-        } else {
-          navigate({ to: "/operator" });
-        }
-      } else {
-        setErr("Incorrect code. Your 6-digit code is set on first login — use the same one each time.");
-      }
-    } else {
-      const cleanedMobile = mobile.trim().replace(/\D/g, "");
-
-      // BLOCK ADMIN NUMBER ON CUSTOMER LOGIN
-      if (cleanedMobile === "9080864542") {
-        setLoading(false);
-        setErr("❌ Admin Portal can ONLY be accessed via Operator Login tab.");
-        return;
-      }
-
-      const ok = await verifyOtp(mobile, otp, name, "customer", {
-        stbId: stbId.trim() || "1234567890",
-      });
       setLoading(false);
 
       if (ok) {
         navigate({ to: "/dashboard" });
       } else {
-        setErr("Incorrect code. Your 6-digit code is set on first login — use the same one each time.");
+        setErr("Failed to start customer session. Please try again.");
       }
+    } catch (error: any) {
+      setLoading(false);
+      setErr(`❌ Backend STB validation failed: ${error.message || "Network Error"}`);
+    }
+  }
+
+  // Operator Step 2: Verify OTP
+  async function handleVerifyOperatorOtp() {
+    setErr(null);
+    if (otp.length < 4) {
+      setErr("Enter the verification OTP code");
+      return;
+    }
+    setLoading(true);
+
+    const contact = operatorContact.trim();
+    const cleanedContact = contact.replace(/\D/g, "");
+
+    // ADMIN PORTAL LOGIN
+    if (cleanedContact === "9080864542") {
+      const ok = await verifyOtp("9080864542", otp, name || "KATHIRAVAN V", "admin");
+      setLoading(false);
+      if (ok) {
+        navigate({ to: "/admin" });
+      } else {
+        setErr("Incorrect OTP code. Enter 4-digit OTP.");
+      }
+      return;
+    }
+
+    // OPERATOR LOGIN
+    if (!isOperatorApproved(contact)) {
+      setLoading(false);
+      setErr("❌ You are not authorized. Contact Admin (KATHIRAVAN V) to add your operator number.");
+      return;
+    }
+    const isGmail = contact.includes("@");
+    const mobileNum = isGmail ? "9787312758" : contact;
+    const emailAddr = isGmail ? contact : undefined;
+    const operatorNum = isGmail
+      ? "OP-" + contact.split("@")[0].toUpperCase()
+      : "OP-" + contact.slice(-5);
+
+    const ok = await verifyOtp(mobileNum, otp, name, "operator", {
+      email: emailAddr,
+      operatorNumber: operatorNum,
+    });
+    setLoading(false);
+
+    if (ok) {
+      const currentUser = getState().user;
+      if (currentUser?.role === "admin") {
+        navigate({ to: "/admin" });
+      } else {
+        navigate({ to: "/operator" });
+      }
+    } else {
+      setErr("Incorrect code. Please try again.");
     }
   }
 
   return (
     <div className="min-h-screen bg-[#F1F5F9] flex items-center justify-center p-4 sm:p-6 lg:p-8 font-sans antialiased text-[#0F172A]">
+      {/* Container for Firebase Invisible reCAPTCHA */}
+      <div id="recaptcha-container"></div>
+
       <div className="w-full max-w-5xl grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-8 items-center">
         {/* LEFT SIDE BRAND PANEL */}
         <div className="bg-gradient-to-b from-[#2563EB] to-[#1E3A8A] text-white rounded-3xl p-8 lg:p-10 flex flex-col justify-between min-h-[440px] md:min-h-[500px] shadow-xl shadow-blue-950/10 border border-blue-500/20">
@@ -281,7 +410,7 @@ export function LoginPage() {
               <p className="text-blue-100/90 text-sm leading-relaxed max-w-md">
                 {role === "operator"
                   ? "Manage customer subscriptions, review instant approvals, and oversee cable TV operator operations smoothly."
-                  : "Enjoy instant set top box top-ups, live operator verification, and round-the-clock service reliability."}
+                  : "Firebase Authenticated mobile login with instant operator verification and 24/7 reliability."}
               </p>
             </div>
           </div>
@@ -291,7 +420,7 @@ export function LoginPage() {
             {[
               { icon: Zap, label: "Instant Pay" },
               { icon: Shield, label: "Operator Verified" },
-              { icon: Lock, label: "Secure System" },
+              { icon: Lock, label: "Firebase Phone Auth" },
             ].map(({ icon: Icon, label }) => (
               <div
                 key={label}
@@ -341,22 +470,26 @@ export function LoginPage() {
                 ? role === "operator"
                   ? "Operator Login"
                   : "Customer Login"
-                : "Verify OTP"}
+                : step === "otp"
+                ? "Verify Firebase SMS OTP"
+                : "Validate STB ID"}
             </h2>
             <p className="text-xs sm:text-sm text-[#64748B] mt-1">
               {step === "details"
                 ? role === "operator"
                   ? "Enter registered operator mobile number or Gmail"
-                  : "Enter your mobile number and STB ID to proceed"
-                : `We sent a 4-digit verification OTP code to ${
+                  : "Enter your name and mobile number to receive SMS OTP"
+                : step === "otp"
+                ? `Enter the SMS OTP sent via Firebase to ${
                     role === "operator" ? operatorContact : "+91 " + mobile
-                  }`}
+                  }`
+                : "Enter your STB Box ID / Smart Card Number to complete login"}
             </p>
           </div>
 
-          {step === "details" ? (
+          {/* STEP 1: DETAILS */}
+          {step === "details" && (
             <div className="space-y-4">
-              {/* Name Field */}
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
                   Name
@@ -374,7 +507,6 @@ export function LoginPage() {
               </div>
 
               {role === "operator" ? (
-                /* Operator Contact Field */
                 <div>
                   <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
                     Mobile Number or Gmail
@@ -387,75 +519,39 @@ export function LoginPage() {
                   />
                 </div>
               ) : (
-                /* Customer Fields */
-                <div className="space-y-4">
-                  <div>
-                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
-                      Mobile Number
-                    </label>
-                    <div className="flex bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] overflow-hidden focus-within:border-[#2563EB] focus-within:ring-4 focus-within:ring-[#2563EB]/15 transition">
-                      <span className="flex items-center px-4 bg-slate-100 text-xs font-bold text-[#64748B] border-r border-[#CBD5E1]">
-                        +91
-                      </span>
-                      <input
-                        inputMode="numeric"
-                        maxLength={10}
-                        value={mobile}
-                        onChange={(e) => {
-                          setMobile(e.target.value.replace(/\D/g, ""));
-                          setErr(null);
-                        }}
-                        placeholder="ENTER YOUR MOBILE NUMBER"
-                        className="w-full bg-transparent px-4 py-3 text-sm text-[#0F172A] placeholder:text-[#94A3B8] outline-none"
-                      />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between mb-1.5">
-                      <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B]">
-                        STB ID / Smart Card Number *
-                      </label>
-                      <span
-                        className={`text-xs font-mono font-bold ${
-                          stbId.length >= 4 ? "text-emerald-600" : "text-amber-600"
-                        }`}
-                      >
-                        {stbId.length}/12
-                      </span>
-                    </div>
+                <div>
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-1.5">
+                    Mobile Number
+                  </label>
+                  <div className="flex bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] overflow-hidden focus-within:border-[#2563EB] focus-within:ring-4 focus-within:ring-[#2563EB]/15 transition">
+                    <span className="flex items-center px-4 bg-slate-100 text-xs font-bold text-[#64748B] border-r border-[#CBD5E1]">
+                      +91
+                    </span>
                     <input
-                      inputMode="text"
-                      maxLength={12}
-                      value={stbId}
+                      inputMode="numeric"
+                      maxLength={10}
+                      value={mobile}
                       onChange={(e) => {
-                        setStbId(e.target.value.replace(/[^A-Za-z0-9\-_]/g, "").toUpperCase());
+                        setMobile(e.target.value.replace(/\D/g, ""));
                         setErr(null);
                       }}
-                      placeholder="ENTER STB ID / SMART CARD NUMBER"
-                      className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] px-4 py-3 text-sm text-[#0F172A] font-mono font-semibold placeholder:font-sans placeholder:font-normal placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15"
+                      placeholder="ENTER YOUR MOBILE NUMBER"
+                      className="w-full bg-transparent px-4 py-3 text-sm text-[#0F172A] placeholder:text-[#94A3B8] outline-none"
                     />
-                    {stbId.length > 0 && stbId.length < 4 && (
-                      <p className="mt-1.5 text-xs text-amber-700 font-medium flex items-center gap-1">
-                        ⚠️ Enter at least {4 - stbId.length} more character(s) to unlock OTP verification.
-                      </p>
-                    )}
                   </div>
                 </div>
               )}
 
-              {/* Error Message */}
               {err && (
                 <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
                   {err}
                 </div>
               )}
 
-              {/* Primary Button */}
               <button
                 type="button"
-                onClick={handleSend}
-                disabled={loading || !isFormValid}
+                onClick={role === "operator" ? handleSendOperatorOtp : handleSendCustomerOtp}
+                disabled={loading || (role === "operator" ? !isOperatorValid : !isCustomerValid)}
                 className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-[12px] py-3.5 px-4 text-base shadow-md shadow-blue-500/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
               >
                 {loading ? (
@@ -466,26 +562,27 @@ export function LoginPage() {
                   </>
                 )}
               </button>
-
-              <p className="text-center text-[11px] text-[#64748B]">
-                By continuing you agree to our Terms & Operator Authorization Policy.
-              </p>
             </div>
-          ) : (
-            /* OTP Step */
+          )}
+
+          {/* STEP 2: VERIFY OTP */}
+          {step === "otp" && (
             <div className="space-y-5">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-2 text-center">
-                  Enter 4-Digit Verification OTP
+                  {role === "customer" ? "Enter 6-Digit Firebase SMS OTP" : "Enter Verification OTP"}
                 </label>
                 <input
                   autoFocus
                   inputMode="numeric"
-                  maxLength={4}
+                  maxLength={role === "customer" ? 6 : 4}
                   value={otp}
-                  onChange={(e) => setOtp(e.target.value.replace(/\D/g, ""))}
-                  placeholder="••••"
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] py-3.5 text-center text-3xl font-bold tracking-[0.5em] text-[#0F172A] placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15"
+                  onChange={(e) => {
+                    setOtp(e.target.value.replace(/\D/g, ""));
+                    setErr(null);
+                  }}
+                  placeholder={role === "customer" ? "••••••" : "••••"}
+                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] py-3.5 text-center text-3xl font-bold tracking-[0.4em] text-[#0F172A] placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 font-mono"
                 />
               </div>
 
@@ -497,26 +594,128 @@ export function LoginPage() {
 
               <button
                 type="button"
-                onClick={handleVerify}
-                disabled={loading || otp.length !== 4}
+                onClick={role === "operator" ? handleVerifyOperatorOtp : handleVerifyCustomerOtp}
+                disabled={loading || (role === "customer" ? otp.length !== 6 : otp.length < 4)}
                 className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-[12px] py-3.5 px-4 text-base shadow-md shadow-blue-500/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
               >
                 {loading
                   ? "Verifying OTP…"
                   : role === "operator"
-                    ? "Verify OTP & Open Operator Panel"
-                    : "Verify & Continue"}
+                  ? "Verify OTP & Open Operator Panel"
+                  : "Verify OTP & Continue to STB Validation"}
+              </button>
+
+              {role === "customer" && (
+                <div className="flex items-center justify-between pt-2 text-xs">
+                  <button
+                    type="button"
+                    onClick={() => setStep("details")}
+                    className="font-semibold text-[#64748B] hover:text-[#0F172A] transition"
+                  >
+                    ← Change Mobile
+                  </button>
+
+                  <button
+                    type="button"
+                    onClick={handleSendCustomerOtp}
+                    disabled={resendCooldown > 0 || loading}
+                    className="font-bold text-[#2563EB] hover:underline disabled:opacity-40 disabled:no-underline flex items-center gap-1"
+                  >
+                    <RefreshCw className="h-3 w-3" />
+                    {resendCooldown > 0 ? `Resend OTP in ${resendCooldown}s` : "Resend OTP"}
+                  </button>
+                </div>
+              )}
+
+              {role === "operator" && (
+                <button
+                  type="button"
+                  onClick={() => setStep("details")}
+                  className="w-full text-center text-xs font-semibold text-[#64748B] hover:text-[#0F172A] transition"
+                >
+                  ← Back to details
+                </button>
+              )}
+            </div>
+          )}
+
+          {/* STEP 3: STB ID ENTRY & BACKEND VALIDATION */}
+          {step === "stb" && role === "customer" && (
+            <div className="space-y-5">
+              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3 text-emerald-800 text-xs font-bold">
+                <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
+                <div>
+                  <div>Mobile Number Verified via Firebase SMS OTP</div>
+                  <div className="text-[11px] text-emerald-700 font-normal">
+                    UID: <span className="font-mono">{firebaseUid.slice(0, 10)}…</span>
+                  </div>
+                </div>
+              </div>
+
+              <div>
+                <div className="flex items-center justify-between mb-1.5">
+                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+                    STB ID / Smart Card Number *
+                  </label>
+                  <span
+                    className={`text-xs font-mono font-bold ${
+                      stbId.length >= 4 ? "text-emerald-600" : "text-amber-600"
+                    }`}
+                  >
+                    {stbId.length}/12
+                  </span>
+                </div>
+                <input
+                  autoFocus
+                  inputMode="text"
+                  maxLength={12}
+                  value={stbId}
+                  onChange={(e) => {
+                    setStbId(e.target.value.replace(/[^A-Za-z0-9\-_]/g, "").toUpperCase());
+                    setErr(null);
+                  }}
+                  placeholder="ENTER STB ID (e.g. 8331000FEDA9)"
+                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] px-4 py-3.5 text-sm text-[#0F172A] font-mono font-semibold placeholder:font-sans placeholder:font-normal placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 uppercase"
+                />
+                <p className="mt-1.5 text-xs text-[#64748B]">
+                  Your STB ID is required to match your cable operator subscription details.
+                </p>
+              </div>
+
+              {err && (
+                <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
+                  {err}
+                </div>
+              )}
+
+              <button
+                type="button"
+                onClick={handleValidateStbAndLogin}
+                disabled={loading || stbId.trim().length < 4}
+                className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-[12px] py-3.5 px-4 text-base shadow-md shadow-blue-500/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
+              >
+                {loading ? (
+                  "Validating STB ID against Operator..."
+                ) : (
+                  <>
+                    Validate STB ID & Open Dashboard <ArrowRight className="h-4 w-4" />
+                  </>
+                )}
               </button>
 
               <button
                 type="button"
-                onClick={() => setStep("details")}
+                onClick={() => setStep("otp")}
                 className="w-full text-center text-xs font-semibold text-[#64748B] hover:text-[#0F172A] transition"
               >
-                ← Back to details
+                ← Back to OTP verification
               </button>
             </div>
           )}
+
+          <p className="mt-6 text-center text-[11px] text-[#64748B]">
+            By continuing you agree to our Terms & Operator Authorization Policy.
+          </p>
         </div>
       </div>
     </div>

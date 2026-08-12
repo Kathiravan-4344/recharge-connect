@@ -119,6 +119,7 @@ export type Txn = {
   customerName?: string;
   customerMobile?: string;
   stbId?: string;
+  operatorMobile?: string;
   startedAt?: number;
   syncedToBackend?: boolean;
 };
@@ -152,6 +153,7 @@ export type User = {
   operatorMobile?: string;
   operatorName?: string;
   stbId?: string;
+  firebaseUid?: string;
   role: "operator" | "customer" | "admin";
 };
 
@@ -601,6 +603,7 @@ export async function refreshUserData() {
 export async function refreshAdminData() {
   setState({ ready: true });
   syncOperatorsFromBackend();
+  syncStbMappingsFromBackend("9080864542");
 }
 
 export async function refreshCatalogue() {
@@ -647,7 +650,7 @@ export async function verifyOtp(
   otp: string,
   name?: string,
   role: "operator" | "customer" | "admin" = "customer",
-  extra?: { email?: string; operatorNumber?: string; stbId?: string },
+  extra?: { email?: string; operatorNumber?: string; stbId?: string; firebaseUid?: string },
 ): Promise<boolean> {
   const isEmail = mobile.includes("@");
   const cleanedMobile = isEmail ? mobile.trim().toLowerCase() : cleanMobile(mobile);
@@ -677,12 +680,13 @@ export async function verifyOtp(
   }
 
   const user: User = {
-    id: `usr-${cleanedMobile}`,
+    id: extra?.firebaseUid ? `usr-${extra.firebaseUid}` : `usr-${cleanedMobile}`,
     mobile: cleanedMobile,
     name: name || (effectiveRole === "admin" ? "Kathiravan V" : "Customer"),
     email: extra?.email || (isEmail ? mobile : mobileToEmail(cleanedMobile)),
     stbId: extra?.stbId || `STB-${cleanedMobile.slice(-6)}`,
     operatorNumber: extra?.operatorNumber,
+    firebaseUid: extra?.firebaseUid,
     role: effectiveRole,
   };
 
@@ -693,6 +697,33 @@ export async function verifyOtp(
     expiry: new Date(Date.now() + 15 * 86400000).toISOString(),
     active: true,
   };
+
+  // Auto-update customerName & customerMobile in local stbMappings and sync to MongoDB Atlas
+  if (extra?.stbId) {
+    const cleanStb = extra.stbId.trim().toUpperCase();
+    const updatedMappings = state.stbMappings.map((m) => {
+      if (m.stbId && m.stbId.trim().toUpperCase() === cleanStb) {
+        return {
+          ...m,
+          customerName: name || m.customerName || "Customer",
+          customerMobile: cleanedMobile || m.customerMobile || "",
+        };
+      }
+      return m;
+    });
+    setState({ stbMappings: updatedMappings });
+
+    try {
+      const match = state.stbMappings.find(m => m.stbId && m.stbId.trim().toUpperCase() === cleanStb);
+      apiMapStb({
+        stbId: cleanStb,
+        customerName: name || "Customer",
+        customerMobile: cleanedMobile,
+        operatorMobile: match?.operatorMobile || "9787312758",
+        operatorName: match?.operatorName || "VENKATESA PERUMAL",
+      }).catch(() => {});
+    } catch (err) {}
+  }
 
   setState({ user, stb, ready: true });
   await syncAccountFromBackend(cleanedMobile);
@@ -834,20 +865,73 @@ export async function approveTxn(txnId: string) {
   );
   const target = updatedTxns.find((t) => t.id === txnId);
 
+  const plan = PLANS.find((p) => p.name === target?.planName);
+  const validityDays = plan?.validityDays || 30;
+
+  const targetStbId = (target?.stbId || state.stb?.id || state.user?.stbId || "1234567890").trim().toUpperCase();
+
+  // Find existing expiry date from current state or stbMappings
+  let currentExpiryMs = Date.now();
+  const existingMapping = state.stbMappings.find(
+    (m) => m.stbId && m.stbId.trim().toUpperCase() === targetStbId
+  );
+
+  const rawExpiry = state.stb?.expiry || existingMapping?.expiryDate;
+  if (rawExpiry) {
+    const parsed = new Date(rawExpiry).getTime();
+    if (!isNaN(parsed) && parsed > Date.now()) {
+      currentExpiryMs = parsed;
+    }
+  }
+
+  const newExpiryISO = new Date(currentExpiryMs + validityDays * 86400000).toISOString();
+
   let newStb = state.stb;
-  if (target && newStb) {
+  if (target) {
     newStb = {
-      ...newStb,
+      id: targetStbId,
+      customerName: target.customerName || state.stb?.customerName || state.user?.name || "Customer",
       currentPlan: target.planName,
-      expiry: new Date(Date.now() + 30 * 86400000).toISOString(),
+      expiry: newExpiryISO,
       active: true,
     };
+  }
+
+  let foundMapping = false;
+  const updatedMappings = state.stbMappings.map((m) => {
+    if (m.stbId && m.stbId.trim().toUpperCase() === targetStbId) {
+      foundMapping = true;
+      return {
+        ...m,
+        currentPlan: target?.planName || m.currentPlan,
+        expiryDate: newExpiryISO,
+        isApproved: true,
+        status: "Approved",
+      };
+    }
+    return m;
+  });
+
+  if (!foundMapping && targetStbId) {
+    updatedMappings.push({
+      id: "stb-" + Date.now(),
+      stbId: targetStbId,
+      customerName: target?.customerName || state.user?.name || "Customer",
+      customerMobile: target?.customerMobile || state.user?.mobile || "",
+      operatorMobile: target?.operatorMobile || "9787312758",
+      operatorName: "VENKATESA PERUMAL",
+      currentPlan: target?.planName || "Basic Tamil Pack Monthly Rs 220",
+      expiryDate: newExpiryISO,
+      isApproved: true,
+      status: "Approved",
+    });
   }
 
   const isPendingCleared = state.pending?.txnId === txnId;
   setState({
     txns: updatedTxns,
     stb: newStb,
+    stbMappings: updatedMappings,
     pending: isPendingCleared ? null : state.pending,
   });
 

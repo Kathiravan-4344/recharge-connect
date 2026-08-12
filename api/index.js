@@ -187,6 +187,8 @@ module.exports = async (req, res) => {
       const { mobileNumber, otp, name, stbId } = body;
       const cleanMob = String(mobileNumber || "").trim();
       const cleanDigits = cleanMob.replace(/\D/g, "").slice(-10);
+      const cleanStb = stbId ? String(stbId).trim().toUpperCase() : "";
+      const cleanName = name ? String(name).trim() : "";
 
       let user = await User.findOne({
         $or: [{ mobileNumber: cleanMob }, { mobileNumber: cleanDigits }]
@@ -205,10 +207,41 @@ module.exports = async (req, res) => {
 
         user = await User.create({
           mobileNumber: cleanMob,
-          name: name || (role === "admin" ? "Kathiravan V" : role === "operator" ? "Operator" : "Customer"),
-          stbId: stbId || `STB-${cleanDigits.slice(-6)}`,
+          name: cleanName || (role === "admin" ? "Kathiravan V" : role === "operator" ? "Operator" : "Customer"),
+          stbId: cleanStb || `STB-${cleanDigits.slice(-6)}`,
           role,
         });
+      } else {
+        if (cleanName) user.name = cleanName;
+        if (cleanStb) user.stbId = cleanStb;
+        await user.save();
+      }
+
+      // Automatically update/save StbMapping in MongoDB Atlas
+      const targetStb = cleanStb || user.stbId;
+      if (targetStb && targetStb.length >= 3) {
+        try {
+          let mapping = await StbMapping.findOne({ stbId: targetStb });
+          if (mapping) {
+            if (cleanName) mapping.customerName = cleanName;
+            if (cleanMob) mapping.customerMobile = cleanMob;
+            await mapping.save();
+          } else {
+            mapping = await StbMapping.create({
+              stbId: targetStb,
+              customerName: cleanName || "Customer",
+              customerMobile: cleanMob,
+              operatorMobile: "9787312758",
+              operatorName: "VENKATESA PERUMAL",
+              currentPlan: "Basic Tamil Pack Monthly Rs 220",
+              expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+              isApproved: true,
+              status: "Approved",
+            });
+          }
+        } catch (stbErr) {
+          console.error("[Vercel API Verify OTP StbMapping Warning]", stbErr.message);
+        }
       }
 
       return res.status(200).json({
@@ -557,13 +590,33 @@ module.exports = async (req, res) => {
           );
 
           if (item.stbId) {
-            await StbMapping.findOneAndUpdate(
-              { stbId: { $regex: new RegExp("^" + item.stbId + "$", "i") } },
-              {
+            const cleanStb = item.stbId.trim().toUpperCase();
+            let mapping = await StbMapping.findOne({ stbId: { $regex: new RegExp("^" + cleanStb + "$", "i") } });
+            
+            let baseTime = Date.now();
+            if (mapping && mapping.expiryDate && new Date(mapping.expiryDate).getTime() > Date.now()) {
+              baseTime = new Date(mapping.expiryDate).getTime();
+            }
+            const newExpiry = new Date(baseTime + 30 * 24 * 60 * 60 * 1000);
+
+            if (mapping) {
+              mapping.currentPlan = item.planName || "Basic Tamil Pack Monthly Rs 220";
+              mapping.expiryDate = newExpiry;
+              mapping.isApproved = true;
+              mapping.status = "Approved";
+              await mapping.save();
+            } else {
+              await StbMapping.create({
+                stbId: cleanStb,
+                customerName: item.customerName || "Customer",
+                customerMobile: item.customerMobile || "",
+                operatorMobile: item.operatorMobile || "9787312758",
                 currentPlan: item.planName || "Basic Tamil Pack Monthly Rs 220",
-                expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-              }
-            );
+                expiryDate: newExpiry,
+                isApproved: true,
+                status: "Approved",
+              });
+            }
           }
 
           if (item.userId || item.customerMobile || item.stbId) {
@@ -572,11 +625,18 @@ module.exports = async (req, res) => {
             if (item.customerMobile) userQuery.push({ mobileNumber: item.customerMobile });
             if (item.stbId) userQuery.push({ stbId: { $regex: new RegExp("^" + item.stbId + "$", "i") } });
             if (userQuery.length > 0) {
+              const uDoc = await User.findOne({ $or: userQuery });
+              let baseTime = Date.now();
+              if (uDoc && uDoc.expiryDate && new Date(uDoc.expiryDate).getTime() > Date.now()) {
+                baseTime = new Date(uDoc.expiryDate).getTime();
+              }
+              const newExpiry = new Date(baseTime + 30 * 24 * 60 * 60 * 1000);
+
               await User.findOneAndUpdate(
                 { $or: userQuery },
                 {
                   currentPlan: item.planName || "Basic Tamil Pack Monthly Rs 220",
-                  expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                  expiryDate: newExpiry,
                   status: "Active",
                 }
               );

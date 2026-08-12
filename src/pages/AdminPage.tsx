@@ -19,6 +19,7 @@ import {
   type Product,
   type ApprovedOperator,
   type ComplaintStatus,
+  type StbMapping,
 } from "../services/store";
 import {
   Shield,
@@ -278,14 +279,16 @@ export function AdminPage() {
   // Aggregate Customer list from all records including stbMappings
   const customerMap = new Map<string, { mobile: string; name: string; stbId: string; operatorMobile?: string }>();
   stbMappings.forEach((m) => {
-    if (m.stbId || m.customerMobile) {
-      const key = (m.customerMobile || m.stbId).trim();
-      if (key && !customerMap.has(key)) {
+    const rawVal = m.stbId || m.customerMobile || "";
+    if (rawVal) {
+      const key = rawVal.trim().toUpperCase();
+      const existing = customerMap.get(key);
+      if (!existing || (m.customerName && m.customerName !== "STB Subscriber") || m.customerMobile) {
         customerMap.set(key, {
-          mobile: m.customerMobile || "N/A",
-          name: m.customerName || "STB Subscriber",
-          stbId: m.stbId,
-          operatorMobile: m.operatorMobile,
+          mobile: m.customerMobile || existing?.mobile || "N/A",
+          name: m.customerName || existing?.name || "STB Subscriber",
+          stbId: m.stbId || "",
+          operatorMobile: m.operatorMobile || existing?.operatorMobile,
         });
       }
     }

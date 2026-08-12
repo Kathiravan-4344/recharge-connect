@@ -47,6 +47,8 @@ const sendOtp = async (req, res) => {
   }
 };
 
+const StbMapping = require("../models/StbMapping");
+
 // @desc Verify OTP & Register/Login User
 // @route POST /api/auth/verify-otp
 const verifyOtp = async (req, res) => {
@@ -57,14 +59,17 @@ const verifyOtp = async (req, res) => {
     }
 
     const cleanMobile = mobileNumber.trim();
+    const cleanStbId = stbId ? stbId.trim().toUpperCase() : null;
+    const cleanName = name ? name.trim() : "";
+
     let user = await User.findOne({ mobileNumber: cleanMobile });
 
     if (!user) {
       user = new User({
         mobileNumber: cleanMobile,
         isVerified: true,
-        name: name ? name.trim() : "Customer",
-        stbId: stbId ? stbId.trim().toUpperCase() : null,
+        name: cleanName || "Customer",
+        stbId: cleanStbId,
       });
     } else {
       if (user.otp && user.otp !== otp.trim() && otp.trim() !== "1234") {
@@ -72,13 +77,40 @@ const verifyOtp = async (req, res) => {
       }
       user.isVerified = true;
       user.otp = null;
-      if (name) user.name = name.trim();
-      if (stbId) user.stbId = stbId.trim().toUpperCase();
+      if (cleanName) user.name = cleanName;
+      if (cleanStbId) user.stbId = cleanStbId;
     }
 
     // Save/Update User in MongoDB
     await user.save();
     console.log(`[DB Auth] Customer verified & saved in MongoDB: ${user._id}`);
+
+    // Automatically update/save StbMapping in MongoDB with customer details
+    if (cleanStbId && cleanStbId.length >= 3) {
+      try {
+        let mapping = await StbMapping.findOne({ stbId: cleanStbId });
+        if (mapping) {
+          if (cleanName) mapping.customerName = cleanName;
+          if (cleanMobile) mapping.customerMobile = cleanMobile;
+          await mapping.save();
+        } else {
+          mapping = await StbMapping.create({
+            stbId: cleanStbId,
+            customerName: cleanName || "Customer",
+            customerMobile: cleanMobile,
+            operatorMobile: "9787312758",
+            operatorName: "VENKATESA PERUMAL",
+            currentPlan: "Basic Tamil Pack Monthly Rs 220",
+            expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+            isApproved: true,
+            status: "Approved",
+          });
+        }
+        console.log(`[DB Auth] Updated StbMapping for ${cleanStbId}: Name="${cleanName}", Mobile="${cleanMobile}"`);
+      } catch (stbErr) {
+        console.error("[DB Auth StbMapping Update Warning]", stbErr.message);
+      }
+    }
 
     let userRole = "customer";
     if (cleanMobile === "9080864542") {

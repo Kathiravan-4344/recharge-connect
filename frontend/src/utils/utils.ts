@@ -32,24 +32,14 @@ export function mobileToEmail(mobile: string) {
 }
 
 export function getCalculatedExpiryDate(refDate?: string | Date): string {
-  const now = refDate ? new Date(refDate) : new Date();
-  const day = now.getDate();
-  let month = now.getMonth();
-  let year = now.getFullYear();
-
-  if (day > 10) {
-    month += 1;
-    if (month > 11) {
-      month = 0;
-      year += 1;
-    }
-  }
+  const d = refDate ? new Date(refDate) : new Date(Date.now() + 30 * 86400000);
+  if (isNaN(d.getTime())) return "N/A";
 
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  return `10 ${months[month]} ${year}`;
+  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
 }
 
