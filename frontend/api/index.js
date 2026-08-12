@@ -590,13 +590,33 @@ module.exports = async (req, res) => {
           );
 
           if (item.stbId) {
-            await StbMapping.findOneAndUpdate(
-              { stbId: { $regex: new RegExp("^" + item.stbId + "$", "i") } },
-              {
+            const cleanStb = item.stbId.trim().toUpperCase();
+            let mapping = await StbMapping.findOne({ stbId: { $regex: new RegExp("^" + cleanStb + "$", "i") } });
+            
+            let baseTime = Date.now();
+            if (mapping && mapping.expiryDate && new Date(mapping.expiryDate).getTime() > Date.now()) {
+              baseTime = new Date(mapping.expiryDate).getTime();
+            }
+            const newExpiry = new Date(baseTime + 30 * 24 * 60 * 60 * 1000);
+
+            if (mapping) {
+              mapping.currentPlan = item.planName || "Basic Tamil Pack Monthly Rs 220";
+              mapping.expiryDate = newExpiry;
+              mapping.isApproved = true;
+              mapping.status = "Approved";
+              await mapping.save();
+            } else {
+              await StbMapping.create({
+                stbId: cleanStb,
+                customerName: item.customerName || "Customer",
+                customerMobile: item.customerMobile || "",
+                operatorMobile: item.operatorMobile || "9787312758",
                 currentPlan: item.planName || "Basic Tamil Pack Monthly Rs 220",
-                expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
-              }
-            );
+                expiryDate: newExpiry,
+                isApproved: true,
+                status: "Approved",
+              });
+            }
           }
 
           if (item.userId || item.customerMobile || item.stbId) {
@@ -605,11 +625,18 @@ module.exports = async (req, res) => {
             if (item.customerMobile) userQuery.push({ mobileNumber: item.customerMobile });
             if (item.stbId) userQuery.push({ stbId: { $regex: new RegExp("^" + item.stbId + "$", "i") } });
             if (userQuery.length > 0) {
+              const uDoc = await User.findOne({ $or: userQuery });
+              let baseTime = Date.now();
+              if (uDoc && uDoc.expiryDate && new Date(uDoc.expiryDate).getTime() > Date.now()) {
+                baseTime = new Date(uDoc.expiryDate).getTime();
+              }
+              const newExpiry = new Date(baseTime + 30 * 24 * 60 * 60 * 1000);
+
               await User.findOneAndUpdate(
                 { $or: userQuery },
                 {
                   currentPlan: item.planName || "Basic Tamil Pack Monthly Rs 220",
-                  expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+                  expiryDate: newExpiry,
                   status: "Active",
                 }
               );
