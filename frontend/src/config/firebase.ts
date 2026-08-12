@@ -23,4 +23,8 @@ const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 
 // Export single shared Firebase Auth instance connected to phone authentication
 export const auth = getAuth(app);
+
+// Apply browser/device default language preference for Firebase Phone Auth & reCAPTCHA
+auth.useDeviceLanguage();
+
 export default app;
