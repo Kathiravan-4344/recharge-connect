@@ -179,7 +179,7 @@ module.exports = async (req, res) => {
     // Auth: Send OTP
     if (req.method === "POST" && routeString.includes("auth/send-otp")) {
       const { mobileNumber } = body;
-      return res.status(200).json({ success: true, message: "OTP sent successfully", otp: "1234" });
+      return res.status(200).json({ success: true, message: "OTP sent successfully", otp: "123456" });
     }
 
     // Auth: Verify OTP

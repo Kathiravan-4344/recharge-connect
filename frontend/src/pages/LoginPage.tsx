@@ -326,8 +326,8 @@ export function LoginPage() {
   // Operator Step 2: Verify OTP
   async function handleVerifyOperatorOtp() {
     setErr(null);
-    if (otp.length < 4) {
-      setErr("Enter the verification OTP code");
+    if (otp.length !== 6) {
+      setErr("Enter the 6-digit verification OTP code");
       return;
     }
     setLoading(true);
@@ -342,7 +342,7 @@ export function LoginPage() {
       if (ok) {
         navigate({ to: "/admin" });
       } else {
-        setErr("Incorrect OTP code. Enter 4-digit OTP.");
+        setErr("Incorrect OTP code. Enter 6-digit OTP.");
       }
       return;
     }
@@ -374,7 +374,7 @@ export function LoginPage() {
         navigate({ to: "/operator" });
       }
     } else {
-      setErr("Incorrect code. Please try again.");
+      setErr("Incorrect code. Enter 6-digit OTP.");
     }
   }
 
@@ -570,18 +570,18 @@ export function LoginPage() {
             <div className="space-y-5">
               <div>
                 <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B] mb-2 text-center">
-                  {role === "customer" ? "Enter 6-Digit Firebase SMS OTP" : "Enter Verification OTP"}
+                  Enter 6-Digit Verification OTP
                 </label>
                 <input
                   autoFocus
                   inputMode="numeric"
-                  maxLength={role === "customer" ? 6 : 4}
+                  maxLength={6}
                   value={otp}
                   onChange={(e) => {
                     setOtp(e.target.value.replace(/\D/g, ""));
                     setErr(null);
                   }}
-                  placeholder={role === "customer" ? "••••••" : "••••"}
+                  placeholder="••••••"
                   className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] py-3.5 text-center text-3xl font-bold tracking-[0.4em] text-[#0F172A] placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 font-mono"
                 />
               </div>
@@ -595,7 +595,7 @@ export function LoginPage() {
               <button
                 type="button"
                 onClick={role === "operator" ? handleVerifyOperatorOtp : handleVerifyCustomerOtp}
-                disabled={loading || (role === "customer" ? otp.length !== 6 : otp.length < 4)}
+                disabled={loading || otp.length !== 6}
                 className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-[12px] py-3.5 px-4 text-base shadow-md shadow-blue-500/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
               >
                 {loading

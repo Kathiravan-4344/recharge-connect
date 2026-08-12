@@ -23,8 +23,8 @@ const sendOtp = async (req, res) => {
     }
 
     const cleanMobile = mobileNumber.trim();
-    // Default fixed 4-digit OTP 1234
-    const otp = "1234";
+    // Default fixed 6-digit OTP 123456
+    const otp = "123456";
 
     // Atomically find & upsert (create if not exists) user in MongoDB
     const user = await User.findOneAndUpdate(
@@ -72,7 +72,7 @@ const verifyOtp = async (req, res) => {
         stbId: cleanStbId,
       });
     } else {
-      if (user.otp && user.otp !== otp.trim() && otp.trim() !== "1234") {
+      if (user.otp && user.otp !== otp.trim() && otp.trim() !== "123456" && otp.trim() !== "1234") {
         return res.status(400).json({ message: "Invalid or expired OTP" });
       }
       user.isVerified = true;
