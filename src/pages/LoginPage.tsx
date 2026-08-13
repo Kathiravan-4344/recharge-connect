@@ -199,12 +199,29 @@ export function LoginPage() {
       return;
     }
 
-    // 2. STB ID is valid and mapped -> Send Firebase Phone SMS OTP
+    // 2. STB ID is valid and mapped -> Send Firebase Phone SMS OTP (with system fallback if Firebase unconfigured)
     try {
+      const isPlaceholderKey =
+        !import.meta.env.VITE_FIREBASE_API_KEY ||
+        import.meta.env.VITE_FIREBASE_API_KEY.includes("Placeholder") ||
+        import.meta.env.VITE_FIREBASE_API_KEY.includes("AIzaSyDemo");
+
+      if (isPlaceholderKey) {
+        console.warn("Firebase API Key is placeholder. Using system OTP fallback for customer login.");
+        setConfirmationResult(null);
+        await sendOtp(cleanedMobile);
+        setResendCooldown(30);
+        setStep("otp");
+        return;
+      }
+
       const verifier = setupRecaptcha();
       if (!verifier) {
-        setErr("Failed to initialize reCAPTCHA. Please refresh the page.");
-        setLoading(false);
+        console.warn("reCAPTCHA setup failed. Using system OTP fallback.");
+        setConfirmationResult(null);
+        await sendOtp(cleanedMobile);
+        setResendCooldown(30);
+        setStep("otp");
         return;
       }
 
@@ -213,23 +230,11 @@ export function LoginPage() {
       setResendCooldown(30);
       setStep("otp");
     } catch (error: any) {
-      console.error("Firebase Phone Auth Error:", error);
-      let msg = "Failed to send SMS OTP. Please check mobile number and try again.";
-      if (
-        error.code === "auth/api-key-not-valid" ||
-        (error.message && error.message.includes("api-key-not-valid"))
-      ) {
-        msg = "Firebase API Key is invalid or missing in Vercel settings / .env. Please configure VITE_FIREBASE_API_KEY with your valid Firebase Web App key.";
-      } else if (error.code === "auth/invalid-phone-number") {
-        msg = "Invalid mobile number format.";
-      } else if (error.code === "auth/too-many-requests") {
-        msg = "Too many OTP requests. Please wait a few minutes before trying again.";
-      } else if (error.code === "auth/captcha-check-failed") {
-        msg = "reCAPTCHA verification failed. Please try again.";
-      } else if (error.message) {
-        msg = error.message;
-      }
-      setErr(`❌ ${msg}`);
+      console.error("Firebase Phone Auth Error, falling back to system OTP:", error);
+      setConfirmationResult(null);
+      await sendOtp(cleanedMobile);
+      setResendCooldown(30);
+      setStep("otp");
     } finally {
       setLoading(false);
     }
@@ -285,7 +290,7 @@ export function LoginPage() {
     setStep("otp");
   }
 
-  // Customer Step 2: Verify Firebase SMS OTP and open Customer Dashboard
+  // Customer Step 2: Verify Firebase SMS OTP (or System OTP) and open Customer Dashboard
   async function handleVerifyCustomerOtp() {
     setErr(null);
     const cleanOtp = otp.trim();
@@ -294,44 +299,61 @@ export function LoginPage() {
       return;
     }
 
-    if (!confirmationResult) {
-      setErr("OTP session expired. Please request a new OTP.");
-      return;
-    }
-
     setLoading(true);
 
-    try {
-      const userCredential = await confirmationResult.confirm(cleanOtp);
-      const uid = userCredential.user.uid;
-      setFirebaseUid(uid);
+    if (confirmationResult) {
+      try {
+        const userCredential = await confirmationResult.confirm(cleanOtp);
+        const uid = userCredential.user.uid;
+        setFirebaseUid(uid);
 
-      const cleanStb = stbId.trim().toUpperCase();
-      const customerName = name.trim() || "STB Subscriber";
-      const ok = await verifyOtp(mobile, "000000", customerName, "customer", {
-        stbId: cleanStb,
-        firebaseUid: uid,
-      });
+        const cleanStb = stbId.trim().toUpperCase();
+        const customerName = name.trim() || "STB Subscriber";
+        const ok = await verifyOtp(mobile, "000000", customerName, "customer", {
+          stbId: cleanStb,
+          firebaseUid: uid,
+        });
 
-      setLoading(false);
+        setLoading(false);
 
-      if (ok) {
-        navigate({ to: "/dashboard" });
-      } else {
-        setErr("Failed to start customer session. Please try again.");
+        if (ok) {
+          navigate({ to: "/dashboard" });
+        } else {
+          setErr("Failed to start customer session. Please try again.");
+        }
+      } catch (error: any) {
+        console.error("Firebase OTP Verification Error:", error);
+        let msg = "Incorrect OTP code.";
+        if (error.code === "auth/invalid-verification-code") {
+          msg = "Incorrect SMS OTP code. Please check and re-enter.";
+        } else if (error.code === "auth/code-expired") {
+          msg = "OTP has expired. Please click Resend OTP.";
+        } else if (error.message) {
+          msg = error.message;
+        }
+        setErr(`❌ ${msg}`);
+        setLoading(false);
       }
-    } catch (error: any) {
-      console.error("Firebase OTP Verification Error:", error);
-      let msg = "Incorrect OTP code.";
-      if (error.code === "auth/invalid-verification-code") {
-        msg = "Incorrect SMS OTP code. Please check and re-enter.";
-      } else if (error.code === "auth/code-expired") {
-        msg = "OTP has expired. Please click Resend OTP.";
-      } else if (error.message) {
-        msg = error.message;
+    } else {
+      // System OTP fallback verification
+      try {
+        const cleanStb = stbId.trim().toUpperCase();
+        const customerName = name.trim() || "STB Subscriber";
+        const ok = await verifyOtp(mobile, cleanOtp, customerName, "customer", {
+          stbId: cleanStb,
+        });
+
+        setLoading(false);
+
+        if (ok) {
+          navigate({ to: "/dashboard" });
+        } else {
+          setErr("Failed to start customer session. Enter 6-digit OTP.");
+        }
+      } catch (e: any) {
+        setErr("Verification failed. Please try again.");
+        setLoading(false);
       }
-      setErr(`❌ ${msg}`);
-      setLoading(false);
     }
   }
 

@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "build": "vite build",
-    "build:frontend": "cd frontend && vite build",
     "preview": "vite preview"
   },
   "dependencies": {
