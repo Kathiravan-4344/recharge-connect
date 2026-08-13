@@ -215,7 +215,12 @@ export function LoginPage() {
     } catch (error: any) {
       console.error("Firebase Phone Auth Error:", error);
       let msg = "Failed to send SMS OTP. Please check mobile number and try again.";
-      if (error.code === "auth/invalid-phone-number") {
+      if (
+        error.code === "auth/api-key-not-valid" ||
+        (error.message && error.message.includes("api-key-not-valid"))
+      ) {
+        msg = "Firebase API Key is invalid or missing in Vercel settings / .env. Please configure VITE_FIREBASE_API_KEY with your valid Firebase Web App key.";
+      } else if (error.code === "auth/invalid-phone-number") {
         msg = "Invalid mobile number format.";
       } else if (error.code === "auth/too-many-requests") {
         msg = "Too many OTP requests. Please wait a few minutes before trying again.";
