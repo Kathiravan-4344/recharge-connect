@@ -28,7 +28,7 @@ export function LoginPage() {
   const [step, setStep] = useState<"details" | "otp">("details");
 
   // Common & Customer state
-  const [name, setName] = useState("STB SUBSCRIBER");
+  const [name, setName] = useState("");
   const [mobile, setMobile] = useState("");
   const [stbId, setStbId] = useState("");
 
@@ -140,11 +140,6 @@ export function LoginPage() {
   // Customer Step 1: Validate STB ID against Operator & Send SMS OTP
   async function handleSendCustomerOtp() {
     setErr(null);
-    const effectiveName = name.trim() ? name.trim().toUpperCase() : "STB SUBSCRIBER";
-    if (!name.trim()) {
-      setName("STB SUBSCRIBER");
-    }
-
     const cleanStb = stbId.trim().toUpperCase();
     if (!cleanStb || !/^[A-Za-z0-9\-\_]{4,12}$/.test(cleanStb)) {
       setErr("ENTER YOUR STB ID (4 to 12 characters)");
@@ -174,7 +169,7 @@ export function LoginPage() {
       const valRes = await apiValidateStb(cleanStb);
       if (valRes.success && valRes.data?.valid) {
         isStbValid = true;
-        if (valRes.data.customerName && valRes.data.customerName !== "STB Subscriber" && name === "STB SUBSCRIBER") {
+        if (valRes.data.customerName && valRes.data.customerName !== "STB Subscriber" && !name.trim()) {
           setName(valRes.data.customerName.toUpperCase());
         }
       } else {
@@ -307,7 +302,8 @@ export function LoginPage() {
       setFirebaseUid(uid);
 
       const cleanStb = stbId.trim().toUpperCase();
-      const ok = await verifyOtp(mobile, "000000", name, "customer", {
+      const customerName = name.trim() || "STB Subscriber";
+      const ok = await verifyOtp(mobile, "000000", customerName, "customer", {
         stbId: cleanStb,
         firebaseUid: uid,
       });
