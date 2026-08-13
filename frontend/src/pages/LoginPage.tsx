@@ -6,6 +6,7 @@ import { auth } from "../config/firebase";
 import { sendOtp, verifyOtp, useStore, isOperatorApproved, getState, syncOperatorsFromBackend } from "../services/store";
 import { apiValidateStb } from "../services/api";
 import { cleanMobile, normalizeIndianPhoneNumber } from "../utils/utils";
+import { VENKATESA_STB_MAPPINGS } from "../services/venkatesaStbs";
 
 function getRoleFromUrl(): "customer" | "operator" {
   if (typeof window === "undefined") return "customer";
@@ -22,12 +23,12 @@ export function LoginPage() {
   const [role, setRole] = useState<"customer" | "operator">(getRoleFromUrl);
   
   // Step state:
-  // For Customer: "details" (Mobile+Name) -> "otp" (Firebase 6-digit SMS) -> "stb" (STB Validation)
+  // For Customer: "details" (Name + STB ID + Mobile) -> "otp" (Firebase 6-digit SMS)
   // For Operator: "details" -> "otp"
-  const [step, setStep] = useState<"details" | "otp" | "stb">("details");
+  const [step, setStep] = useState<"details" | "otp">("details");
 
   // Common & Customer state
-  const [name, setName] = useState("");
+  const [name, setName] = useState("STB SUBSCRIBER");
   const [mobile, setMobile] = useState("");
   const [stbId, setStbId] = useState("");
 
@@ -109,7 +110,7 @@ export function LoginPage() {
     (isOperatorValidEmail || isOperatorValidMobile || cleanedOpContact === "9080864542" || cleanedOpContact === "9787312758");
 
   const isCustomerValid =
-    name.trim().length > 0 &&
+    stbId.trim().length >= 4 &&
     /^\d{10}$/.test(cleanMobile(mobile));
 
   // Initialize invisible Firebase reCAPTCHA
@@ -136,11 +137,17 @@ export function LoginPage() {
     }
   }
 
-  // Customer Step 1: Send Firebase SMS OTP
+  // Customer Step 1: Validate STB ID against Operator & Send SMS OTP
   async function handleSendCustomerOtp() {
     setErr(null);
+    const effectiveName = name.trim() ? name.trim().toUpperCase() : "STB SUBSCRIBER";
     if (!name.trim()) {
-      setErr("ENTER YOUR NAME");
+      setName("STB SUBSCRIBER");
+    }
+
+    const cleanStb = stbId.trim().toUpperCase();
+    if (!cleanStb || !/^[A-Za-z0-9\-\_]{4,12}$/.test(cleanStb)) {
+      setErr("ENTER YOUR STB ID (4 to 12 characters)");
       return;
     }
 
@@ -159,6 +166,45 @@ export function LoginPage() {
 
     setLoading(true);
 
+    // 1. Validate STB ID against Operator Mapped STBs FIRST
+    let isStbValid = false;
+    let STBErrorMessage = "";
+
+    try {
+      const valRes = await apiValidateStb(cleanStb);
+      if (valRes.success && valRes.data?.valid) {
+        isStbValid = true;
+        if (valRes.data.customerName && valRes.data.customerName !== "STB Subscriber" && name === "STB SUBSCRIBER") {
+          setName(valRes.data.customerName.toUpperCase());
+        }
+      } else {
+        STBErrorMessage = valRes.data?.message || valRes.message || "";
+      }
+    } catch (e: any) {
+      console.warn("Backend STB validation network error, checking local store...", e);
+    }
+
+    // Fallback to local store / VENKATESA STB mappings if API call didn't return valid true
+    if (!isStbValid) {
+      const localMappings = getState().stbMappings || VENKATESA_STB_MAPPINGS || [];
+      const match = localMappings.find(
+        (m) => m.stbId && m.stbId.trim().toUpperCase() === cleanStb
+      );
+      if (match) {
+        isStbValid = true;
+      }
+    }
+
+    if (!isStbValid) {
+      setLoading(false);
+      setErr(
+        STBErrorMessage ||
+          "❌ STB ID is not registered with any operator. Please contact your local operator to map your STB ID."
+      );
+      return;
+    }
+
+    // 2. STB ID is valid and mapped -> Send Firebase Phone SMS OTP
     try {
       const verifier = setupRecaptcha();
       if (!verifier) {
@@ -239,7 +285,7 @@ export function LoginPage() {
     setStep("otp");
   }
 
-  // Customer Step 2: Verify Firebase SMS OTP
+  // Customer Step 2: Verify Firebase SMS OTP and open Customer Dashboard
   async function handleVerifyCustomerOtp() {
     setErr(null);
     const cleanOtp = otp.trim();
@@ -260,9 +306,19 @@ export function LoginPage() {
       const uid = userCredential.user.uid;
       setFirebaseUid(uid);
 
-      // REQUIREMENT 3: DO NOT open Customer Home directly. Advance to STB ID entry step!
-      setStep("stb");
-      setOtp("");
+      const cleanStb = stbId.trim().toUpperCase();
+      const ok = await verifyOtp(mobile, "000000", name, "customer", {
+        stbId: cleanStb,
+        firebaseUid: uid,
+      });
+
+      setLoading(false);
+
+      if (ok) {
+        navigate({ to: "/dashboard" });
+      } else {
+        setErr("Failed to start customer session. Please try again.");
+      }
     } catch (error: any) {
       console.error("Firebase OTP Verification Error:", error);
       let msg = "Incorrect OTP code.";
@@ -274,52 +330,7 @@ export function LoginPage() {
         msg = error.message;
       }
       setErr(`❌ ${msg}`);
-    } finally {
       setLoading(false);
-    }
-  }
-
-  // Customer Step 3: Validate STB ID against backend database
-  async function handleValidateStbAndLogin() {
-    setErr(null);
-    const cleanStb = stbId.trim().toUpperCase();
-
-    if (!/^[A-Za-z0-9\-\_]{4,12}$/.test(cleanStb)) {
-      setErr("Enter a valid STB ID / Customer ID (4 to 12 characters)");
-      return;
-    }
-
-    setLoading(true);
-
-    try {
-      // Validate STB ID against Operator Mapped STBs
-      const valRes = await apiValidateStb(cleanStb);
-      if (!valRes.success || !valRes.data?.valid) {
-        setLoading(false);
-        setErr(
-          valRes.data?.message ||
-            "❌ STB ID is not registered with any operator. Please contact your local operator to map your STB ID."
-        );
-        // REMAIN on STB step as required!
-        return;
-      }
-
-      // Valid STB ID! Store session and navigate to Customer Home!
-      const ok = await verifyOtp(mobile, "000000", name, "customer", {
-        stbId: cleanStb,
-        firebaseUid,
-      });
-
-      setLoading(false);
-
-      if (ok) {
-        navigate({ to: "/dashboard" });
-      } else {
-        setErr("Failed to start customer session. Please try again.");
-      }
-    } catch (error: any) {
-      setLoading(false);
-      setErr(`❌ Backend STB validation failed: ${error.message || "Network Error"}`);
     }
   }
 
@@ -410,7 +421,7 @@ export function LoginPage() {
               <p className="text-blue-100/90 text-sm leading-relaxed max-w-md">
                 {role === "operator"
                   ? "Manage customer subscriptions, review instant approvals, and oversee cable TV operator operations smoothly."
-                  : "Firebase Authenticated mobile login with instant operator verification and 24/7 reliability."}
+                  : "Secure mobile login with instant operator verification and 24/7 reliability."}
               </p>
             </div>
           </div>
@@ -420,7 +431,7 @@ export function LoginPage() {
             {[
               { icon: Zap, label: "Instant Pay" },
               { icon: Shield, label: "Operator Verified" },
-              { icon: Lock, label: "Firebase Phone Auth" },
+              { icon: Lock, label: "SMS Authentication" },
             ].map(({ icon: Icon, label }) => (
               <div
                 key={label}
@@ -470,20 +481,16 @@ export function LoginPage() {
                 ? role === "operator"
                   ? "Operator Login"
                   : "Customer Login"
-                : step === "otp"
-                ? "Verify Firebase SMS OTP"
-                : "Validate STB ID"}
+                : "Verify Mobile OTP"}
             </h2>
             <p className="text-xs sm:text-sm text-[#64748B] mt-1">
               {step === "details"
                 ? role === "operator"
                   ? "Enter registered operator mobile number or Gmail"
-                  : "Enter your name and mobile number to receive SMS OTP"
-                : step === "otp"
-                ? `Enter the SMS OTP sent via Firebase to ${
+                  : "Enter STB ID and mobile number to receive SMS OTP"
+                : `Enter the 6-digit SMS OTP sent to ${
                     role === "operator" ? operatorContact : "+91 " + mobile
-                  }`
-                : "Enter your STB Box ID / Smart Card Number to complete login"}
+                  }`}
             </p>
           </div>
 
@@ -505,6 +512,36 @@ export function LoginPage() {
                   className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] px-4 py-3 text-sm text-[#0F172A] placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 uppercase font-bold"
                 />
               </div>
+
+              {role === "customer" && (
+                <div>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B]">
+                      STB ID / Smart Card Number
+                    </label>
+                    {stbId.length > 0 && (
+                      <span
+                        className={`text-xs font-mono font-bold ${
+                          stbId.length >= 4 ? "text-emerald-600" : "text-amber-600"
+                        }`}
+                      >
+                        {stbId.length}/12
+                      </span>
+                    )}
+                  </div>
+                  <input
+                    inputMode="text"
+                    maxLength={12}
+                    value={stbId}
+                    onChange={(e) => {
+                      setStbId(e.target.value.replace(/[^A-Za-z0-9\-_]/g, "").toUpperCase());
+                      setErr(null);
+                    }}
+                    placeholder="ENTER YOUR STB ID"
+                    className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] px-4 py-3 text-sm text-[#0F172A] font-mono font-semibold placeholder:font-sans placeholder:font-normal placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 uppercase"
+                  />
+                </div>
+              )}
 
               {role === "operator" ? (
                 <div>
@@ -602,7 +639,7 @@ export function LoginPage() {
                   ? "Verifying OTP…"
                   : role === "operator"
                   ? "Verify OTP & Open Operator Panel"
-                  : "Verify OTP & Continue to STB Validation"}
+                  : "Verify OTP & Open Dashboard"}
               </button>
 
               {role === "customer" && (
@@ -612,7 +649,7 @@ export function LoginPage() {
                     onClick={() => setStep("details")}
                     className="font-semibold text-[#64748B] hover:text-[#0F172A] transition"
                   >
-                    ← Change Mobile
+                    ← Back to Details
                   </button>
 
                   <button
@@ -636,80 +673,6 @@ export function LoginPage() {
                   ← Back to details
                 </button>
               )}
-            </div>
-          )}
-
-          {/* STEP 3: STB ID ENTRY & BACKEND VALIDATION */}
-          {step === "stb" && role === "customer" && (
-            <div className="space-y-5">
-              <div className="p-3.5 rounded-xl bg-emerald-50 border border-emerald-200 flex items-center gap-3 text-emerald-800 text-xs font-bold">
-                <CheckCircle2 className="h-5 w-5 text-emerald-600 shrink-0" />
-                <div>
-                  <div>Mobile Number Verified via Firebase SMS OTP</div>
-                  <div className="text-[11px] text-emerald-700 font-normal">
-                    UID: <span className="font-mono">{firebaseUid.slice(0, 10)}…</span>
-                  </div>
-                </div>
-              </div>
-
-              <div>
-                <div className="flex items-center justify-between mb-1.5">
-                  <label className="block text-xs font-semibold uppercase tracking-wider text-[#64748B]">
-                    STB ID / Smart Card Number *
-                  </label>
-                  <span
-                    className={`text-xs font-mono font-bold ${
-                      stbId.length >= 4 ? "text-emerald-600" : "text-amber-600"
-                    }`}
-                  >
-                    {stbId.length}/12
-                  </span>
-                </div>
-                <input
-                  autoFocus
-                  inputMode="text"
-                  maxLength={12}
-                  value={stbId}
-                  onChange={(e) => {
-                    setStbId(e.target.value.replace(/[^A-Za-z0-9\-_]/g, "").toUpperCase());
-                    setErr(null);
-                  }}
-                  placeholder="ENTER STB ID (e.g. 8331000FEDA9)"
-                  className="w-full bg-[#F8FAFC] border border-[#CBD5E1] rounded-[10px] px-4 py-3.5 text-sm text-[#0F172A] font-mono font-semibold placeholder:font-sans placeholder:font-normal placeholder:text-[#94A3B8] outline-none transition focus:border-[#2563EB] focus:ring-4 focus:ring-[#2563EB]/15 uppercase"
-                />
-                <p className="mt-1.5 text-xs text-[#64748B]">
-                  Your STB ID is required to match your cable operator subscription details.
-                </p>
-              </div>
-
-              {err && (
-                <div className="p-3.5 rounded-lg bg-red-50 border border-red-200 text-red-700 text-xs font-semibold">
-                  {err}
-                </div>
-              )}
-
-              <button
-                type="button"
-                onClick={handleValidateStbAndLogin}
-                disabled={loading || stbId.trim().length < 4}
-                className="w-full bg-[#2563EB] hover:bg-[#1D4ED8] text-white font-bold rounded-[12px] py-3.5 px-4 text-base shadow-md shadow-blue-500/20 transition-all duration-200 ease-in-out flex items-center justify-center gap-2 disabled:opacity-40 disabled:pointer-events-none active:scale-[0.99]"
-              >
-                {loading ? (
-                  "Validating STB ID against Operator..."
-                ) : (
-                  <>
-                    Validate STB ID & Open Dashboard <ArrowRight className="h-4 w-4" />
-                  </>
-                )}
-              </button>
-
-              <button
-                type="button"
-                onClick={() => setStep("otp")}
-                className="w-full text-center text-xs font-semibold text-[#64748B] hover:text-[#0F172A] transition"
-              >
-                ← Back to OTP verification
-              </button>
             </div>
           )}
 
