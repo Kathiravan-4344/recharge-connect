@@ -64,14 +64,11 @@ const DEFAULT_PRODUCTS = [
   },
 ];
 
-// @desc Get All Products
+// @desc Get All Products (Returns ONLY products managed by Operator in MongoDB)
 // @route GET /api/products
 const getProducts = async (req, res) => {
   try {
-    let products = await Product.find();
-    if (products.length === 0) {
-      products = await Product.insertMany(DEFAULT_PRODUCTS);
-    }
+    const products = await Product.find().sort({ createdAt: 1 });
     return res.status(200).json({ success: true, count: products.length, products });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

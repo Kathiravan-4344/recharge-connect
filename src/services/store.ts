@@ -1455,16 +1455,24 @@ export async function syncProductsFromBackend() {
   try {
     const res = await apiGetProducts();
     if (res.success && Array.isArray(res.data?.products)) {
-      const prods: Product[] = res.data.products.map((p: any) => ({
-        id: p._id || p.id,
-        name: p.name,
-        category: p.category || "accessory",
-        price: p.price || 0,
-        availableStock: p.availableStock || 0,
-        soldQuantity: p.soldQuantity || 0,
-        description: p.description || "",
-        iconName: p.iconName || "Box",
-      }));
+      const prods: Product[] = res.data.products
+        .filter(
+          (p: any) =>
+            p &&
+            !["prod-1", "prod-2", "prod-3", "prod-4", "prod-5", "prod-6", "prod-7", "prod-8", "prod-9", "prod-10"].includes(
+              p.id || p._id
+            )
+        )
+        .map((p: any) => ({
+          id: p._id || p.id,
+          name: p.name,
+          category: p.category || "accessory",
+          price: p.price || 0,
+          availableStock: p.availableStock || 0,
+          soldQuantity: p.soldQuantity || 0,
+          description: p.description || "",
+          iconName: p.iconName || "Box",
+        }));
       setState({ products: prods });
     }
   } catch (err) {

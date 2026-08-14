@@ -831,29 +831,15 @@ module.exports = async (req, res) => {
       return res.status(200).json({ success: true, message: "Operator deleted successfully" });
     }
 
-    // Products: Get List
+    // Products: Get List (Returns ONLY products managed by Operator in MongoDB)
     if (req.method === "GET" && routeString.includes("products") && !routeString.includes("product-request")) {
-      let products = await ProductCatalog.find().sort({ createdAt: 1 });
-      if (products.length === 0) {
-        const seedItems = [
-          { id: "prod-1", name: "HD Set Top Box Remote", category: "accessory", price: 250, availableStock: 45, soldQuantity: 120, description: "Universal STB Remote compatible with all HD models", iconName: "Tv" },
-          { id: "prod-2", name: "4K Ultra HD HDMI Cable 1.5m", category: "accessory", price: 150, availableStock: 60, soldQuantity: 85, description: "High speed 4K Gold Plated Shielded HDMI Cable", iconName: "Zap" },
-          { id: "prod-3", name: "Dish Antenna LNB Receiver", category: "accessory", price: 350, availableStock: 30, soldQuantity: 42, description: "Universal Ku-Band Single LNB for High Signal Reception", iconName: "Radio" },
-          { id: "prod-4", name: "Coaxial Cable 15m with F-Connectors", category: "accessory", price: 200, availableStock: 50, soldQuantity: 65, description: "Heavy Duty Shielded RG6 Coaxial Cable with brass connectors", iconName: "Cable" },
-          { id: "prod-5", name: "12V 2A STB Power Adapter", category: "accessory", price: 220, availableStock: 40, soldQuantity: 90, description: "Surge Protected Power Supply Adapter for HD STB", iconName: "Plug" },
-          { id: "prod-6", name: "STB Wall Mounting Bracket Stand", category: "accessory", price: 180, availableStock: 35, soldQuantity: 55, description: "Heavy Duty Metal Wall Mount Stand with cable slots", iconName: "Box" },
-          { id: "prod-7", name: "AV 3-RCA Audio Video Cable", category: "accessory", price: 120, availableStock: 45, soldQuantity: 38, description: "Premium RCA Cable for Standard Definition STB connection", iconName: "Sliders" },
-          { id: "prod-8", name: "Universal Learning Smart Remote", category: "accessory", price: 390, availableStock: 25, soldQuantity: 74, description: "Dual TV + STB Smart Remote with button learning mode", iconName: "Tv" },
-          { id: "prod-9", name: "Dish Antenna Signal Alignment Service", category: "service", price: 299, availableStock: 100, soldQuantity: 110, description: "Technician Home Visit for Dish Alignment & Cable Signal Tuning", iconName: "Wrench" },
-          { id: "prod-10", name: "4K Smart Hybrid STB Hardware Upgrade", category: "service", price: 999, availableStock: 15, soldQuantity: 28, description: "Upgrade old STB to 4K Smart Android Hybrid Box with OTT Apps", iconName: "Sparkles" }
-        ];
-        try {
-          await ProductCatalog.insertMany(seedItems);
-          products = await ProductCatalog.find().sort({ createdAt: 1 });
-        } catch (seedErr) {
-          console.warn("[Product Seed Error]", seedErr.message);
-        }
-      }
+      try {
+        await ProductCatalog.deleteMany({
+          id: { $in: ["prod-1", "prod-2", "prod-3", "prod-4", "prod-5", "prod-6", "prod-7", "prod-8", "prod-9", "prod-10"] }
+        });
+      } catch (e) {}
+
+      const products = await ProductCatalog.find().sort({ createdAt: 1 });
       return res.status(200).json({ success: true, count: products.length, products });
     }
 
