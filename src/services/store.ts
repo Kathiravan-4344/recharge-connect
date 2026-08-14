@@ -694,7 +694,7 @@ export async function verifyOtp(
     id: user.stbId || "1234567890",
     customerName: user.name || "Customer",
     currentPlan: "Basic Tamil Silver Pack Monthly Rs 240",
-    expiry: new Date(Date.now() + 15 * 86400000).toISOString(),
+    expiry: getCalculatedExpiryDate(),
     active: true,
   };
 

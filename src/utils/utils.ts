@@ -67,22 +67,18 @@ export function getCalculatedExpiryDate(refDate?: string | Date): string {
   const now = new Date();
   const currentDay = now.getDate(); // 1-31
   let targetYear = now.getFullYear();
-  let targetMonth = now.getMonth(); // 0-11
+  let targetMonth = now.getMonth() + 1; // 1-12
 
   // If past 10th date of current month -> Expiry is 10th of NEXT month
   if (currentDay > 10) {
     targetMonth += 1;
-    if (targetMonth > 11) {
-      targetMonth = 0;
+    if (targetMonth > 12) {
+      targetMonth = 1;
       targetYear += 1;
     }
   }
 
-  const months = [
-    "Jan", "Feb", "Mar", "Apr", "May", "Jun",
-    "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
-  ];
-
-  return `10 ${months[targetMonth]} ${targetYear}`;
+  const mm = String(targetMonth).padStart(2, "0");
+  return `10-${mm}-${targetYear}`;
 }
 
