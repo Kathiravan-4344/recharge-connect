@@ -56,6 +56,8 @@ import {
   Car,
   Lock,
   Copy,
+  History,
+  Receipt,
 } from "lucide-react";
 
 function CopyStbButton({ stbId }: { stbId: string }) {
@@ -200,6 +202,15 @@ export function OperatorPage() {
   const [editCustName, setEditCustName] = useState("");
   const [editCustMobile, setEditCustMobile] = useState("");
   const [editStbSubmitting, setEditStbSubmitting] = useState(false);
+
+  // Customer Recharge History Modal State
+  const [historyStb, setHistoryStb] = useState<StbMapping | null>(null);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+
+  function handleOpenCustomerHistory(stb: StbMapping) {
+    setHistoryStb(stb);
+    setShowHistoryModal(true);
+  }
 
   // Search & filter state for txns
   const [searchTerm, setSearchTerm] = useState("");
@@ -1073,6 +1084,14 @@ export function OperatorPage() {
                             </td>
                             <td className="px-6 py-4 text-right">
                               <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => handleOpenCustomerHistory(m)}
+                                  className="flex items-center gap-1 rounded-xl border border-indigo-200 bg-indigo-50 px-2.5 py-1.5 text-xs font-bold text-indigo-700 hover:bg-indigo-100 transition cursor-pointer shadow-sm"
+                                  title="View Customer Recharge History"
+                                >
+                                  <History className="h-3.5 w-3.5 text-indigo-600" />
+                                  <span>History</span>
+                                </button>
                                 <button
                                   onClick={() => handleOpenEditStb(m)}
                                   className="rounded-xl border border-blue-200 bg-blue-50 p-2 text-xs font-bold text-blue-600 hover:bg-blue-100 transition cursor-pointer"
@@ -2218,6 +2237,143 @@ STB999888777`}
                 </button>
               </div>
             </form>
+          </div>
+        </div>
+      )}
+
+      {/* Customer Recharge History Modal */}
+      {showHistoryModal && historyStb && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-2xl rounded-2xl bg-white p-6 shadow-2xl border border-[#CBD5E1] space-y-4 max-h-[90vh] flex flex-col">
+            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3 shrink-0">
+              <div>
+                <h3 className="text-base sm:text-lg font-extrabold text-[#0F172A] flex items-center gap-2">
+                  <History className="h-5 w-5 text-[#2563EB]" /> Customer Recharge History
+                </h3>
+                <p className="text-xs text-[#64748B] font-semibold mt-0.5">
+                  STB ID: <span className="font-mono font-bold text-[#0F172A]">{historyStb.stbId}</span> • Owner: <span className="font-bold text-[#0F172A]">{formatName(historyStb.customerName)}</span>
+                </p>
+              </div>
+              <button
+                onClick={() => {
+                  setShowHistoryModal(false);
+                  setHistoryStb(null);
+                }}
+                className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition cursor-pointer"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            {/* Quick Customer Info Summary Banner */}
+            <div className="bg-slate-50 border border-[#CBD5E1] rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-3 text-xs shrink-0">
+              <div>
+                <span className="font-bold text-[#64748B] uppercase text-[10px] block">Customer Name</span>
+                <span className="font-bold text-[#0F172A] text-sm uppercase">{formatName(historyStb.customerName)}</span>
+              </div>
+              <div>
+                <span className="font-bold text-[#64748B] uppercase text-[10px] block">Mobile Number</span>
+                <span className="font-mono font-bold text-[#0F172A]">{historyStb.customerMobile ? `+91 ${historyStb.customerMobile}` : "N/A"}</span>
+              </div>
+              <div>
+                <span className="font-bold text-[#64748B] uppercase text-[10px] block">Current Pack</span>
+                <span className="font-bold text-[#2563EB]">{historyStb.currentPlan || "Basic Tamil Pack Monthly Rs 220"}</span>
+              </div>
+              <div>
+                <span className="font-bold text-[#64748B] uppercase text-[10px] block">Expiry Date</span>
+                <span className="font-mono font-bold text-[#0F172A]">{getCalculatedExpiryDate(historyStb.expiryDate)}</span>
+              </div>
+            </div>
+
+            {/* History Table */}
+            <div className="overflow-y-auto grow space-y-2 pr-1">
+              {(() => {
+                const cleanStb = (historyStb.stbId || "").trim().toUpperCase();
+                const cleanMob = (historyStb.customerMobile || "").replace(/\D/g, "");
+
+                const customerTxns = txns.filter((t) => {
+                  const tStb = (t.stbId || "").trim().toUpperCase();
+                  const tMob = (t.customerMobile || "").replace(/\D/g, "");
+                  return (
+                    (cleanStb && tStb === cleanStb) ||
+                    (cleanMob && tMob && cleanMob.slice(-10) === cleanMob.slice(-10))
+                  );
+                });
+
+                if (customerTxns.length === 0) {
+                  return (
+                    <div className="p-8 text-center bg-slate-50 rounded-xl border border-dashed border-[#CBD5E1]">
+                      <Receipt className="mx-auto h-8 w-8 text-slate-300 mb-1" />
+                      <p className="font-bold text-xs text-[#0F172A]">No past recharges recorded for this customer yet</p>
+                      <p className="text-[11px] text-[#64748B] mt-0.5">
+                        When this customer submits recharge requests, their payment history will be logged here.
+                      </p>
+                    </div>
+                  );
+                }
+
+                return (
+                  <div className="border border-[#CBD5E1] rounded-xl overflow-hidden">
+                    <table className="w-full text-xs text-[#0F172A]">
+                      <thead className="bg-[#F1F5F9] text-left text-[11px] uppercase tracking-wider text-[#64748B] font-bold border-b border-[#CBD5E1]">
+                        <tr>
+                          <th className="px-4 py-2.5">Date & Time</th>
+                          <th className="px-4 py-2.5">Plan Name</th>
+                          <th className="px-4 py-2.5">Amount</th>
+                          <th className="px-4 py-2.5">Status</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-[#CBD5E1]">
+                        {customerTxns.map((t) => (
+                          <tr key={t.id} className="hover:bg-slate-50 transition">
+                            <td className="px-4 py-3 text-[#64748B] font-medium whitespace-nowrap">
+                              {new Date(t.date).toLocaleString("en-IN", {
+                                day: "2-digit",
+                                month: "short",
+                                year: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })}
+                            </td>
+                            <td className="px-4 py-3 font-bold text-[#0F172A]">{t.planName}</td>
+                            <td className="px-4 py-3 font-mono font-extrabold text-[#2563EB]">₹{t.amount}</td>
+                            <td className="px-4 py-3">
+                              {t.status === "success" ? (
+                                <span className="inline-flex rounded-full bg-emerald-100 border border-emerald-300 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
+                                  🟢 Approved
+                                </span>
+                              ) : t.status === "pending" ? (
+                                <span className="inline-flex rounded-full bg-amber-100 border border-amber-300 px-2.5 py-0.5 text-[10px] font-bold text-amber-800">
+                                  🟡 Pending
+                                </span>
+                              ) : (
+                                <span className="inline-flex rounded-full bg-red-100 border border-red-300 px-2.5 py-0.5 text-[10px] font-bold text-red-800">
+                                  🔴 Rejected
+                                </span>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                );
+              })()}
+            </div>
+
+            {/* Modal Footer */}
+            <div className="pt-3 border-t border-[#CBD5E1] flex justify-end shrink-0">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowHistoryModal(false);
+                  setHistoryStb(null);
+                }}
+                className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2 text-xs font-bold text-white shadow-sm cursor-pointer"
+              >
+                Close History
+              </button>
+            </div>
           </div>
         </div>
       )}
