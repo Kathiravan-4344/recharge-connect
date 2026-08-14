@@ -18,6 +18,7 @@ import {
   syncStbMappingsFromBackend,
   addStbMapping,
   deleteStbMappingAction,
+  setOperatorExpiryDay,
   isOperatorApproved,
   cleanContact,
   getCalculatedExpiryDate,
@@ -173,6 +174,7 @@ export function OperatorPage() {
   const complaints = useStore((s) => s.complaints);
   const stbMappings = useStore((s) => s.stbMappings);
   const approvedOperators = useStore((s) => s.approvedOperators);
+  const operatorExpiryDay = useStore((s) => s.operatorExpiryDay || 10);
   const navigate = useNavigate();
 
   const currentOpInfo = approvedOperators.find(
@@ -1006,6 +1008,38 @@ export function OperatorPage() {
               >
                 <Plus className="h-4 w-4" /> Map / Add New STB ID
               </button>
+            </div>
+
+            {/* Global Customer Expiry Cutoff Day Settings Card */}
+            <div className="bg-gradient-to-r from-blue-50 via-indigo-50 to-slate-50 rounded-2xl border border-blue-200 p-5 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3.5">
+                <div className="grid h-10 w-10 place-items-center rounded-xl bg-[#2563EB] text-white font-bold shrink-0 shadow-sm">
+                  📅
+                </div>
+                <div>
+                  <h3 className="text-sm font-extrabold text-[#0F172A]">
+                    Set Global Expiry Cutoff Day for All Customers
+                  </h3>
+                  <p className="text-xs text-[#64748B] font-semibold mt-0.5">
+                    Date automatically rolls over month-by-month. Current active cutoff day: <strong className="text-[#2563EB] font-extrabold">{operatorExpiryDay}{operatorExpiryDay === 1 ? "st" : operatorExpiryDay === 2 ? "nd" : operatorExpiryDay === 3 ? "rd" : "th"} of every month</strong> (e.g. {getCalculatedExpiryDate()}).
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2.5 shrink-0 self-start sm:self-auto bg-white p-2 rounded-xl border border-[#CBD5E1]">
+                <span className="text-xs font-bold text-[#64748B] pl-1">Cutoff Day:</span>
+                <select
+                  value={operatorExpiryDay}
+                  onChange={(e) => setOperatorExpiryDay(Number(e.target.value))}
+                  className="rounded-lg border border-[#CBD5E1] bg-[#F8FAFC] px-3 py-1.5 text-xs font-extrabold text-[#2563EB] outline-none focus:border-[#2563EB] cursor-pointer"
+                >
+                  {Array.from({ length: 28 }, (_, i) => i + 1).map((d) => (
+                    <option key={d} value={d}>
+                      {d}{d === 1 ? "st" : d === 2 ? "nd" : d === 3 ? "rd" : "th"} Day of Month
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
             {/* Filter Bar */}

@@ -188,6 +188,7 @@ export type State = {
   selectedPlanObject?: any;
   approvedOperators: ApprovedOperator[];
   blockedCustomers: string[];
+  operatorExpiryDay: number;
   ready: boolean;
 };
 
@@ -287,6 +288,7 @@ const defaultState: State = {
   selectedPlanObject: null,
   approvedOperators: INITIAL_APPROVED_OPERATORS,
   blockedCustomers: [],
+  operatorExpiryDay: 10,
   ready: true,
 };
 
@@ -297,6 +299,11 @@ export function selectPlan(planOrId: any) {
   } else {
     setState({ selectedPlanId: String(planOrId || "") });
   }
+}
+
+export function setOperatorExpiryDay(day: number) {
+  const clean = Math.max(1, Math.min(28, Number(day) || 10));
+  setState({ operatorExpiryDay: clean });
 }
 
 let state: State = defaultState;

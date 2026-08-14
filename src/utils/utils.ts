@@ -63,14 +63,27 @@ export function mobileToEmail(mobile: string) {
   return `${cleanMobile(mobile)}@stb-recharge.app`;
 }
 
-export function getCalculatedExpiryDate(refDate?: string | Date): string {
+import { getState } from "../services/store";
+
+export function getCalculatedExpiryDate(refDate?: string | Date, customCutoffDay?: number): string {
   const now = new Date();
   const currentDay = now.getDate(); // 1-31
   let targetYear = now.getFullYear();
   let targetMonth = now.getMonth() + 1; // 1-12
 
-  // If past 10th date of current month -> Expiry is 10th of NEXT month
-  if (currentDay > 10) {
+  let cutoffDay = customCutoffDay;
+  if (!cutoffDay) {
+    try {
+      cutoffDay = getState().operatorExpiryDay || 10;
+    } catch (e) {
+      cutoffDay = 10;
+    }
+  }
+
+  const effectiveCutoff = Math.max(1, Math.min(28, Number(cutoffDay) || 10));
+
+  // If past cutoff day of current month -> Expiry is cutoff day of NEXT month
+  if (currentDay > effectiveCutoff) {
     targetMonth += 1;
     if (targetMonth > 12) {
       targetMonth = 1;
@@ -78,7 +91,8 @@ export function getCalculatedExpiryDate(refDate?: string | Date): string {
     }
   }
 
+  const dd = String(effectiveCutoff).padStart(2, "0");
   const mm = String(targetMonth).padStart(2, "0");
-  return `10-${mm}-${targetYear}`;
+  return `${dd}-${mm}-${targetYear}`;
 }
 
