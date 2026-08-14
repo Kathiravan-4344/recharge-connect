@@ -221,9 +221,11 @@ module.exports = async (req, res) => {
       const targetStb = cleanStb || user.stbId;
       if (targetStb && targetStb.length >= 3) {
         try {
-          let mapping = await StbMapping.findOne({ stbId: targetStb });
+          let mapping = await StbMapping.findOne({
+            stbId: { $regex: new RegExp("^" + targetStb.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$", "i") },
+          });
           if (mapping) {
-            if (cleanName) mapping.customerName = cleanName;
+            if (cleanName && cleanName !== "STB Subscriber") mapping.customerName = cleanName;
             if (cleanMob) mapping.customerMobile = cleanMob;
             await mapping.save();
           } else {
@@ -402,7 +404,28 @@ module.exports = async (req, res) => {
       } else {
         mappings = await StbMapping.find({ operatorMobile: opMobile }).sort({ createdAt: -1 });
       }
-      return res.status(200).json({ success: true, mappings });
+
+      const users = await User.find({ stbId: { $exists: true, $ne: "" } });
+      const userMapByStb = new Map();
+      users.forEach((u) => {
+        if (u.stbId) userMapByStb.set(u.stbId.trim().toUpperCase(), u);
+      });
+
+      const enrichedMappings = mappings.map((m) => {
+        const mObj = m.toObject ? m.toObject() : { ...m };
+        const matchedUser = userMapByStb.get(mObj.stbId?.trim().toUpperCase());
+        if (matchedUser) {
+          if ((!mObj.customerName || mObj.customerName === "STB Subscriber" || mObj.customerName === "Customer") && matchedUser.name) {
+            mObj.customerName = matchedUser.name;
+          }
+          if (!mObj.customerMobile && matchedUser.mobileNumber) {
+            mObj.customerMobile = matchedUser.mobileNumber;
+          }
+        }
+        return mObj;
+      });
+
+      return res.status(200).json({ success: true, mappings: enrichedMappings });
     }
 
     // Delete STB Mapping: DELETE /api/stb/map/:id

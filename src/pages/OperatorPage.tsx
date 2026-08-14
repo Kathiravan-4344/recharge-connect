@@ -195,6 +195,12 @@ export function OperatorPage() {
   const [stbSubmitting, setStbSubmitting] = useState(false);
   const [stbErr, setStbErr] = useState<string | null>(null);
 
+  // Edit STB Customer Info Modal State
+  const [editingStb, setEditingStb] = useState<StbMapping | null>(null);
+  const [editCustName, setEditCustName] = useState("");
+  const [editCustMobile, setEditCustMobile] = useState("");
+  const [editStbSubmitting, setEditStbSubmitting] = useState(false);
+
   // Search & filter state for txns
   const [searchTerm, setSearchTerm] = useState("");
   const [statusFilter, setStatusFilter] = useState<"all" | "pending" | "success" | "failed">("all");
@@ -510,6 +516,31 @@ export function OperatorPage() {
     if (confirm("Are you sure you want to unmap/delete this STB ID?")) {
       deleteStbMappingAction(id, user?.mobile);
     }
+  }
+
+  function handleOpenEditStb(mapping: StbMapping) {
+    setEditingStb(mapping);
+    setEditCustName(
+      mapping.customerName && mapping.customerName !== "STB Subscriber" ? mapping.customerName : ""
+    );
+    setEditCustMobile(mapping.customerMobile || "");
+  }
+
+  async function handleSaveStbCustomerInfo(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingStb) return;
+    setEditStbSubmitting(true);
+    await addStbMapping({
+      stbId: editingStb.stbId,
+      operatorMobile: editingStb.operatorMobile || user?.mobile || "9787312758",
+      operatorName: editingStb.operatorName || user?.name || "VENKATESA PERUMAL",
+      customerName: editCustName.trim().toUpperCase() || "STB Subscriber",
+      customerMobile: editCustMobile.trim(),
+      currentPlan: editingStb.currentPlan,
+      expiryDate: editingStb.expiryDate,
+    });
+    setEditStbSubmitting(false);
+    setEditingStb(null);
   }
 
   function handleScheduleSubmit(e: React.FormEvent) {
@@ -1041,13 +1072,22 @@ export function OperatorPage() {
                               </span>
                             </td>
                             <td className="px-6 py-4 text-right">
-                              <button
-                                onClick={() => handleDeleteStbMapping(m.id || m._id || "")}
-                                className="rounded-xl border border-red-200 bg-red-50 p-2 text-xs font-bold text-red-600 hover:bg-red-100 transition"
-                                title="Unmap STB ID"
-                              >
-                                <X className="h-4 w-4" />
-                              </button>
+                              <div className="flex items-center justify-end gap-1.5">
+                                <button
+                                  onClick={() => handleOpenEditStb(m)}
+                                  className="rounded-xl border border-blue-200 bg-blue-50 p-2 text-xs font-bold text-blue-600 hover:bg-blue-100 transition cursor-pointer"
+                                  title="Edit Customer Name & Mobile"
+                                >
+                                  <Edit3 className="h-4 w-4" />
+                                </button>
+                                <button
+                                  onClick={() => handleDeleteStbMapping(m.id || m._id || "")}
+                                  className="rounded-xl border border-red-200 bg-red-50 p-2 text-xs font-bold text-red-600 hover:bg-red-100 transition cursor-pointer"
+                                  title="Unmap STB ID"
+                                >
+                                  <X className="h-4 w-4" />
+                                </button>
+                              </div>
                             </td>
                           </tr>
                         ))
@@ -2101,6 +2141,83 @@ STB999888777`}
                 </div>
               </form>
             )}
+          </div>
+        </div>
+      )}
+
+      {/* EDIT STB CUSTOMER INFO MODAL */}
+      {editingStb && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/60 backdrop-blur-sm p-4 animate-in fade-in duration-200">
+          <div className="w-full max-w-md rounded-2xl bg-white p-6 shadow-2xl border border-[#CBD5E1] space-y-4">
+            <div className="flex items-center justify-between border-b border-[#CBD5E1] pb-3">
+              <div>
+                <h3 className="text-base font-bold text-[#0F172A] flex items-center gap-2">
+                  <Edit3 className="h-4 w-4 text-[#2563EB]" /> Edit Customer Info
+                </h3>
+                <p className="text-xs text-[#64748B] font-mono mt-0.5">
+                  STB ID: <span className="font-bold text-[#0F172A]">{editingStb.stbId}</span>
+                </p>
+              </div>
+              <button
+                onClick={() => setEditingStb(null)}
+                className="rounded-full p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+
+            <form onSubmit={handleSaveStbCustomerInfo} className="space-y-4 text-xs">
+              <div>
+                <label className="block font-bold text-[#64748B] mb-1 uppercase tracking-wider">
+                  Customer Name
+                </label>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. KATHIRAVAN V"
+                  value={editCustName}
+                  onChange={(e) => setEditCustName(e.target.value.toUpperCase())}
+                  className="w-full rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-3.5 py-2.5 text-xs font-bold text-[#0F172A] outline-none focus:border-[#2563EB] uppercase"
+                />
+              </div>
+
+              <div>
+                <label className="block font-bold text-[#64748B] mb-1 uppercase tracking-wider">
+                  Customer Mobile Number
+                </label>
+                <div className="flex rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] overflow-hidden">
+                  <span className="flex items-center px-3 text-xs font-bold text-[#64748B] bg-slate-100 border-r border-[#CBD5E1]">
+                    +91
+                  </span>
+                  <input
+                    type="text"
+                    inputMode="numeric"
+                    maxLength={10}
+                    placeholder="Enter 10-digit mobile number"
+                    value={editCustMobile}
+                    onChange={(e) => setEditCustMobile(e.target.value.replace(/\D/g, ""))}
+                    className="w-full bg-transparent px-3.5 py-2.5 text-xs font-bold text-[#0F172A] outline-none"
+                  />
+                </div>
+              </div>
+
+              <div className="pt-3 flex justify-end gap-2 border-t border-[#CBD5E1]">
+                <button
+                  type="button"
+                  onClick={() => setEditingStb(null)}
+                  className="rounded-xl border border-[#CBD5E1] bg-[#F8FAFC] px-4 py-2 text-xs font-bold text-[#0F172A] hover:bg-slate-100 cursor-pointer"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={editStbSubmitting}
+                  className="rounded-xl bg-[#2563EB] hover:bg-[#1D4ED8] px-5 py-2 text-xs font-bold text-white shadow-sm disabled:opacity-50 cursor-pointer flex items-center gap-1.5"
+                >
+                  {editStbSubmitting ? "Saving..." : "Save Customer Info"}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}

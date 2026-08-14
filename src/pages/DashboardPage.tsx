@@ -98,15 +98,18 @@ export function DashboardPage() {
               <Tv className="h-7 w-7" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <span className="font-mono text-xl font-extrabold text-[#0F172A]">
-                  {stb?.id || user?.stbId || "1234567890"}
-                </span>
+              <div className="flex items-center gap-2.5">
+                <h2 className="text-xl sm:text-2xl font-extrabold text-[#0F172A] tracking-tight uppercase">
+                  {formatName(user?.name || stb?.customerName || "Customer")}
+                </h2>
                 <StatusDot active={stb?.active ?? true} />
               </div>
-              <p className="text-xs font-semibold text-[#64748B] mt-0.5 uppercase tracking-wide">
-                Registered STB Box ID • Owner: {formatName(user?.name || "Customer")}
-              </p>
+              <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-[#64748B] mt-0.5">
+                <span className="uppercase text-[11px] tracking-wider text-[#64748B]">STB ID:</span>
+                <span className="font-mono font-bold text-[#0F172A] text-sm sm:text-base">
+                  {stb?.id || user?.stbId || "1234567890"}
+                </span>
+              </div>
             </div>
           </div>
 

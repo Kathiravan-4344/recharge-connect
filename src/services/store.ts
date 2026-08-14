@@ -701,23 +701,43 @@ export async function verifyOtp(
   // Auto-update customerName & customerMobile in local stbMappings and sync to MongoDB Atlas
   if (extra?.stbId) {
     const cleanStb = extra.stbId.trim().toUpperCase();
+    const cleanName = name && name !== "STB Subscriber" && name !== "Customer" ? name.trim().toUpperCase() : undefined;
+
+    let found = false;
     const updatedMappings = state.stbMappings.map((m) => {
       if (m.stbId && m.stbId.trim().toUpperCase() === cleanStb) {
+        found = true;
         return {
           ...m,
-          customerName: name || m.customerName || "Customer",
+          customerName: cleanName || m.customerName || "Customer",
           customerMobile: cleanedMobile || m.customerMobile || "",
         };
       }
       return m;
     });
+
+    if (!found) {
+      updatedMappings.unshift({
+        id: `stb-usr-${cleanStb}`,
+        stbId: cleanStb,
+        operatorMobile: "9787312758",
+        operatorName: "VENKATESA PERUMAL",
+        customerName: cleanName || "Customer",
+        customerMobile: cleanedMobile,
+        currentPlan: "Basic Tamil Pack Monthly Rs 220",
+        expiryDate: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+        isApproved: true,
+        status: "Approved",
+      });
+    }
+
     setState({ stbMappings: updatedMappings });
 
     try {
-      const match = state.stbMappings.find(m => m.stbId && m.stbId.trim().toUpperCase() === cleanStb);
+      const match = updatedMappings.find((m) => m.stbId && m.stbId.trim().toUpperCase() === cleanStb);
       apiMapStb({
         stbId: cleanStb,
-        customerName: name || "Customer",
+        customerName: cleanName || "Customer",
         customerMobile: cleanedMobile,
         operatorMobile: match?.operatorMobile || "9787312758",
         operatorName: match?.operatorName || "VENKATESA PERUMAL",
@@ -1473,11 +1493,46 @@ export async function syncStbMappingsFromBackend(operatorMobile?: string) {
         createdAt: m.createdAt,
       }));
 
-      // Combine backend mappings with VENKATESA_STB_MAPPINGS so all 360 STBs are always preserved
-      const backendStbIds = new Set(backendMappings.map((m) => m.stbId));
-      const missingVenStbs = VENKATESA_STB_MAPPINGS.filter((m) => !backendStbIds.has(m.stbId));
-      const combined = [...backendMappings, ...missingVenStbs];
+      // Combine backend mappings with existing state and static VENKATESA_STB_MAPPINGS
+      const map = new Map<string, StbMapping>();
 
+      // 1. Static defaults
+      VENKATESA_STB_MAPPINGS.forEach((m) => {
+        if (m.stbId) map.set(m.stbId.trim().toUpperCase(), { ...m });
+      });
+
+      // 2. Existing local state (preserves local customer name & mobile updates)
+      (state.stbMappings || []).forEach((m) => {
+        if (m.stbId) {
+          const key = m.stbId.trim().toUpperCase();
+          const existing = map.get(key);
+          const hasRealName = m.customerName && m.customerName !== "STB Subscriber" && m.customerName !== "Customer";
+          map.set(key, {
+            ...existing,
+            ...m,
+            customerName: hasRealName ? m.customerName : existing?.customerName || "STB Subscriber",
+            customerMobile: m.customerMobile || existing?.customerMobile || "",
+          });
+        }
+      });
+
+      // 3. Backend mappings (highest priority from Atlas DB)
+      backendMappings.forEach((m) => {
+        if (m.stbId) {
+          const key = m.stbId.trim().toUpperCase();
+          const existing = map.get(key);
+          const backendHasRealName = m.customerName && m.customerName !== "STB Subscriber" && m.customerName !== "Customer";
+          const localHasRealName = existing?.customerName && existing.customerName !== "STB Subscriber" && existing.customerName !== "Customer";
+          map.set(key, {
+            ...existing,
+            ...m,
+            customerName: backendHasRealName ? m.customerName : localHasRealName ? existing.customerName : "STB Subscriber",
+            customerMobile: m.customerMobile || existing?.customerMobile || "",
+          });
+        }
+      });
+
+      const combined = Array.from(map.values());
       setState({ stbMappings: combined });
     }
   } catch (err) {

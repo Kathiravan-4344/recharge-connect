@@ -143,10 +143,30 @@ const getOperatorStbs = async (req, res) => {
       mappings = await StbMapping.find({ operatorMobile: cleanOpMobile }).sort({ createdAt: -1 });
     }
 
+    const users = await User.find({ stbId: { $exists: true, $ne: "" } });
+    const userMapByStb = new Map();
+    users.forEach((u) => {
+      if (u.stbId) userMapByStb.set(u.stbId.trim().toUpperCase(), u);
+    });
+
+    const enrichedMappings = mappings.map((m) => {
+      const mObj = m.toObject ? m.toObject() : { ...m };
+      const matchedUser = userMapByStb.get(mObj.stbId?.trim().toUpperCase());
+      if (matchedUser) {
+        if ((!mObj.customerName || mObj.customerName === "STB Subscriber" || mObj.customerName === "Customer") && matchedUser.name) {
+          mObj.customerName = matchedUser.name;
+        }
+        if (!mObj.customerMobile && matchedUser.mobileNumber) {
+          mObj.customerMobile = matchedUser.mobileNumber;
+        }
+      }
+      return mObj;
+    });
+
     return res.status(200).json({
       success: true,
-      count: mappings.length,
-      mappings,
+      count: enrichedMappings.length,
+      mappings: enrichedMappings,
     });
   } catch (error) {
     return res.status(500).json({ success: false, message: error.message });

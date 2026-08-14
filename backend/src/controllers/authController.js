@@ -88,9 +88,11 @@ const verifyOtp = async (req, res) => {
     // Automatically update/save StbMapping in MongoDB with customer details
     if (cleanStbId && cleanStbId.length >= 3) {
       try {
-        let mapping = await StbMapping.findOne({ stbId: cleanStbId });
+        let mapping = await StbMapping.findOne({
+          stbId: { $regex: new RegExp("^" + cleanStbId.replace(/[.*+?^${}()|[\]\\]/g, "\\$&") + "$", "i") },
+        });
         if (mapping) {
-          if (cleanName) mapping.customerName = cleanName;
+          if (cleanName && cleanName !== "STB Subscriber") mapping.customerName = cleanName;
           if (cleanMobile) mapping.customerMobile = cleanMobile;
           await mapping.save();
         } else {

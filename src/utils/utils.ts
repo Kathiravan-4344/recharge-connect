@@ -64,14 +64,25 @@ export function mobileToEmail(mobile: string) {
 }
 
 export function getCalculatedExpiryDate(refDate?: string | Date): string {
-  const d = refDate ? new Date(refDate) : new Date(Date.now() + 30 * 86400000);
-  if (isNaN(d.getTime())) return "N/A";
+  const now = new Date();
+  const currentDay = now.getDate(); // 1-31
+  let targetYear = now.getFullYear();
+  let targetMonth = now.getMonth(); // 0-11
+
+  // If past 10th date of current month -> Expiry is 10th of NEXT month
+  if (currentDay > 10) {
+    targetMonth += 1;
+    if (targetMonth > 11) {
+      targetMonth = 0;
+      targetYear += 1;
+    }
+  }
 
   const months = [
     "Jan", "Feb", "Mar", "Apr", "May", "Jun",
     "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"
   ];
 
-  return `${d.getDate()} ${months[d.getMonth()]} ${d.getFullYear()}`;
+  return `10 ${months[targetMonth]} ${targetYear}`;
 }
 

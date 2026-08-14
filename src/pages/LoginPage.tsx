@@ -110,6 +110,7 @@ export function LoginPage() {
     (isOperatorValidEmail || isOperatorValidMobile || cleanedOpContact === "9080864542" || cleanedOpContact === "9787312758");
 
   const isCustomerValid =
+    name.trim().length >= 2 &&
     stbId.trim().length >= 4 &&
     /^\d{10}$/.test(cleanMobile(mobile));
 
@@ -140,6 +141,11 @@ export function LoginPage() {
   // Customer Step 1: Validate STB ID against Operator & Send SMS OTP
   async function handleSendCustomerOtp() {
     setErr(null);
+    if (!name.trim()) {
+      setErr("ENTER YOUR FULL NAME");
+      return;
+    }
+
     const cleanStb = stbId.trim().toUpperCase();
     if (!cleanStb || !/^[A-Za-z0-9\-\_]{4,12}$/.test(cleanStb)) {
       setErr("ENTER YOUR STB ID (4 to 12 characters)");
