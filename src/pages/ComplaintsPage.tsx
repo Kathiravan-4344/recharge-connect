@@ -96,6 +96,7 @@ export function ComplaintsPage() {
 
   useEffect(() => {
     if (!user) navigate({ to: "/" });
+    syncComplaintsFromBackend();
   }, [user, navigate]);
 
   // Tab: "raise" | "tracking" | "history"

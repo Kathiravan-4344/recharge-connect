@@ -714,29 +714,9 @@ module.exports = async (req, res) => {
       return res.status(201).json({ success: true, message: "Complaint registered successfully", complaint });
     }
 
-    // Complaints: Get All
+    // Complaints: Get All (Returns ALL customer complaints so operator receives every customer issue)
     if (req.method === "GET" && routeString.includes("complaint")) {
-      const searchParams = req.query || {};
-      const opMobile = String(searchParams.operatorMobile || req.headers["x-operator-mobile"] || "").trim();
-
-      let complaints = [];
-      if (opMobile && opMobile !== "9080864542") {
-        const mappedStbs = await StbMapping.find({ operatorMobile: opMobile }).distinct("stbId");
-        const mappedRegex = mappedStbs.map((s) => new RegExp("^" + s + "$", "i"));
-        complaints = await Complaint.find({
-          $or: [
-            { stbId: { $in: mappedRegex } },
-            { stbId: { $in: mappedStbs } },
-            { customerMobile: opMobile },
-          ],
-        }).sort({ createdAt: -1 });
-
-        if (complaints.length === 0) {
-          complaints = await Complaint.find().sort({ createdAt: -1 });
-        }
-      } else {
-        complaints = await Complaint.find().sort({ createdAt: -1 });
-      }
+      const complaints = await Complaint.find().sort({ createdAt: -1 });
       return res.status(200).json({ success: true, count: complaints.length, complaints });
     }
 
