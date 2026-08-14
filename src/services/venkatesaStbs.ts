@@ -20,7 +20,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -33,7 +33,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -46,7 +46,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -59,7 +59,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -72,7 +72,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -85,7 +85,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -98,7 +98,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -111,7 +111,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -124,7 +124,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -137,7 +137,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -150,7 +150,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -163,7 +163,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -176,7 +176,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -189,7 +189,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -202,7 +202,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -215,7 +215,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -228,7 +228,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -241,7 +241,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -254,7 +254,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -267,7 +267,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -280,7 +280,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -293,7 +293,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -306,7 +306,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -319,7 +319,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -332,7 +332,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -345,7 +345,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -358,7 +358,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -371,7 +371,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -384,7 +384,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -397,7 +397,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -410,7 +410,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -423,7 +423,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -436,7 +436,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -449,7 +449,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -462,7 +462,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -475,7 +475,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -488,7 +488,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -501,7 +501,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -514,7 +514,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -527,7 +527,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -540,7 +540,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -553,7 +553,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -566,7 +566,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -579,7 +579,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -592,7 +592,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -605,7 +605,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -618,7 +618,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -631,7 +631,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -644,7 +644,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -657,7 +657,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -670,7 +670,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -683,7 +683,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -696,7 +696,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -709,7 +709,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -722,7 +722,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -735,7 +735,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -748,7 +748,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -761,7 +761,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -774,7 +774,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -787,7 +787,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -800,7 +800,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -813,7 +813,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -826,7 +826,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -839,7 +839,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -852,7 +852,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -865,7 +865,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -878,7 +878,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -891,7 +891,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -904,7 +904,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -917,7 +917,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -930,7 +930,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -943,7 +943,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -956,7 +956,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -969,7 +969,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -982,7 +982,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -995,7 +995,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1008,7 +1008,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1021,7 +1021,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1034,7 +1034,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1047,7 +1047,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1060,7 +1060,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1073,7 +1073,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1086,7 +1086,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1099,7 +1099,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1112,7 +1112,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1125,7 +1125,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1138,7 +1138,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1151,7 +1151,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1164,7 +1164,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1177,7 +1177,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1190,7 +1190,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1203,7 +1203,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1216,7 +1216,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1229,7 +1229,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1242,7 +1242,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1255,7 +1255,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1268,7 +1268,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1281,7 +1281,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1294,7 +1294,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1307,7 +1307,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1320,7 +1320,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1333,7 +1333,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1346,7 +1346,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1359,7 +1359,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1372,7 +1372,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1385,7 +1385,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1398,7 +1398,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1411,7 +1411,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1424,7 +1424,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1437,7 +1437,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1450,7 +1450,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1463,7 +1463,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1476,7 +1476,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1489,7 +1489,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1502,7 +1502,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1515,7 +1515,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1528,7 +1528,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1541,7 +1541,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1554,7 +1554,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1567,7 +1567,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1580,7 +1580,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1593,7 +1593,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1606,7 +1606,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1619,7 +1619,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1632,7 +1632,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1645,7 +1645,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1658,7 +1658,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1671,7 +1671,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1684,7 +1684,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1697,7 +1697,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1710,7 +1710,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1723,7 +1723,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1736,7 +1736,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1749,7 +1749,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1762,7 +1762,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1775,7 +1775,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1788,7 +1788,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1801,7 +1801,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1814,7 +1814,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1827,7 +1827,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1840,7 +1840,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1853,7 +1853,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1866,7 +1866,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1879,7 +1879,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1892,7 +1892,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1905,7 +1905,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1918,7 +1918,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1931,7 +1931,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1944,7 +1944,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1957,7 +1957,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1970,7 +1970,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1983,7 +1983,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -1996,7 +1996,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2009,7 +2009,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2022,7 +2022,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2035,7 +2035,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2048,7 +2048,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2061,7 +2061,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2074,7 +2074,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2087,7 +2087,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2100,7 +2100,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2113,7 +2113,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2126,7 +2126,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2139,7 +2139,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2152,7 +2152,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2165,7 +2165,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2178,7 +2178,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2191,7 +2191,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2204,7 +2204,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2217,7 +2217,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2230,7 +2230,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2243,7 +2243,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2256,7 +2256,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2269,7 +2269,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2282,7 +2282,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2295,7 +2295,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2308,7 +2308,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2321,7 +2321,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2334,7 +2334,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2347,7 +2347,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2360,7 +2360,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2373,7 +2373,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2386,7 +2386,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2399,7 +2399,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2412,7 +2412,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2425,7 +2425,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2438,7 +2438,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2451,7 +2451,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2464,7 +2464,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2477,7 +2477,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2490,7 +2490,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2503,7 +2503,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2516,7 +2516,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2529,7 +2529,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2542,7 +2542,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2555,7 +2555,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2568,7 +2568,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2581,7 +2581,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2594,7 +2594,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2607,7 +2607,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2620,7 +2620,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2633,7 +2633,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2646,7 +2646,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2659,7 +2659,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2672,7 +2672,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2685,7 +2685,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2698,7 +2698,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2711,7 +2711,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2724,7 +2724,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2737,7 +2737,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2750,7 +2750,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2763,7 +2763,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2776,7 +2776,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2789,7 +2789,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2802,7 +2802,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2815,7 +2815,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2828,7 +2828,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2841,7 +2841,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2854,7 +2854,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2867,7 +2867,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2880,7 +2880,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2893,7 +2893,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2906,7 +2906,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2919,7 +2919,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2932,7 +2932,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2945,7 +2945,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2958,7 +2958,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2971,7 +2971,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2984,7 +2984,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -2997,7 +2997,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3010,7 +3010,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3023,7 +3023,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3036,7 +3036,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3049,7 +3049,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3062,7 +3062,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3075,7 +3075,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3088,7 +3088,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3101,7 +3101,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3114,7 +3114,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3127,7 +3127,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3140,7 +3140,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3153,7 +3153,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3166,7 +3166,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3179,7 +3179,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3192,7 +3192,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3205,7 +3205,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3218,7 +3218,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3231,7 +3231,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3244,7 +3244,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3257,7 +3257,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3270,7 +3270,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3283,7 +3283,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3296,7 +3296,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3309,7 +3309,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3322,7 +3322,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3335,7 +3335,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3348,7 +3348,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3361,7 +3361,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3374,7 +3374,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3387,7 +3387,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3400,7 +3400,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3413,7 +3413,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3426,7 +3426,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3439,7 +3439,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3452,7 +3452,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3465,7 +3465,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3478,7 +3478,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3491,7 +3491,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3504,7 +3504,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3517,7 +3517,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3530,7 +3530,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3543,7 +3543,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3556,7 +3556,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3569,7 +3569,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3582,7 +3582,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3595,7 +3595,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3608,7 +3608,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3621,7 +3621,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3634,7 +3634,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3647,7 +3647,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3660,7 +3660,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3673,7 +3673,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3686,7 +3686,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3699,7 +3699,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3712,7 +3712,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3725,7 +3725,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3738,7 +3738,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3751,7 +3751,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3764,7 +3764,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3777,7 +3777,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3790,7 +3790,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3803,7 +3803,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3816,7 +3816,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3829,7 +3829,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3842,7 +3842,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3855,7 +3855,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3868,7 +3868,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3881,7 +3881,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3894,7 +3894,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3907,7 +3907,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3920,7 +3920,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3933,7 +3933,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3946,7 +3946,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3959,7 +3959,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3972,7 +3972,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3985,7 +3985,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -3998,7 +3998,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4011,7 +4011,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4024,7 +4024,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4037,7 +4037,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4050,7 +4050,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4063,7 +4063,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4076,7 +4076,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4089,7 +4089,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4102,7 +4102,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4115,7 +4115,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4128,7 +4128,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4141,7 +4141,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4154,7 +4154,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4167,7 +4167,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4180,7 +4180,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4193,7 +4193,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4206,7 +4206,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4219,7 +4219,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4232,7 +4232,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4245,7 +4245,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4258,7 +4258,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4271,7 +4271,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4284,7 +4284,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4297,7 +4297,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4310,7 +4310,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4323,7 +4323,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4336,7 +4336,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4349,7 +4349,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4362,7 +4362,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4375,7 +4375,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4388,7 +4388,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4401,7 +4401,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4414,7 +4414,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4427,7 +4427,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4440,7 +4440,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4453,7 +4453,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4466,7 +4466,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4479,7 +4479,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4492,7 +4492,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4505,7 +4505,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4518,7 +4518,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4531,7 +4531,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4544,7 +4544,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4557,7 +4557,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4570,7 +4570,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4583,7 +4583,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4596,7 +4596,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4609,7 +4609,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4622,7 +4622,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4635,7 +4635,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4648,7 +4648,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4661,7 +4661,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4674,7 +4674,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"
@@ -4687,7 +4687,7 @@ export const VENKATESA_STB_MAPPINGS: StbMapping[] = [
     "customerName": "STB Subscriber",
     "customerMobile": "",
     "currentPlan": "Basic Tamil Pack Monthly Rs 220",
-    "expiryDate": "2026-12-31",
+    "expiryDate": "10-09-2026",
     "isApproved": true,
     "status": "Approved",
     "createdAt": "2026-08-11"

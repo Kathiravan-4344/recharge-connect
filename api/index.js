@@ -387,7 +387,7 @@ module.exports = async (req, res) => {
           customerName: customerName ? customerName.trim() : "Customer",
           customerMobile: customerMobile ? customerMobile.trim() : "",
           currentPlan: currentPlan ? currentPlan.trim() : "Basic Tamil Pack Monthly Rs 220",
-          expiryDate: expiryDate ? new Date(expiryDate) : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          expiryDate: expiryDate ? expiryDate : "10-09-2026",
           isApproved: true,
           status: "Approved",
         });
